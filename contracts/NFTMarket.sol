@@ -73,8 +73,6 @@ contract NFTMarket is
     mapping(address => mapping(uint256 => Listing)) private listings;
     // address is IERC721 -- kept like this because of OpenZeppelin upgrade plugin bug
     mapping(address => EnumerableSet.UintSet) private listedTokenIDs;
-    // keeps target buyer for nftId of specific type (address)
-    mapping(address => mapping(uint256 => address)) nftTargetBuyers;
     // address is IERC721
     EnumerableSet.AddressSet private listedTokenTypes; // stored for a way to know the types we have on offer
 
@@ -95,6 +93,9 @@ contract NFTMarket is
 
     Weapons internal weapons;
     Characters internal characters;
+
+    // keeps target buyer for nftId of specific type (address)
+    mapping(address => mapping(uint256 => address)) nftTargetBuyers;
 
     // ############
     // Events
