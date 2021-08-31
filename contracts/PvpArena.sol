@@ -4,6 +4,7 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "abdk-libraries-solidity/ABDKMath64x64.sol";
+import "./interfaces/IRandoms.sol";
 import "./cryptoblades.sol";
 import "./characters.sol";
 import "./weapons.sol";
@@ -31,6 +32,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     Shields public shields;
     IERC20 public skillToken;
     Raid1 public raids;
+    IRandoms public randoms;
 
     /// @dev how many times the cost of battling must be wagered to enter the arena
     uint256 wageringFactor;
@@ -98,7 +100,8 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     function initialize(
         address gameContract,
         address shieldsContract,
-        address raidContract
+        address raidContract,
+        address randomsContract
     ) public initializer {
         __AccessControl_init_unchained();
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -109,6 +112,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         shields = Shields(shieldsContract);
         skillToken = IERC20(game.skillToken());
         raids = Raid1(raidContract);
+        randoms = IRandoms(randomsContract);
 
         wageringFactor = 3;
     }
@@ -169,9 +173,16 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         return fightersByPlayer[msg.sender];
     }
 
-    /// @dev attempts to find an opponent for a character. If a battle is still pending, it charges a penalty and re-rolls the opponent
+    /// @dev attempts to find an opponent for a character
     function requestOpponent(uint256 characterID) public returns (uint256) {
         // TODO: implement (not final signature)
+    }
+
+    /// @dev requests a new opponent for a fee
+    function reRollOpponent(uint256 characterID) public {
+        // TODO:
+        // - [ ] check if character is currently attacking
+        uint256 seed = randoms.getRandomSeed(msg.sender);
     }
 
     /// @dev checks if a character is in the arena

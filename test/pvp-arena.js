@@ -100,8 +100,6 @@ contract("PvpArena", (accounts) => {
         );
       });
 
-      it("should lock duelCost from wagered skill");
-
       it("should add the character with its weapon and shield to the arena", async () => {
         const isCharacterInArena = await pvpArena.isCharacterInArena(
           characterId
@@ -293,4 +291,24 @@ contract("PvpArena", (accounts) => {
   });
 
   describe("#leaveArena", () => {});
+  describe("#requestOpponent", () => {
+    describe("finding opponents", () => {
+      it("should only pick characters from the same tier");
+      it("should not consider the character requesting an opponent");
+      it("should not consider characters owned by the sender");
+      it('should only consider "attackable" characters');
+    });
+
+    describe("opponent found", () => {
+      it("should lock 1 duel's cost from wagered skill");
+    });
+
+    describe("no opponent found", () => {
+      it("should revert");
+    });
+
+    describe("decision time expired", () => {
+      it("should revert");
+    });
+  });
 });
