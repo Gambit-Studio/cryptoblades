@@ -100,6 +100,18 @@ contract("PvpArena", (accounts) => {
         );
       });
 
+      it("should leave the character temporarily unattackable", async () => {
+        let isAttackable = await pvpArena.isCharacterAttackable(characterId);
+        const unattackableSeconds = await pvpArena.unattackableSeconds();
+
+        expect(isAttackable).to.equal(false);
+
+        await time.increase(unattackableSeconds);
+
+        isAttackable = await pvpArena.isCharacterAttackable(characterId);
+        expect(isAttackable).to.equal(true);
+      });
+
       it("should add the character with its weapon and shield to the arena", async () => {
         const isCharacterInArena = await pvpArena.isCharacterInArena(
           characterId

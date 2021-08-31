@@ -36,12 +36,18 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
 
     /// @dev how many times the cost of battling must be wagered to enter the arena
     uint256 wageringFactor;
+    /// @dev amount of time in seconds a character is unattackable
+    uint256 public unattackableSeconds;
+
+    /// @dev last time a character was involved in activity that makes it untattackable
+    mapping(uint256 => uint256) lastActivityByCharacterID;
 
     /// @dev Fighter by characterID
     mapping(uint256 => Fighter) public fightersByCharacterID;
 
     /// @dev IDs of characters available by tier (1-10, 11-20, etc...)
     mapping(uint8 => uint256[]) private fightersByTier;
+
     /// @dev IDs of characters in the arena per player
     mapping(address => uint256[]) private fightersByPlayer;
 
@@ -115,6 +121,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         randoms = IRandoms(randomsContract);
 
         wageringFactor = 3;
+        unattackableSeconds = 60 * 1;
     }
 
     /// @notice enter the arena with a character, a weapon and optionally a shield
@@ -141,6 +148,9 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             wager,
             useShield
         );
+
+        // character starts unattackable
+        _updateLastActivityTimestamp(characterID);
 
         skillToken.transferFrom(msg.sender, address(this), wager);
     }
@@ -204,6 +214,17 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         return shieldsInUse[shieldID];
     }
 
+    /// @dev wether or not a character can appear as someone's opponent
+    function isCharacterAttackable(uint256 characterID)
+        public
+        view
+        returns (bool)
+    {
+        uint256 lastActivity = lastActivityByCharacterID[characterID];
+
+        return lastActivity.add(unattackableSeconds) <= block.timestamp;
+    }
+
     /// @dev performs a given character's duel against its opponent
     function performDuel(uint256 characterID) external {
         // TODO: implement (not final signature)
@@ -213,5 +234,9 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     /// if the character is in a battle, a penalty is charged
     function withdrawCharacter(uint256 characterID) external {
         // TODO: implement (not final signature)
+    }
+
+    function _updateLastActivityTimestamp(uint256 characterID) private {
+        lastActivityByCharacterID[characterID] = block.timestamp;
     }
 }
