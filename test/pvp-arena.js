@@ -1,5 +1,5 @@
 const web3 = require("web3");
-const { expectRevert, time } = require("@openzeppelin/test-helpers");
+const { expectRevert, expectEvent, time } = require("@openzeppelin/test-helpers");
 const helpers = require("./helpers");
 
 const SkillToken = artifacts.require("SkillToken");
@@ -8,6 +8,8 @@ const Weapons = artifacts.require("Weapons");
 const Shields = artifacts.require("Shields");
 const PvpArena = artifacts.require("PvpArena");
 const BasicPriceOracle = artifacts.require("BasicPriceOracle");
+
+const { BN } = web3.utils;
 
 contract("PvpArena", (accounts) => {
   let pvpArena, characters, weapons;
@@ -19,7 +21,9 @@ contract("PvpArena", (accounts) => {
     pvpArena = await PvpArena.deployed();
     priceOracle = await BasicPriceOracle.deployed();
 
-    // TODO: Check if this is right
+    await skillToken.transferFrom(skillToken.address, accounts[1], web3.utils.toWei('1', 'kether')); // 1000 skill, test token value is $5 usd
+    await skillToken.transferFrom(skillToken.address, accounts[2], web3.utils.toWei('1', 'kether')); // 1000 skill, test token value is $5 usd
+
     await characters.grantRole(await characters.GAME_ADMIN(), accounts[0]);
     await characters.grantRole(await characters.NO_OWNED_LIMIT(), accounts[1]);
     await weapons.grantRole(await weapons.GAME_ADMIN(), accounts[0]);
@@ -36,7 +40,6 @@ contract("PvpArena", (accounts) => {
       web3.utils.toWei("10", "ether")
     );
 
-    await priceOracle.setCurrentPrice("10");
   });
 
   describe("#getArenaTier", () => {
@@ -341,7 +344,7 @@ contract("PvpArena", (accounts) => {
         const cost1 = await pvpArena.getEntryWager(character1ID, {
           from: accounts[1],
         });
-        const cost2 = await pvpArena.getEntryWager(character1ID, {
+        const cost2 = await pvpArena.getEntryWager(character2ID, {
           from: accounts[1],
         });
         const cost3 = await pvpArena.getEntryWager(character1ID, {
@@ -351,9 +354,6 @@ contract("PvpArena", (accounts) => {
         await skillToken.approve(pvpArena.address, web3.utils.toWei(cost1), {
           from: accounts[1],
         });
-        await skillToken.approve(pvpArena.address, web3.utils.toWei(cost2), {
-          from: accounts[1],
-        });
         await skillToken.approve(pvpArena.address, web3.utils.toWei(cost3), {
           from: accounts[2],
         });
@@ -361,20 +361,25 @@ contract("PvpArena", (accounts) => {
         await pvpArena.enterArena(character1ID, weapon1ID, 0, false, {
           from: accounts[1],
         });
+
+        await skillToken.approve(pvpArena.address, web3.utils.toWei(cost2), {
+          from: accounts[1],
+        });
         await pvpArena.enterArena(character2ID, weapon2ID, 0, false, {
           from: accounts[1],
         });
+
         await pvpArena.enterArena(character3ID, weapon3ID, 0, false, {
           from: accounts[2],
         });
       });
 
-      it("should only pick characters from the same tier", async () => {
-        const opponent = await pvpArena.requestOpponent(character1ID, {
+      it.only("should only pick characters from the same tier", async () => {
+        const  { tx }= await pvpArena.requestOpponent(character1ID, {
           from: accounts[1],
         });
 
-        expect(opponent.toString()).to.equal(character2ID.toString());
+        expectEvent.inTransaction(tx, pvpArena, 'NewDuel', { attacker: character1ID, defender: character2ID });
       });
       it("should not consider the character requesting an opponent");
       it("should not consider characters owned by the sender");
