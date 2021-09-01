@@ -7,7 +7,7 @@ const Raid1 = artifacts.require("Raid1");
 const DummyRandoms = artifacts.require("DummyRandoms");
 const ChainlinkRandoms = artifacts.require("ChainlinkRandoms");
 
-module.exports = async function (deployer) {
+module.exports = async function (deployer, network) {
   const game = await CryptoBlades.deployed();
   const shields = await Shields.deployed();
   const raids = await Raid1.deployed();
