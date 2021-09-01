@@ -245,15 +245,8 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         // TODO:
         // - [ ] check if character is currently attacking
         // - [ ] check if penalty can be paid
-    }
-
-    /// TODO: REMOVE THIS
-    function getTierFighters(uint8 tier)
-        public
-        view
-        returns (uint256[] memory)
-    {
-        return fightersByTier[tier];
+        // - [ ] charge penalty
+        // - [ ] find a new opponent
     }
 
     /// @dev gets the amount of SKILL that is risked per duel
