@@ -79,7 +79,7 @@ async function createShield(receiver, seed, context = {}) {
 function getExpForLevel(level) {
   let requiredExp = 0;
 
-  for (let i = 0; i < level - 1; i++) {
+  for (let i = 0; i < level; i++) {
     requiredExp += experienceTable[i];
   }
 

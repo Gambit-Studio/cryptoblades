@@ -188,6 +188,12 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         isOwnedCharacter(characterID)
     {
         uint8 tier = getArenaTier(characterID);
+
+        require(
+            fightersByTier[tier].length != 0,
+            "No opponents available for this character's level"
+        );
+
         uint256 randomIndex = randoms.getRandomSeed(msg.sender) %
             fightersByTier[tier].length;
 
@@ -198,10 +204,8 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         for (uint256 i = 0; i < fightersByTier[tier].length; i++) {
             uint256 index = (randomIndex + i) % fightersByTier[tier].length;
             uint256 candidateID = fightersByTier[tier][index];
-
             if (candidateID == characterID) continue;
             if (!isCharacterAttackable(candidateID)) continue;
-
             foundOpponent = true;
             opponentID = candidateID;
             break;
@@ -243,7 +247,16 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         // - [ ] check if penalty can be paid
     }
 
-    /// @notice gets the amount of SKILL that is risked per duel
+    /// TODO: REMOVE THIS
+    function getTierFighters(uint8 tier)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return fightersByTier[tier];
+    }
+
+    /// @dev gets the amount of SKILL that is risked per duel
     function getDuelCost(uint256 characterID) public view returns (uint256) {
         // FIXME: Use normal combat rewards formula. THIS IS JUST TEMPORARY CODE
         return getArenaTier(characterID).add(1).mul(1000);
