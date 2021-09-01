@@ -32,6 +32,11 @@ contract("PvpArena", (accounts) => {
     );
     await skillToken.transferFrom(
       skillToken.address,
+      accounts[2],
+      web3.utils.toWei("10", "ether")
+    );
+    await skillToken.transferFrom(
+      skillToken.address,
       accounts[3],
       web3.utils.toWei("10", "ether")
     );
@@ -262,6 +267,7 @@ contract("PvpArena", (accounts) => {
       cost = await pvpArena.getEntryWager(character1Id, {
         from: accounts[3],
       });
+
       await skillToken.approve(pvpArena.address, web3.utils.toWei(cost), {
         from: accounts[3],
       });
@@ -290,6 +296,92 @@ contract("PvpArena", (accounts) => {
         character2Id.toString()
       );
     });
+  });
+
+  describe("#performDuel", () => {
+    let character1Id;
+    let character2Id;
+    let no1Ranker;
+    let no2Ranker;
+    beforeEach(async () => {
+     
+      character1Id = await helpers.createCharacter(accounts[2], "111", {
+        characters,
+      });
+      const weapon1Id = await helpers.createWeapon(accounts[2], "222", {
+        weapons,
+      });
+      character2Id = await helpers.createCharacter(accounts[3], "222", {
+        characters,
+      });
+      const weapon2Id = await helpers.createWeapon(accounts[3], "111", {
+        weapons,
+      });
+      cost = await pvpArena.getEntryWager(character1Id, {
+        from: accounts[2],
+      });
+
+      await skillToken.approve(pvpArena.address, web3.utils.toWei(cost), {
+        from: accounts[2],
+      });
+      await pvpArena.enterArena(character1Id, weapon1Id, 0, false, {
+        from: accounts[2],
+      });
+      cost = await pvpArena.getEntryWager(character2Id, {
+        from: accounts[3],
+      });
+
+      await skillToken.approve(pvpArena.address, web3.utils.toWei(cost), {
+        from: accounts[3],
+      });
+      await pvpArena.enterArena(character2Id, weapon2Id, 0, false, {
+        from: accounts[3],
+      });
+    });
+
+    it("should perform duel", async () => {
+      await pvpArena.performDuel(character1Id, "2", { from: [accounts[2]] });
+      no1Ranker = await pvpArena.characterStatisticsByID(character1Id);
+      no1Ranker.characterID = parseInt(no1Ranker.characterID);
+      no1Ranker.totalPoints = parseInt(no1Ranker.totalPoints);
+      no1Ranker.totalGamesWon = parseInt(no1Ranker.totalGamesWon);
+      no1Ranker.totalGamesLost = parseInt(no1Ranker.totalGamesLost);
+      no1Ranker.totalGamesPlayed = parseInt(no1Ranker.totalGamesPlayed);
+
+      await pvpArena.performDuel(character1Id, "1", { from: [accounts[2]] });
+      no2Ranker = await pvpArena.characterStatisticsByID(character2Id);
+      no2Ranker.characterID = parseInt(no2Ranker.characterID);
+      no2Ranker.totalPoints = parseInt(no2Ranker.totalPoints);
+      no2Ranker.totalGamesWon = parseInt(no2Ranker.totalGamesWon);
+      no2Ranker.totalGamesLost = parseInt(no2Ranker.totalGamesLost);
+      no2Ranker.totalGamesPlayed = parseInt(no2Ranker.totalGamesPlayed);
+
+      let pointsOfRankOne = parseInt(await pvpArena.pointsOfRankOne());
+    
+      expect(no1Ranker.totalPoints.toString()).to.equal(
+        pointsOfRankOne.toString()
+      );
+
+      let pointsOfRankTwo = parseInt(await pvpArena.pointsOfRankTwo());
+     
+      expect(no2Ranker.totalPoints.toString()).to.equal(
+        pointsOfRankTwo.toString()
+      );
+    });
+
+    // it("should check the character id of the number 1 character in the leaderboard", async () => {
+    //   let ranker1Details = await pvpArena.topThreeRankers(0);
+    //   expect(no1Ranker.characterID.toString()).to.equal(
+    //     parseInt(ranker1Details.characterID).toString()
+    //   );
+    // });
+
+    // it("should check the character id of the number 2 character in the leaderboard", async () => {
+    //   let ranker2Details = await pvpArena.topThreeRankers(1);
+    //   expect(no2Ranker.characterID.toString()).to.equal(
+    //     parseInt(ranker2Details.characterID).toString()
+    //   );
+    // });
   });
 
   describe("#leaveArena", () => {});

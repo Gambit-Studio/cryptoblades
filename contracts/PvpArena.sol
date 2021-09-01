@@ -25,6 +25,21 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         bool useShield;
     }
 
+    struct CharacterStatistcs {
+        uint256 characterID;
+        uint256 totalGamesPlayed;
+        uint256 totalGamesLost;
+        uint256 totalGamesWon;
+        uint256 totalPoints;
+    }
+
+    struct TopThreeRankingDetails {
+        uint256 characterID;
+        uint256 totalPoints;
+        uint256 rank;
+        uint256 lastUpdatedAt;
+    }
+
     CryptoBlades public game;
     Characters public characters;
     Weapons public weapons;
@@ -32,8 +47,24 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     IERC20 public skillToken;
     Raid1 public raids;
 
+   
     /// @dev how many times the cost of battling must be wagered to enter the arena
     uint256 wageringFactor;
+
+    ///@dev Total number of games played in the arena
+    uint256 totalGamesPlayed;
+
+    /// @dev Total number of points of rank one
+    uint256 public pointsOfRankOne;
+
+    /// @dev Total number of points of rank two
+    uint256 public pointsOfRankTwo;
+
+    /// @dev Total number of points of rank three
+    uint256 public pointsOfRankThree;
+
+    
+    TopThreeRankingDetails[3] public topThreeRankers;
 
     /// @dev Fighter by characterID
     mapping(uint256 => Fighter) public fightersByCharacterID;
@@ -52,12 +83,21 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     ///@dev shields currently in the arena
     mapping(uint256 => bool) public shieldsInUse;
 
+    ///@dev current top 3 characters
+    mapping(uint256 => TopThreeRankingDetails) public topThreeRankingDetailsByRank;
+
+    ///@dev character's overall stats including ranking
+    mapping(uint256 => CharacterStatistcs) public characterStatisticsByID;
+
+    
+
     modifier enteringArenaChecks(
         uint256 characterID,
         uint256 weaponID,
         uint256 shieldID,
         bool useShield
     ) {
+        
         require(
             !charactersInUse[characterID],
             "The character is already in the arena"
@@ -92,6 +132,18 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             // TODO: Check if shields are used in the arena somehow
         }
 
+        _;
+    }
+
+    modifier beforePerformingDuel(uint256 characterID){
+         require(
+            charactersInUse[characterID],
+            "The character is not in the arena"
+        );
+        require(
+            characters.ownerOf(characterID) == msg.sender,
+            "You don't own the given character"
+        );
         _;
     }
 
@@ -194,8 +246,94 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     }
 
     /// @dev performs a given character's duel against its opponent
-    function performDuel(uint256 characterID) public {
+    function performDuel(uint256 characterID,uint256 winner) public beforePerformingDuel(characterID) {
         // TODO: implement (not final signature)
+        
+        uint8 tier = getArenaTier(characterID);
+        uint256 opponentCharacterID = fightersByTier[tier][1];
+        caluculateTopThreeRanking(characterID,opponentCharacterID,winner);
+    }
+
+    /// @dev caluclates ranking to determine opponentCharacter rankers
+    function caluculateTopThreeRanking(uint256 characterID,uint256 opponentCharacterID,uint256 winner) private{
+        CharacterStatistcs storage opponentCharacter = characterStatisticsByID[opponentCharacterID];
+        CharacterStatistcs storage myCharacter = characterStatisticsByID[characterID];
+        if (winner == 1) {
+            opponentCharacter.totalPoints += 1;
+            opponentCharacter.totalGamesPlayed += 1;
+            opponentCharacter.totalGamesWon += 1;
+            myCharacter.totalGamesPlayed += 1;
+            myCharacter.totalGamesLost += 1;
+            if (pointsOfRankOne < opponentCharacter.totalPoints) {
+                
+                opponentCharacter.characterID= opponentCharacterID;
+                pointsOfRankOne = opponentCharacter.totalPoints;
+                topThreeRankers[0] = TopThreeRankingDetails(
+                    opponentCharacterID,
+                    opponentCharacter.totalPoints,
+                    1,
+                    block.timestamp
+                );
+            } else if (pointsOfRankTwo < opponentCharacter.totalPoints) {
+               
+                opponentCharacter.characterID= opponentCharacterID;
+                pointsOfRankTwo = opponentCharacter.totalPoints;
+              topThreeRankers[1] = TopThreeRankingDetails(
+                    opponentCharacterID,
+                    opponentCharacter.totalPoints,
+                    2,
+                    block.timestamp
+                );
+            } else if (pointsOfRankThree < opponentCharacter.totalPoints) {
+                
+                opponentCharacter.characterID= opponentCharacterID;
+                pointsOfRankThree = opponentCharacter.totalPoints;
+               topThreeRankers[2] = TopThreeRankingDetails(
+                    opponentCharacterID,
+                    opponentCharacter.totalPoints,
+                    3,
+                    block.timestamp
+                );
+            }
+        } else {
+            myCharacter.totalPoints += 1;
+            myCharacter.totalGamesPlayed += 1;
+            myCharacter.totalGamesWon += 1;
+            opponentCharacter.totalGamesPlayed += 1;
+            opponentCharacter.totalGamesLost += 1;
+            if (pointsOfRankOne < myCharacter.totalPoints) {
+               
+                myCharacter.characterID= characterID;
+                pointsOfRankOne = myCharacter.totalPoints;
+                topThreeRankers[0] = TopThreeRankingDetails(
+                    characterID,
+                    myCharacter.totalPoints,
+                    1,
+                    block.timestamp
+                );
+            } else if (pointsOfRankTwo < myCharacter.totalPoints) {
+               
+                myCharacter.characterID= characterID;
+                pointsOfRankTwo = myCharacter.totalPoints;
+                topThreeRankers[1] = TopThreeRankingDetails(
+                    characterID,
+                    myCharacter.totalPoints,
+                    2,
+                    block.timestamp
+                );
+            } else if (pointsOfRankThree < myCharacter.totalPoints) {
+               
+                myCharacter.characterID= characterID;
+                pointsOfRankThree = myCharacter.totalPoints;
+                topThreeRankers[2] = TopThreeRankingDetails(
+                    characterID,
+                    myCharacter.totalPoints,
+                    3,
+                    block.timestamp
+                );
+            }
+        }
+        totalGamesPlayed++;
     }
 
     /// @dev withdraws a character from the arena.
