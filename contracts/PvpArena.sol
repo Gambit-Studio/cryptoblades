@@ -71,13 +71,8 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     uint8 public losingPoints;
     /// @dev amount of players that are considered for the top ranking
     uint8 private _maxCharactersPerRanking;
-
-    /// @dev percentage of the ranked seasonal pool given to the top one player
-    uint8 private _topOnePrizePercentage;
-    /// @dev percentage of the ranked seasonal pool given to the top two player
-    uint8 private _topTwoPrizePercentage;
-    /// @dev percentage of the ranked seasonal pool given to the top three player
-    uint8 private _topThreePrizePercentage;
+    /// @dev percentages of ranked prize distribution by fighter rank (represented as index)
+    uint8[] private _prizePercentages;
 
     /// @dev Fighter by characterID
     mapping(uint256 => Fighter) public fighterByCharacter;
@@ -197,16 +192,9 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         winningPoints = 5;
         losingPoints = 3;
         _maxCharactersPerRanking = 4;
-        _topOnePrizePercentage = 60;
-        _topTwoPrizePercentage = 30;
-        _topThreePrizePercentage = 10;
-        require(
-            _topOnePrizePercentage +
-                _topTwoPrizePercentage +
-                _topThreePrizePercentage ==
-                100,
-            "Invalid ranked prize distribution"
-        );
+        _prizePercentages.push(60);
+        _prizePercentages.push(30);
+        _prizePercentages.push(10);
     }
 
     /// @notice enter the arena with a character, a weapon and optionally a shield
@@ -599,7 +587,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             if (_fightersByTier[i].length() == 0) {
                 continue;
             }
-            for (uint8 j = 0; j < 3; j++) {
+            for (uint8 j = 0; j < _prizePercentages.length; j++) {
                 _transferRewards(
                     _rankingByTier[i][j],
                     j + 1,
@@ -614,25 +602,13 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         uint8 position,
         uint256 pool
     ) private {
-        uint8 percentage;
+        uint8 percentage = _prizePercentages[position];
         address playerToTransfer = characters.ownerOf(characterID);
         uint256 amountToTransfer;
 
-        if (position == 1) {
-            percentage = _topOnePrizePercentage;
-        } else if (position == 2) {
-            percentage = _topTwoPrizePercentage;
-        } else if (position == 3) {
-            percentage = _topThreePrizePercentage;
-        }
-
         amountToTransfer = (pool.mul(percentage)).div(100);
 
-        skillToken.transferFrom(
-            address(this),
-            playerToTransfer,
-            amountToTransfer
-        );
+        skillToken.safeTransfer(playerToTransfer, amountToTransfer);
     }
 
     /// @dev get the top players of a tier
