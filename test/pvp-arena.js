@@ -5,6 +5,7 @@ const {
   time,
 } = require("@openzeppelin/test-helpers");
 const helpers = require("./helpers");
+const { describe } = require("yargs");
 
 const { BN, toBN, fromWei } = web3.utils;
 
@@ -2140,5 +2141,11 @@ contract("PvpArena", (accounts) => {
         expect(playerTier[3].toString()).to.equal(character1ID.toString());
       });
     });
+  });
+
+  describe("#distributeSeasonRewards", () => {
+    beforeEach(() => {});
+
+    it();
   });
 });

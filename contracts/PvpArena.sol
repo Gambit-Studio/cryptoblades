@@ -78,6 +78,10 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     mapping(uint256 => Fighter) public fighterByCharacter;
     /// @dev Active duel by characterID currently attacking
     mapping(uint256 => Duel) public duelByAttacker;
+    /// @dev ranking points by character
+    mapping(uint256 => uint256) public characterRankingPoints;
+    /// @dev funds available for withdrawal by address
+    mapping(address => uint256) public withdrawableFundsByAddress;
     /// @dev last time a character was involved in activity that makes it untattackable
     mapping(uint256 => uint256) private _lastActivityByCharacter;
     /// @dev IDs of characters available by tier (1-10, 11-20, etc...)
@@ -96,8 +100,6 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     mapping(uint256 => uint256) private _duelEarningsByCharacter;
     /// @dev ranking by tier
     mapping(uint8 => uint256[]) private _rankingByTier;
-    /// @dev ranking points by character
-    mapping(uint256 => uint256) public characterRankingPoints;
 
     event NewDuel(
         uint256 indexed attacker,
@@ -582,35 +584,6 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         }
     }
 
-    function _distributeSeasonRewards() private {
-        for (uint8 i = 0; i <= 15; i++) {
-            if (_fightersByTier[i].length() == 0) {
-                continue;
-            }
-            for (uint8 j = 0; j < _prizePercentages.length; j++) {
-                _transferRewards(
-                    _rankingByTier[i][j],
-                    j + 1,
-                    _rankingsPoolByTier[i]
-                );
-            }
-        }
-    }
-
-    function _transferRewards(
-        uint256 characterID,
-        uint8 position,
-        uint256 pool
-    ) private {
-        uint8 percentage = _prizePercentages[position];
-        address playerToTransfer = characters.ownerOf(characterID);
-        uint256 amountToTransfer;
-
-        amountToTransfer = (pool.mul(percentage)).div(100);
-
-        skillToken.safeTransfer(playerToTransfer, amountToTransfer);
-    }
-
     /// @dev get the top players of a tier
     function getTopTierPlayers(uint256 characterID)
         public
@@ -870,5 +843,49 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         characterRankingPoints[characterID] = 0;
         //this is not final, but processing the loser will update the ranks leaving this player in the 4th position, which will be quickly replaced by other players
         processLoser(characterID);
+    }
+
+    /// @dev distributes the ranking rewards pool to top players
+    function _distributeSeasonRewards() private {
+        for (uint8 i = 0; i <= 15; i++) {
+            if (_fightersByTier[i].length() == 0) {
+                continue;
+            }
+            for (uint8 j = 0; j < _prizePercentages.length; j++) {
+                _transferRewards(
+                    _rankingByTier[i][j],
+                    j + 1,
+                    _rankingsPoolByTier[i]
+                );
+            }
+        }
+    }
+
+    /// @dev increases a players withdrawable funds depending on their position in the ranked leaderboard
+    function _transferRewards(
+        uint256 characterID,
+        uint8 position,
+        uint256 pool
+    ) private {
+        uint8 percentage = _prizePercentages[position];
+        address playerToTransfer = characters.ownerOf(characterID);
+        uint256 amountToTransfer;
+
+        amountToTransfer = (pool.mul(percentage)).div(100);
+
+        withdrawableFundsByAddress[
+            playerToTransfer
+        ] = withdrawableFundsByAddress[playerToTransfer].add(amountToTransfer);
+    }
+
+    /// @dev allows a player to withdraw their withdrawable funds
+    function withdraw() public {
+        uint256 amountToTransfer = withdrawableFundsByAddress[msg.sender];
+
+        if (amountToTransfer > 0) {
+            withdrawableFundsByAddress[msg.sender] = 0;
+
+            skillToken.safeTransfer(msg.sender, amountToTransfer);
+        }
     }
 }
