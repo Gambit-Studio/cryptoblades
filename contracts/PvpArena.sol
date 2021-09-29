@@ -846,6 +846,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     }
 
     /// @dev distributes the ranking rewards pool to top players
+    // TODO: Re-evaluate if private or requires some permission
     function _distributeSeasonRewards() private {
         for (uint8 i = 0; i <= 15; i++) {
             if (_fightersByTier[i].length() == 0) {
@@ -879,7 +880,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     }
 
     /// @dev allows a player to withdraw their withdrawable funds
-    function withdraw() public {
+    function withdraw() external {
         uint256 amountToTransfer = withdrawableFundsByAddress[msg.sender];
 
         if (amountToTransfer > 0) {

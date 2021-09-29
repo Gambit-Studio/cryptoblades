@@ -2148,4 +2148,10 @@ contract("PvpArena", (accounts) => {
 
     it();
   });
+
+  describe("#withdraw", () => {
+    beforeEach(() => {});
+
+    it();
+  });
 });
