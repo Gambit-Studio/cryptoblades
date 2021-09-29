@@ -912,6 +912,7 @@ contract("PvpArena", (accounts) => {
       it("should subtract the penalty from the refunded amount");
     });
   });
+
   describe("#performDuel", async () => {
     describe("happy path", () => {
       describe("attacker wins", () => {
@@ -1805,6 +1806,7 @@ contract("PvpArena", (accounts) => {
       });
     });
   });
+
   describe("rankingBehaviour", () => {
     describe("entering the arena ", () => {
       let character1ID;
@@ -1815,6 +1817,7 @@ contract("PvpArena", (accounts) => {
       let character6ID;
       let weapon1ID;
       let weapon2ID;
+
       it("should fill the rank with the first 4 players", async () => {
         character1ID = await createCharacterInPvpTier(accounts[1], 2, "222");
         character2ID = await createCharacterInPvpTier(accounts[1], 2, "222");
@@ -1831,6 +1834,7 @@ contract("PvpArena", (accounts) => {
         expect(characterTier[3].toString()).to.equal(character5ID.toString());
       });
     });
+
     describe("after the fight", () => {
       it("update the ranks of both the winner and the loser and add/subtract points respectively", async () => {
         const winningPoints = await pvpArena.winningPoints();
@@ -1923,6 +1927,7 @@ contract("PvpArena", (accounts) => {
           loserPreviousRankPoints.sub(losingPoints).toString()
         );
       });
+
       it("should update the player if he is not within the top 4 and has a higher score than the 4th ranked player", async () => {
         weapon1ID = await helpers.createWeapon(
           accounts[2],
@@ -1995,6 +2000,7 @@ contract("PvpArena", (accounts) => {
         // expect the last character to be the first one, climibing through the entire ladder
         expect(playerTier[0].toString()).to.equal(character6ID).toString();
       });
+
       it("should process the winner and the loser with only 2 players inside the tier", async () => {
         weapon1ID = await helpers.createWeapon(
           accounts[2],
@@ -2054,6 +2060,7 @@ contract("PvpArena", (accounts) => {
         expect(playerTier[2]).to.equal(undefined);
       });
     });
+
     describe("loser path", () => {
       it("should not update the ranks if the loser is not within the top 4", async () => {
         weapon1ID = await helpers.createWeapon(
