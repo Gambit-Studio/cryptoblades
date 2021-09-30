@@ -82,7 +82,7 @@ module.exports = {
         new HDWalletProvider(
           hdWalletProviderOptions(
             undefined,
-            process.env.BINANCE_ALPA_WALLET_MNEMONIC,
+            process.env.BINANCE_ALPHA_WALLET_MNEMONIC,
             {
               providerOrUrl: "https://data-seed-prebsc-2-s2.binance.org:8545/",
             }
