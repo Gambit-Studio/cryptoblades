@@ -18,20 +18,23 @@
  *
  */
 
-require('dotenv').config();
+require("dotenv").config();
 
-function hdWalletProviderOptions(privateKeyEnvVarValue, mnemonicPhraseEnvVarValue, otherOpts) {
+function hdWalletProviderOptions(
+  privateKeyEnvVarValue,
+  mnemonicPhraseEnvVarValue,
+  otherOpts
+) {
   const opts = { ...otherOpts };
-  if(privateKeyEnvVarValue) {
+  if (privateKeyEnvVarValue) {
     opts.privateKeys = [privateKeyEnvVarValue];
-  }
-  else {
+  } else {
     opts.mnemonic = mnemonicPhraseEnvVarValue;
   }
   return opts;
 }
 
-const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {
   /**
@@ -52,38 +55,62 @@ module.exports = {
     // options below to some value.
     //
     development: {
-      host: process.env.ETH_DEV_RPC_HOST || '127.0.0.1',     // Localhost (default: none)
-      port: process.env.ETH_DEV_RPC_PORT || 7545,            // Standard Ethereum port (default: none)
-      network_id: process.env.ETH_DEV_RPC_NETWORK_ID || '*',       // Any network (default: none)
-      gas: parseInt(process.env.ETH_DEV_RPC_GAS, 10) || 67219750 // required for deploy, otherwise it throws weird require-errors on constructor
+      host: process.env.ETH_DEV_RPC_HOST || "127.0.0.1", // Localhost (default: none)
+      port: process.env.ETH_DEV_RPC_PORT || 7545, // Standard Ethereum port (default: none)
+      network_id: process.env.ETH_DEV_RPC_NETWORK_ID || "*", // Any network (default: none)
+      gas: parseInt(process.env.ETH_DEV_RPC_GAS, 10) || 67219750, // required for deploy, otherwise it throws weird require-errors on constructor
     },
     bsctestnet: {
-      provider: () => new HDWalletProvider(hdWalletProviderOptions(
-        process.env.BINANCE_WALLET_PRIVATE_KEY,
-        process.env.BINANCE_WALLET_MNEMONIC,
-        {
-          providerOrUrl: 'https://data-seed-prebsc-2-s2.binance.org:8545/'
-        }
-      )),
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.BINANCE_WALLET_PRIVATE_KEY,
+            process.env.BINANCE_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://data-seed-prebsc-2-s2.binance.org:8545/",
+            }
+          )
+        ),
       network_id: 0x61,
       confirmations: 10,
       timeoutBlocks: 200,
-      gas: 10000000,//8000000,
-      skipDryRun: true
+      gas: 10000000, //8000000,
+      skipDryRun: true,
     },
+    bsctestnet_alpha: {
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            undefined,
+            process.env.BINANCE_ALPA_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://data-seed-prebsc-2-s2.binance.org:8545/",
+            }
+          )
+        ),
+      network_id: 0x61,
+      confirmations: 10,
+      timeoutBlocks: 200,
+      gas: 10000000, //8000000,
+      skipDryRun: true,
+    },
+
     bscmainnet: {
-      provider: () => new HDWalletProvider(hdWalletProviderOptions(
-        process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
-        process.env.BINANCE_MAINNET_WALLET_MNEMONIC,
-        {
-          providerOrUrl: 'https://bsc-dataseed.binance.org/'
-        }
-      )),
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
+            process.env.BINANCE_MAINNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://bsc-dataseed.binance.org/",
+            }
+          )
+        ),
       network_id: 0x38,
       confirmations: 10,
       timeoutBlocks: 200,
       gas: 5600000,
-      skipDryRun: true
+      skipDryRun: true,
     },
     // Another network with more advanced options...
     // advanced: {
@@ -120,23 +147,21 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.6.5",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.6.5", // Fetch exact version from solc-bin (default: truffle's version)
       //docker: false,        // Use "0.5.1" you've installed locally with docker (default: false)
-      settings: {          // See the solidity docs for advice about optimization and evmVersion
+      settings: {
+        // See the solidity docs for advice about optimization and evmVersion
         optimizer: {
           enabled: true,
-          runs: 200
+          runs: 200,
         },
         //evmVersion: "byzantium"
-      }
-    }
+      },
+    },
   },
-  plugins: [
-    "truffle-plugin-verify",
-    "truffle-contract-size"
-  ],
+  plugins: ["truffle-plugin-verify", "truffle-contract-size"],
   api_keys: {
-    bscscan: process.env.BSCSCAN_API_KEY
+    bscscan: process.env.BSCSCAN_API_KEY,
   },
   // subscribers: {
   //   abisToTs: require('./truffle-subscriber-abis-to-ts.js')
