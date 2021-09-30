@@ -72,7 +72,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     /// @dev amount of players that are considered for the top ranking
     uint8 private _maxCharactersPerRanking;
     /// @dev percentages of ranked prize distribution by fighter rank (represented as index)
-    uint8[] private _prizePercentages;
+    uint256[] private _prizePercentages;
 
     /// @dev Fighter by characterID
     mapping(uint256 => Fighter) public fighterByCharacter;
@@ -81,7 +81,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     /// @dev ranking points by character
     mapping(uint256 => uint256) public characterRankingPoints;
     /// @dev funds available for withdrawal by address
-    mapping(address => uint256) public withdrawableFundsByAddress;
+    mapping(address => uint256) private _rankingEarningsByPlayer;
     /// @dev last time a character was involved in activity that makes it untattackable
     mapping(uint256 => uint256) private _lastActivityByCharacter;
     /// @dev IDs of characters available by tier (1-10, 11-20, etc...)
@@ -678,7 +678,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         _lastActivityByCharacter[characterID] = block.timestamp;
     }
 
-    /// @dev function where admins can seta character's ranking points
+    /// @dev function where admins can set a character's ranking points
     function setRankingPoints(uint256 characterID, uint8 newRankingPoints)
         public
         restricted
@@ -846,16 +846,44 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     }
 
     /// @dev distributes the ranking rewards pool to top players
-    // TODO: Re-evaluate if private or requires some permission
-    function _distributeSeasonRewards() private {
+    function distributeSeasonRewards() external restricted {
+        // Note: Loops over 15 tiers. Should not be reachable anytime in the foreseeable future.
         for (uint8 i = 0; i <= 15; i++) {
             if (_fightersByTier[i].length() == 0) {
                 continue;
             }
-            for (uint8 j = 0; j < _prizePercentages.length; j++) {
-                _transferRewards(
-                    _rankingByTier[i][j],
-                    j + 1,
+            uint256 difference = _prizePercentages.length -
+                _rankingByTier[i].length;
+
+            // Note: If there are less players than top positions, excess is transferred to top 1.
+            if (_rankingByTier[i].length < _prizePercentages.length) {
+                uint256 excessPercentage;
+                address topOnePlayer = characters.ownerOf(_rankingByTier[i][0]);
+
+                // Note: We accumulate excessive percentage.
+                for (
+                    uint256 j = difference;
+                    j < _prizePercentages.length;
+                    j++
+                ) {
+                    excessPercentage = excessPercentage.add(
+                        _prizePercentages[_prizePercentages.length - difference]
+                    );
+                }
+
+                // Note: We assign excessive rewards to top 1 player.
+                _rankingEarningsByPlayer[
+                    topOnePlayer
+                ] = _rankingEarningsByPlayer[topOnePlayer].add(
+                    (_rankingsPoolByTier[i].mul(excessPercentage)).div(100)
+                );
+            }
+
+            // Note: We assign rewards normally to all possible players.
+            for (uint8 h = 0; h < _prizePercentages.length - difference; h++) {
+                _assignRewards(
+                    _rankingByTier[i][h],
+                    h + 1,
                     _rankingsPoolByTier[i]
                 );
             }
@@ -863,28 +891,28 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     }
 
     /// @dev increases a players withdrawable funds depending on their position in the ranked leaderboard
-    function _transferRewards(
+    function _assignRewards(
         uint256 characterID,
         uint8 position,
         uint256 pool
     ) private {
-        uint8 percentage = _prizePercentages[position];
+        uint256 percentage = _prizePercentages[position];
         address playerToTransfer = characters.ownerOf(characterID);
         uint256 amountToTransfer;
 
         amountToTransfer = (pool.mul(percentage)).div(100);
 
-        withdrawableFundsByAddress[
+        _rankingEarningsByPlayer[playerToTransfer] = _rankingEarningsByPlayer[
             playerToTransfer
-        ] = withdrawableFundsByAddress[playerToTransfer].add(amountToTransfer);
+        ].add(amountToTransfer);
     }
 
     /// @dev allows a player to withdraw their withdrawable funds
-    function withdraw() external {
-        uint256 amountToTransfer = withdrawableFundsByAddress[msg.sender];
+    function withdrawRankedRewards() external {
+        uint256 amountToTransfer = _rankingEarningsByPlayer[msg.sender];
 
         if (amountToTransfer > 0) {
-            withdrawableFundsByAddress[msg.sender] = 0;
+            _rankingEarningsByPlayer[msg.sender] = 0;
 
             skillToken.safeTransfer(msg.sender, amountToTransfer);
         }
