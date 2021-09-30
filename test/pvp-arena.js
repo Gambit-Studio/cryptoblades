@@ -2143,102 +2143,57 @@ contract("PvpArena", (accounts) => {
     });
   });
 
-  describe("#distributeSeasonRewards", () => {
-    beforeEach(() => {
-      character1ID = await createCharacterInPvpTier(accounts[1], 1);
-      character2ID = await createCharacterInPvpTier(accounts[2], 1);
-      character3ID = await createCharacterInPvpTier(accounts[3], 1);
+  // describe("#distributeSeasonRewards", () => {
+  //   beforeEach(async () => {
+  //     character1ID = await createCharacterInPvpTier(accounts[1], 1);
+  //     character2ID = await createCharacterInPvpTier(accounts[2], 1);
+  //     character3ID = await createCharacterInPvpTier(accounts[3], 1);
 
-      // SEGUIR ACA ACABO DE COPIAR ESTO DE DUEL CHARACTER (EL BEFORE EACH, ARREGLARLO)
+  //     await pvpArena.setRankingPoints(character1ID, 15, {
+  //       from: accounts[0],
+  //     });
+  //     await pvpArena.setRankingPoints(character2ID, 10, {
+  //       from: accounts[0],
+  //     });
+  //     await pvpArena.setRankingPoints(character3ID, 5, {
+  //       from: accounts[0],
+  //     });
+  //   });
 
-      // We create 2 identical characters with identical weapons, then
-      // we make 1 effective against the other so that the result is always
-      // the same
-      const weapon1ID = await helpers.createWeapon(
-        accounts[1],
-        "111",
-        helpers.elements.water,
-        {
-          weapons,
-        }
-      );
-      const weapon2ID = await helpers.createWeapon(
-        accounts[2],
-        "111",
-        helpers.elements.fire,
-        {
-          weapons,
-        }
-      );
+  //   it("distributes rewards correctly to top characters' owners", async () => {
+  //     console.log("1111: ", await skillToken.balanceOf(accounts[1]));
+  //     console.log("2222: ", await skillToken.balanceOf(accounts[2]));
+  //     console.log("3333: ", await skillToken.balanceOf(accounts[3]));
 
-      character1ID = await createCharacterInPvpTier(
-        accounts[1],
-        2,
-        "222",
-        weapon1ID
-      );
-      character2ID = await createCharacterInPvpTier(
-        accounts[2],
-        2,
-        "222",
-        weapon2ID
-      );
+  //     await pvpArena.distributeSeasonRewards({ from: accounts[0] });
 
-      await characters.setTrait(character1ID, helpers.elements.water, {
-        from: accounts[0],
-      });
-      await characters.setTrait(character2ID, helpers.elements.fire, {
-        from: accounts[0],
-      });
+  //     console.log("11: ", await skillToken.balanceOf(accounts[1]));
+  //     console.log("22: ", await skillToken.balanceOf(accounts[2]));
+  //     console.log("33: ", await skillToken.balanceOf(accounts[3]));
 
-      await time.increase(await pvpArena.unattackableSeconds());
-      await pvpArena.requestOpponent(character1ID, {
-        from: accounts[1],
-      });
+  //     // it("should send the unclaimed earnings to the sender", async () => {
+  //     //   await pvpArena.withdrawDuelEarnings(character1ID, {
+  //     //     from: accounts[1],
+  //     //   });
+  //     //   const newBalance = await skillToken.balanceOf(accounts[1]);
+  //     //   const duelCost = await pvpArena.getDuelCost(character1ID);
+  //     //   const bounty = duelCost.mul(toBN(2));
+  //     //   const poolTax = bounty.mul(toBN(15)).div(toBN(100));
+  //     //   const winnerReward = bounty.sub(poolTax).sub(duelCost);
+  //     //   expect(newBalance.toString()).to.equal(
+  //     //     balance.add(winnerReward.mul(toBN(2))).toString()
+  //     //   );
+  //     // });
+  //   });
 
-      character1Wager = await pvpArena.getCharacterWager(character1ID, {
-        from: accounts[1],
-      });
-      character2Wager = await pvpArena.getCharacterWager(character2ID, {
-        from: accounts[2],
-      });
+  //   it(
+  //     "gives excess rewards to top 1 player if there are less players than the amount of top slots"
+  //   );
+  // });
 
-      const { tx } = await pvpArena.performDuel(character1ID, {
-        from: accounts[1],
-      });
-      previousBalance = await skillToken.balanceOf(accounts[1]);
-      duelEvent = await expectEvent.inTransaction(tx, pvpArena, "DuelFinished");
+  // describe("#withdraw", () => {
+  //   beforeEach(() => {});
 
-      duelTx = tx;
-      duelCost = await pvpArena.getDuelCost(character1ID, {
-        from: accounts[1],
-      });
-
-      bounty = duelCost.mul(toBN(2));
-      poolTax = bounty.mul(toBN(15)).div(toBN(100));
-      winnerReward = bounty.sub(poolTax).sub(duelCost);
-    });
-
-    it("distributes rewards correctly to top characters' owners", () => {
-      await pvpArena.setRankingPoints(character1ID, 35, {
-        from: accounts[0],
-      });
-      await pvpArena.setRankingPoints(character2ID, 34, {
-        from: accounts[0],
-      });
-      await pvpArena.setRankingPoints(character3ID, 33, {
-        from: accounts[0],
-      });
-    });
-
-    it(
-      "gives excess rewards to top 1 player if there are less players than the amount of top slots"
-    );
-  });
-
-  describe("#withdraw", () => {
-    beforeEach(() => {});
-
-    it();
-  });
+  //   it();
+  // });
 });
