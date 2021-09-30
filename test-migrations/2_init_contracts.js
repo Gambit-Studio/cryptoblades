@@ -1,3 +1,7 @@
+// NOTE: This is a compacted version of dev contracts that can be 
+// used to test new features in testnet as separate contracts so that the
+// official contracts in testnet are not affected.
+
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
 const assert = require('assert');
 
