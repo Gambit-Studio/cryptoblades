@@ -30,6 +30,8 @@ import { abi as weaponCosmeticsAbi } from '../../build/contracts/WeaponCosmetics
 import { abi as characterCosmeticsAbi } from '../../build/contracts/CharacterCosmetics.json';
 import config from '../app-config.json';
 
+console.log('networks', cryptoBladesNetworks);
+console.log('skillTokenNetworks', skillTokenNetworks);
 
 import Web3 from 'web3';
 import { Contracts, isStakeType, StakeType, StakingContracts } from './interfaces';
@@ -58,18 +60,24 @@ interface Chain {
   chains: Record<string, Record<string, any>>;
 }
 
+
 export function getConfigValue(key: string): any {
+  if (process.env.VUE_APP_STAGE === 'alpha') {
+    return process.env[key];
+  }
+
   if(process.env.NODE_ENV === 'development') return '';
   const env = window.location.href.startsWith('https://test') ? 'test' : 'production';
   const chain = localStorage.getItem('currentChain') || 'BSC';
   return (config as Config).environments[env].chains[chain][key];
 }
 
-let networkId = getConfigValue('VUE_APP_NETWORK_ID') || '5777';
+let networkId = getConfigValue('VUE_APP_NETWORK_ID') || '97';
 
 type Networks = Partial<Record<string, { address: string }>>;
 
 type Abi = any[];
+
 
 const stakingContractAddressesFromBuild: Partial<Record<StakeType, Partial<StakingContractEntry>>> = {
   skill: {
@@ -140,6 +148,8 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
   }
 
   const cryptoBladesContractAddr = getConfigValue('VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS') || (cryptoBladesNetworks as Networks)[networkId]!.address;
+
+  console.log('cryptoBladesContractAddr', cryptoBladesContractAddr);
   const CryptoBlades = new web3.eth.Contract(cryptoBladesAbi as Abi, cryptoBladesContractAddr);
   const [charactersAddr, weaponsAddr, randomsAddr, blacksmithAddr] = await Promise.all([
     CryptoBlades.methods.characters().call(),
@@ -147,6 +157,8 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
     CryptoBlades.methods.randoms().call(),
     CryptoBlades.methods.blacksmith().call(),
   ]);
+
+  console.log(charactersAddr, weaponsAddr, randomsAddr, blacksmithAddr);
 
   const Randoms = new web3.eth.Contract(randomsAbi as Abi, randomsAddr);
   const Characters = new web3.eth.Contract(charactersAbi as Abi, charactersAddr);
