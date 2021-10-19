@@ -234,7 +234,6 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         }
         // character starts unattackable
         _updateLastActivityTimestamp(characterID);
-
         skillToken.transferFrom(msg.sender, address(this), wager);
     }
 
@@ -264,7 +263,9 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             getDuelCost(characterID).div(4)
         );
     }
-
+    function enterz (uint256 characterID, uint256 weaponID) public {
+        raids.joinRaid(characterID, weaponID);
+    }
     /// @dev performs a given character's duel against its opponent
     function performDuel(uint256 attackerID)
         external

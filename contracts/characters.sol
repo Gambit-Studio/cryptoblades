@@ -8,7 +8,6 @@ import "./Promos.sol";
 import "./util.sol";
 import "./interfaces/ITransferCooldownable.sol";
 import "./PvpArena.sol";
-import "hardhat/console.sol";
 
 contract Characters is
     Initializable,

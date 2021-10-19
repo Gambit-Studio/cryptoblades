@@ -14,7 +14,7 @@ import "./Promos.sol";
 import "./weapons.sol";
 import "./util.sol";
 import "./Blacksmith.sol";
-
+import "./PvpArena.sol";
 contract CryptoBlades is Initializable, AccessControlUpgradeable {
     using ABDKMath64x64 for int128;
     using SafeMath for uint256;
@@ -119,6 +119,11 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
         rewardsClaimTaxDuration = 15 days;
     }
 
+    function migrateTo_PvpArena(PvpArena _pvp) public {
+        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not admin");
+        pvp = _pvp;
+    }
+
     // UNUSED; KEPT FOR UPGRADEABILITY PROXY COMPATIBILITY
     uint characterLimit;
     // config vars
@@ -198,6 +203,8 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
     event FightOutcome(address indexed owner, uint256 indexed character, uint256 weapon, uint32 target, uint24 playerRoll, uint24 enemyRoll, uint16 xpGain, uint256 skillGain);
     event InGameOnlyFundsGiven(address indexed to, uint256 skillAmount);
 
+    PvpArena public pvp;
+
     function recoverSkill(uint256 amount) public {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender));
 
@@ -272,8 +279,12 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
 
     function fight(uint256 char, uint256 wep, uint32 target, uint8 fightMultiplier) external
         fightModifierChecks(char, wep) {
+        require(
+            !pvp.isCharacterInArena(char),
+            "Character is on the arena"
+        );
+        require(!pvp.isWeaponInArena(wep), "weapon is on the arena");
         require(fightMultiplier >= 1 && fightMultiplier <= 5);
-
         (uint8 charTrait, uint24 basePowerLevel, uint64 timestamp) =
             unpackFightData(characters.getFightDataAndDrainStamina(char, staminaCostFight * fightMultiplier, false));
 

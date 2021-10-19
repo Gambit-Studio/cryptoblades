@@ -1838,6 +1838,30 @@ contract("PvpArena", (accounts) => {
         expect(characterTier[0].toString()).to.equal(character1ID.toString());
         expect(characterTier[2].toString()).to.equal(character4ID.toString());
       });
+      it.only("should not allow the player to join if he is raiding", async () => {
+        weapon1ID = await helpers.createWeapon(
+          accounts[1],
+          "111",
+          helpers.elements.water,
+          { weapons }
+        );
+        character1ID = await createCharacterInPvpTier(
+          accounts[1],
+          2,
+          "222",
+          weapon1ID
+        );
+        character2ID = await createCharacterInPvpTier(accounts[1], 2, "222");
+
+        await helpers.joinRaid(character1ID, weapon1ID);
+        //this char will be in a different tier
+        const characterTier = await pvpArena.getTierTopRankers(character1ID, {
+          from: accounts[1],
+        });
+
+        expect(characterTier[0].toString()).to.equal(character1ID.toString());
+        expect(characterTier[2].toString()).to.equal(character4ID.toString());
+      });
     });
 
     describe("Ranking reset", () => {

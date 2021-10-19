@@ -166,7 +166,9 @@ async function prepareContracts(accounts) {
   await promos.grantRole(promos_GAME_ADMIN, game.address);
   await promos.grantRole(promos_GAME_ADMIN, characters.address);
   await game.grantRole(GAME_ADMIN, raid.address);
+  await game.grantRole(GAME_ADMIN, raid1.address);
   await game.grantRole(GAME_ADMIN, blacksmith.address);
+  await raid1.grantRole(GAME_ADMIN, game.address);
 
   await weapons.migrateTo_e55d8c5();
   await weapons.migrateTo_aa9da90();
@@ -196,6 +198,8 @@ async function prepareContracts(accounts) {
     characterWaterTraitChangeConsumables.address,
     characterLightningTraitChangeConsumables.address
   );
+
+  await raid1.migrateTo_PvpArena(pvpArena.address);
 
   return {
     skillToken,

@@ -1,12 +1,12 @@
 const { upgradeProxy } = require("@openzeppelin/truffle-upgrades");
 const { artifacts } = require("hardhat");
 
-const Characters = artifacts.require("Characters");
+const Raid1 = artifacts.require("Raid1");
 const PvpArena = artifacts.require("PvpArena");
 
 module.exports = async function (deployer) {
-  const charas = await Characters.deployed();
+  const raids = await Raid1.deployed();
   const pvpArena = await PvpArena.deployed();
-  const _charas = await upgradeProxy(charas.address, Characters, { deployer });
-  _charas.migrateTo_PvpArena(pvpArena.address);
+  const _raids = await upgradeProxy(raids.address, Raid1, { deployer });
+  _raids.migrateTo_PvpArena(pvpArena.address);
 };
