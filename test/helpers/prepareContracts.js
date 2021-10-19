@@ -187,6 +187,7 @@ async function prepareContracts(accounts) {
   await game.migrateTo_23b3a8b(skillStakingRewards.address);
   await game.migrateTo_801f279();
   await game.migrateTo_60872c8(blacksmith.address);
+  await game.migrateTo_PvpArena(pvpArena.address);
 
   await blacksmith.migrateRandoms(randoms.address);
   await blacksmith.migrateTo_61c10da(shields.address, game.address);
