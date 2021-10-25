@@ -18,20 +18,23 @@
  *
  */
 
-require('dotenv').config();
+require("dotenv").config();
 
-function hdWalletProviderOptions(privateKeyEnvVarValue, mnemonicPhraseEnvVarValue, otherOpts) {
+function hdWalletProviderOptions(
+  privateKeyEnvVarValue,
+  mnemonicPhraseEnvVarValue,
+  otherOpts
+) {
   const opts = { ...otherOpts };
-  if(privateKeyEnvVarValue) {
+  if (privateKeyEnvVarValue) {
     opts.privateKeys = [privateKeyEnvVarValue];
-  }
-  else {
+  } else {
     opts.mnemonic = mnemonicPhraseEnvVarValue;
   }
   return opts;
 }
 
-const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {
   /**
@@ -52,102 +55,120 @@ module.exports = {
     // options below to some value.
     //
     development: {
-      host: process.env.ETH_DEV_RPC_HOST || '127.0.0.1',     // Localhost (default: none)
-      port: process.env.ETH_DEV_RPC_PORT || 7545,            // Standard Ethereum port (default: none)
-      network_id: process.env.ETH_DEV_RPC_NETWORK_ID || '*',       // Any network (default: none)
-      gas: parseInt(process.env.ETH_DEV_RPC_GAS, 10) || 67219750 // required for deploy, otherwise it throws weird require-errors on constructor
+      host: process.env.ETH_DEV_RPC_HOST || "127.0.0.1", // Localhost (default: none)
+      port: process.env.ETH_DEV_RPC_PORT || 7545, // Standard Ethereum port (default: none)
+      network_id: process.env.ETH_DEV_RPC_NETWORK_ID || "*", // Any network (default: none)
+      gas: parseInt(process.env.ETH_DEV_RPC_GAS, 10) || 67219750, // required for deploy, otherwise it throws weird require-errors on constructor
     },
     test: {
-      host: 'localhost',
+      host: "localhost",
       gas: 6721975, // required for deploy, otherwise it throws weird require-errors on constructor
       port: 9545,
-      network_id: '*', // Any network (default: none)
+      network_id: "*", // Any network (default: none)
       defaultEtherBalance: 1000,
     },
     bsctestnet: {
-      provider: () => new HDWalletProvider(hdWalletProviderOptions(
-        process.env.BINANCE_WALLET_PRIVATE_KEY,
-        process.env.BINANCE_WALLET_MNEMONIC,
-        {
-          providerOrUrl: 'https://data-seed-prebsc-2-s2.binance.org:8545/'
-        }
-      )),
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.BINANCE_WALLET_PRIVATE_KEY,
+            process.env.BINANCE_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://data-seed-prebsc-2-s2.binance.org:8545/",
+            }
+          )
+        ),
       network_id: 0x61,
-      confirmations: 10,
+      confirmations: 2,
       timeoutBlocks: 200,
-      gas: 10000000,//8000000,
-      skipDryRun: true
+      gas: 10000000, //8000000,
+      skipDryRun: true,
     },
     bscmainnet: {
-      provider: () => new HDWalletProvider(hdWalletProviderOptions(
-        process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
-        process.env.BINANCE_MAINNET_WALLET_MNEMONIC,
-        {
-          providerOrUrl: 'https://bsc-dataseed.binance.org/'
-        }
-      )),
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
+            process.env.BINANCE_MAINNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://bsc-dataseed.binance.org/",
+            }
+          )
+        ),
       network_id: 0x38,
       confirmations: 10,
       timeoutBlocks: 200,
       gas: 5600000,
-      skipDryRun: true
+      skipDryRun: true,
     },
     hecotestnet: {
-      provider: () => new HDWalletProvider(hdWalletProviderOptions(
-        process.env.HECO_TESTNET_WALLET_PRIVATE_KEY,
-        process.env.HECO_TESTNET_WALLET_MNEMONIC,
-        {
-          providerOrUrl: 'wss://ws-testnet.hecochain.com'
-        }
-      )),
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.HECO_TESTNET_WALLET_PRIVATE_KEY,
+            process.env.HECO_TESTNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "wss://ws-testnet.hecochain.com",
+            }
+          )
+        ),
       network_id: 0x100,
       confirmations: 10,
       timeoutBlocks: 200,
       gas: 5600000,
-      skipDryRun: true
+      skipDryRun: true,
     },
     hecomainnet: {
-      provider: () => new HDWalletProvider(hdWalletProviderOptions(
-        process.env.HECO_MAINNET_WALLET_PRIVATE_KEY,
-        process.env.HECO_MAINNET_WALLET_MNEMONIC,
-        {
-          providerOrUrl: 'https://http-mainnet-node.huobichain.com'
-        }
-      )),
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.HECO_MAINNET_WALLET_PRIVATE_KEY,
+            process.env.HECO_MAINNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://http-mainnet-node.huobichain.com",
+            }
+          )
+        ),
       network_id: 0x80,
       confirmations: 10,
       timeoutBlocks: 200,
       gas: 5600000,
-      skipDryRun: true
+      skipDryRun: true,
     },
     okextestnet: {
-      provider: () => new HDWalletProvider(hdWalletProviderOptions(
-        process.env.OKEX_TESTNET_WALLET_PRIVATE_KEY,
-        process.env.OKEX_TESTNET_WALLET_MNEMONIC,
-        {
-          providerOrUrl: 'https://exchaintestrpc.okex.org',
-          pollingInterval: 10000000,
-        }
-      )),
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.OKEX_TESTNET_WALLET_PRIVATE_KEY,
+            process.env.OKEX_TESTNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://exchaintestrpc.okex.org",
+              pollingInterval: 10000000,
+            }
+          )
+        ),
       gasPrice: 1000000000,
       network_id: 0x41,
       timeoutBlocks: 200,
-      skipDryRun: true
+      skipDryRun: true,
     },
     okexmainnet: {
-      provider: () => new HDWalletProvider(hdWalletProviderOptions(
-        process.env.OKEX_MAINNET_WALLET_PRIVATE_KEY,
-        process.env.OKEX_MAINNET_WALLET_MNEMONIC,
-        {
-          providerOrUrl: 'https://exchainrpc.okex.org'
-        }
-      )),
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.OKEX_MAINNET_WALLET_PRIVATE_KEY,
+            process.env.OKEX_MAINNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://exchainrpc.okex.org",
+            }
+          )
+        ),
       gasPrice: 1000000000,
       network_id: 0x42,
       confirmations: 10,
       timeoutBlocks: 200,
       gas: 5600000,
-      skipDryRun: true
+      skipDryRun: true,
     },
     // Another network with more advanced options...
     // advanced: {
@@ -184,25 +205,23 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.6.5",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.6.5", // Fetch exact version from solc-bin (default: truffle's version)
       //docker: false,        // Use "0.5.1" you've installed locally with docker (default: false)
-      settings: {          // See the solidity docs for advice about optimization and evmVersion
+      settings: {
+        // See the solidity docs for advice about optimization and evmVersion
         optimizer: {
           enabled: true,
-          runs: 200
+          runs: 200,
         },
         //evmVersion: "byzantium"
-      }
-    }
+      },
+    },
   },
-  plugins: [
-    "truffle-plugin-verify",
-    "truffle-contract-size"
-  ],
+  plugins: ["truffle-plugin-verify", "truffle-contract-size"],
   api_keys: {
     bscscan: process.env.BSCSCAN_API_KEY,
     hecoinfo: process.env.HECOINFO_API_KEY,
-    OKLink: process.env.OKLINK_API_KEY
+    OKLink: process.env.OKLINK_API_KEY,
   },
   // subscribers: {
   //   abisToTs: require('./truffle-subscriber-abis-to-ts.js')
