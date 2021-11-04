@@ -5,8 +5,8 @@
       "chains": {
         "BSC": {
           "VUE_APP_WAX_BRIDGE_WAX_WALLET_ADDRESS": "snoui.wam",
-          "VUE_APP_NETWORK_ID":"97",
-          "VUE_APP_EXPECTED_NETWORK_ID":"97",
+          "VUE_APP_NETWORK_ID":"1337",
+          "VUE_APP_EXPECTED_NETWORK_ID":"1337",
           "VUE_APP_EXPECTED_NETWORK_NAME":"Binance Smart Chain Testnet",
 
           "VUE_APP_STAKE_TYPES_AVAILABLE":"",
@@ -29,7 +29,7 @@
           "currencyName": "Binance Coin",
           "currencySymbol": "BNB",
           "currencyDecimals": "18",
-          "rpcUrls": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+          "rpcUrls": ["http://127.0.0.1:7545"],
           "blockExplorerUrls": ["https://testnet.bscscan.com"],
           "exchangeUrl": "https://app.apeswap.finance/swap?outputCurrency=0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab"
         },
