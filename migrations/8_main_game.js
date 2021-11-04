@@ -47,11 +47,12 @@ module.exports = async function (deployer, network) {
   const priceOracle = await deployProxy(BasicPriceOracle, [], { deployer });
 
   const charas = await deployProxy(Characters, [], { deployer });
+  console.log("characters",charas.address);
 
   const weps = await deployProxy(Weapons, [], { deployer });
-
+  console.log("weapons",weps.address);
   const game = await deployProxy(CryptoBlades, [skillToken.address, charas.address, weps.address, priceOracle.address, randoms.address], { deployer });
-
+  console.log("game",game.address);
   const charas_GAME_ADMIN = await charas.GAME_ADMIN();
   await charas.grantRole(charas_GAME_ADMIN, game.address);
 

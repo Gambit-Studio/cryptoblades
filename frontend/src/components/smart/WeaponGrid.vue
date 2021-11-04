@@ -391,8 +391,6 @@ export default Vue.extend({
     setWeaponPvPStatusVisibility(weaponID: number){
       this.fetchParticipatingWeapons();
 
-      console.log(this.pvp);
-
       if(this.pvp.participatingWeapons.includes(weaponID.toString())){
         return true;
       }
