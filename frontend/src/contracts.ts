@@ -78,9 +78,8 @@ export function getConfigValue(key: string): any {
   const chain = localStorage.getItem('currentChain') || 'BSC';
   return (config as Config).environments[env].chains[chain][key];
 }
-
 let networkId = getConfigValue('VUE_APP_NETWORK_ID') || '5777';
-
+console.log('nwid', networkId);
 type Networks = Partial<Record<string, { address: string }>>;
 
 type Abi = any[];
