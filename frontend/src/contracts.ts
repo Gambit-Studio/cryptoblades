@@ -137,6 +137,7 @@ async function setUpStakingContracts(web3: Web3) {
   }
 
   const skillTokenAddress = getConfigValue('VUE_APP_SKILL_TOKEN_CONTRACT_ADDRESS') || (skillTokenNetworks as Networks)[networkId]!.address;
+  console.log('skillTokenAddress', skillTokenAddress);
   const SkillToken = new web3.eth.Contract(erc20Abi as Abi, skillTokenAddress);
 
   return {
