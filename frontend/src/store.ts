@@ -3601,7 +3601,7 @@ export function createStore(web3: Web3) {
             .call(defaultCallOptions(state));
 
           commit('updateIsCharacterInArena', { isCharacterInArena });
-          console.log("characterID", characterID, "is in arena", isCharacterInArena);
+          console.log('characterID', characterID, 'is in arena', isCharacterInArena);
           return isCharacterInArena;
         }catch(err){
           console.log('Fetch Is Character In Arena Error Log: ' + err);
