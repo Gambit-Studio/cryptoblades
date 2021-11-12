@@ -246,7 +246,7 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
 
   const pvpContracts: PvPContracts = {};
   if(featureFlagPvP){
-    const pvpContractAddr = process.env.VUE_APP_PVP_CONTRACT_ADDRESS || (pvpNetworks as Networks)[networkId]!.address;
+    const pvpContractAddr = getConfigValue('VUE_APP_PVP_CONTRACT_ADDRESS') || (pvpNetworks as Networks)[networkId]!.address;
 
     pvpContracts.PvpArena = new web3.eth.Contract(pvpAbi as Abi, pvpContractAddr);
 
