@@ -75,13 +75,13 @@ export function getConfigValue(key: string): any {
   }
 
   if(process.env.NODE_ENV === 'development') return '';
-  const env = window.location.href.startsWith('https://test') ? 'test' : 'production';
+  const env = 'test';
   const chain = localStorage.getItem('currentChain') || 'BSC';
   return (config as Config).environments[env].chains[chain][key];
 }
 
 let networkId = getConfigValue('VUE_APP_NETWORK_ID') || '5777';
-
+console.log(networkId);
 type Networks = Partial<Record<string, { address: string }>>;
 
 type Abi = any[];
