@@ -69,6 +69,8 @@ interface Chain {
 
 export function getConfigValue(key: string): any {
   if (process.env.VUE_APP_STAGE === 'alpha') {
+    console.log(process.env.VUE_APP_STAGE);
+    console.log(process.env[key]);
     return process.env[key];
   }
 
