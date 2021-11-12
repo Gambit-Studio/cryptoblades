@@ -41,7 +41,7 @@
   "scripts": {
     "postinstall": "lerna exec -- npm install",
     "lint": "lerna exec -- npm run lint",
-    "build:frontend": "rm -rf build && cd frontend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
     "start:frontend": "cd frontend && npm start",
     "contract:prepare": "npm run build",
     "contract:deploy": "npm run deploy",
