@@ -664,7 +664,6 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     {
         return characterRankingPoints[characterID];
     }
-
     /// @dev checks if a character is in the arena
     function isCharacterInArena(uint256 characterID)
         public
@@ -917,10 +916,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     }
 
     /// @dev set the ranking points of a player to 0 and update the rank,
-    function resetCharacterRankingPoints(uint256 characterID)
-        external
-        restricted
-    {
+    function resetCharacterRankingPoints(uint256 characterID) external restricted {
         //TODO Determine if this is the right approach as it might less efficient gas wise
         characterRankingPoints[characterID] = 0;
         processLoser(characterID);
