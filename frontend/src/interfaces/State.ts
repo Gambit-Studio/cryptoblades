@@ -82,9 +82,15 @@ export interface IPvPState {
   isCharacterInArena: boolean;
   isWeaponInArena: boolean;
   isShieldInArena: boolean;
+  isPerformDuel: boolean;
+  isDuelResult: boolean;
+  duelResult: IDuelResult | null;
   duelByAttacker: IDuelByAttacker | null;
   decisionTime: string;
   rewards: IPvPReward;
+  hasPendingDuel: boolean;
+  characterRankingPoints: string;
+  showStats: boolean;
 }
 
 export interface IDuelByAttacker {
@@ -101,6 +107,8 @@ export interface IDuelResult {
   defenderId: string;
   defenderRoll: string;
   timestamp: string;
+  previousDuelReward: string | number;
+  newDuelReward: string | number;
 }
 
 export interface IInventory{
@@ -166,14 +174,14 @@ export interface IState {
 
   currentTab: number;
 
-  characterTransferCooldowns: Record<number,  | undefined>;
-
   staking: Record<StakeType, IStakeState>;
   stakeOverviews: Record<StakeType, IStakeOverviewState>;
 
   raid: IRaidState;
 
   pvp: IPvPState;
+
+  isLoading: boolean;
 
   inventory: IInventory[];
 

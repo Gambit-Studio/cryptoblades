@@ -1,6 +1,5 @@
 <template>
   <div>
-
         <span class="fighter-combat-details-label">Arena Cost</span> {{getEntryWager}}<br>
         <span class="fighter-combat-details-label">Arena Checks</span><br>
         <span>Character</span>
@@ -22,6 +21,10 @@
           <span
             v-text="getArenaButtonText"
             @click="arenaAction"/><br>
+        </div>
+        <div class="view-stats-arena-details-container">
+          <span
+            @click="openStats()">VIEW STATS</span>
         </div>
   </div>
 </template>
@@ -71,10 +74,17 @@ export default {
     ...mapActions(['enterArena']),
     ...mapMutations([
       'setCurrentPvPCharacter',
-      'updateIsShieldInArena'
+      'updateIsShieldInArena',
+      'updateShowStats',
+      'updateIsLoading'
     ]),
 
+    openStats(){
+      this.updateShowStats(true);
+    },
+
     async enterArena(){
+      this.updateIsLoading(true);
       let canEnterArena = false;
       this.weaponErrorMessage = '';
       this.shieldErrorMessage = '';
@@ -100,13 +110,13 @@ export default {
         this.weaponErrorMessage = 'No issues here.';
       }
       if (this.currentWeapon === null &&
-               this.ownWeapons.length > 1 &&
+               this.ownWeapons.length >= 1 &&
                this.pvp.isWeaponInArena){
         this.weaponErrorMessage = 'Please select a weapon.';
         canEnterArena = false;
       }
       if (this.currentShield === null &&
-               this.ownShields.length > 1 &&
+               this.ownShields.length >= 1 &&
                this.pvp.isShieldInArena){
         this.shieldErrorMessage = 'Please select a shield.';
         canEnterArena = false;
@@ -123,32 +133,52 @@ export default {
       }
 
       if(this.currentShield && canEnterArena){
-        await this.$store.dispatch('enterArena',
+        const errorMessage = await this.$store.dispatch('enterArena',
           {characterID: this.currentCharacterId,
             weaponID: this.currentWeaponId,
             shieldID: this.currentShield.id,
             useShield: true});
-        await Promise.all([
-          this.$store.dispatch('fetchIsCharacterInArena',{characterID: this.currentCharacterId}),
-          this.$store.dispatch('fetchIsWeaponInArena',{ weaponID: this.currentWeaponId }),
-          this.$store.dispatch('fetchIsShieldInArena', { shieldID: this.currentShield.id })
-        ]);
+
+        if(errorMessage && errorMessage.code === 4001){
+          this.$dialog.notify.error(errorMessage.message, {position: 'bottom-left'});
+        }else if (errorMessage && errorMessage.code !== 4001){
+          this.$dialog.notify.error('Something went wrong entering the arena. Please try again', {position: 'bottom-left'});
+        }
+
+        if(!errorMessage){
+          await Promise.all([
+            this.$store.dispatch('fetchIsCharacterInArena',{characterID: this.currentCharacterId}),
+            this.$store.dispatch('fetchIsWeaponInArena',{ weaponID: this.currentWeaponId }),
+            this.$store.dispatch('fetchIsShieldInArena', { shieldID: this.currentShield.id })
+          ]);
+        }
       }
       else if (this.currentShield === null && canEnterArena){
-        await this.$store.dispatch('enterArena',
+        const errorMessage = await this.$store.dispatch('enterArena',
           {characterID: this.currentCharacterId,
             weaponID: this.currentWeaponId,
             shieldID: 0,
             useShield: false});
-        await Promise.all([
-          this.$store.dispatch('fetchIsCharacterInArena',{characterID: this.currentCharacterId}),
-          this.$store.dispatch('fetchIsWeaponInArena',{ weaponID: this.currentWeaponId }),
-          this.updateIsShieldInArena({ isShieldInArena: false })
-        ]);
+
+        if(errorMessage && errorMessage.code === 4001){
+          this.$dialog.notify.error(errorMessage.message, {position: 'bottom-left'});
+        }else if (errorMessage && errorMessage.code !== 4001){
+          this.$dialog.notify.error('Something went wrong entering the arena. Please try again', {position: 'bottom-left'});
+        }
+
+        if(!errorMessage){
+          await Promise.all([
+            this.$store.dispatch('fetchIsCharacterInArena',{characterID: this.currentCharacterId}),
+            this.$store.dispatch('fetchIsWeaponInArena',{ weaponID: this.currentWeaponId }),
+            this.updateIsShieldInArena({ isShieldInArena: false })
+          ]);
+        }
+
       }
       else if (!canEnterArena){
         this.$bvModal.show('enterArenaErrorModal');
       }
+      this.updateIsLoading(false);
     },
 
     async goTo(){
@@ -164,8 +194,9 @@ export default {
       if(this.pvp.isCharacterInArena){
         this.goTo();
       }
-      else
+      else{
         this.enterArena();
+      }
     }
   }
 };
@@ -211,6 +242,20 @@ export default {
   font-size: 15px;
   color: #fff;
   font-weight: bold;
+}
+
+.view-stats-arena-details-container {
+  height: auto;
+  width: 150px;
+  color:#968332;
+  font-weight: bolder;
+  border: 1px solid #968332;
+  border-radius: 5%;
+  box-shadow: 0 0 10px #fff;
+  background-color: #252525;
+  margin-top: 10px;
+  text-align: center;
+  cursor: pointer;
 }
 
 </style>

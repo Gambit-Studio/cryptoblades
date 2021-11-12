@@ -13,7 +13,7 @@ import {
 import {
   Contract, Contracts, isStakeType, IStakeOverviewState,
   IStakeState, IState, IWeb3EventSubscription, StakeType, IRaidState, IPvPState, IInventory, IPvPFighterState,
-  IDuelByAttacker, IDuelResult, IWeapon
+  IDuelByAttacker, IWeapon, IDuelResult
 } from './interfaces';
 import { getCharacterNameFromSeed } from './character-name';
 import { approveFee, approveFeeFromAnyContract, getFeeInSkillFromUsd } from './contract-call-utils';
@@ -199,6 +199,9 @@ export function createStore(web3: Web3) {
         isCharacterInArena: false,
         isWeaponInArena: false,
         isShieldInArena: false,
+        isPerformDuel: false,
+        isDuelResult: false,
+        duelResult: null,
         duelByAttacker: {
           attackerId: '0',
           defenderId: '0',
@@ -212,7 +215,12 @@ export function createStore(web3: Web3) {
           allUnclaimedDuelEarnings: '0',
           unclaimedDuelEarningsById: '0'
         },
+        hasPendingDuel: false,
+        characterRankingPoints: '0',
+        showStats: false,
       },
+
+      isLoading: false,
 
       inventory: [],
 
@@ -1055,6 +1063,34 @@ export function createStore(web3: Web3) {
 
       updateTraitBonus(state: IState, traitBonus: string){
         state.pvp.traitBonus = traitBonus;
+      },
+
+      updateHasPendingDuel(state: IState, hasPendingDuel: boolean){
+        state.pvp.hasPendingDuel = hasPendingDuel;
+      },
+
+      updateCharacterRankingPoints(state: IState, characterRankingPoints: string){
+        state.pvp.characterRankingPoints = characterRankingPoints;
+      },
+
+      updateShowStats(state: IState, showStats: boolean){
+        state.pvp.showStats = showStats;
+      },
+
+      updateIsLoading(state: IState, isLoading: boolean){
+        state.isLoading = isLoading;
+      },
+
+      updateIsDuelResult(state: IState, isDuelResult: boolean){
+        state.pvp.isDuelResult = isDuelResult;
+      },
+
+      updateIsPerformDuel(state: IState, isPerformDuel: boolean){
+        state.pvp.isPerformDuel = isPerformDuel;
+      },
+
+      updateDuelResult(state: IState, duelResult: IDuelResult){
+        state.pvp.duelResult = duelResult;
       }
 
     },
@@ -1683,7 +1719,7 @@ export function createStore(web3: Web3) {
           dispatch('fetchCharacterRename', charId);
         }
       },
-      async fetchCharacterRename({ state, commit }, characterId: number) {
+      async fetchCharacterRename({ state, commit }, characterId) {
         const renameString = await state.contracts().CharacterRenameTagConsumables!.methods
           .getCharacterRename(characterId)
           .call(defaultCallOptions(state));
@@ -2576,7 +2612,6 @@ export function createStore(web3: Web3) {
 
         return await Promise.all(landsIds.map(landId => CBKLand.methods.get(landId).call(defaultCallOptions(state))));
       },
-
 
       async fetchAllMarketNftIds({ state }, { nftContractAddr }) {
         const { NFTMarket } = state.contracts();
@@ -3540,22 +3575,6 @@ export function createStore(web3: Web3) {
           console.log('Fetch Duel Cost Error Log: ' + err);
         }
       },
-      async fetchIsAttackerWithinDecisionTime ({state, commit}, {characterID}){
-        const { PvpArena } = state.contracts();
-        if(!PvpArena) return;
-
-        try{
-          const isAttackerWithinDecisionTime = await PvpArena!.methods
-            .isAttackerWithinDecisionTime(characterID)
-            .call(defaultCallOptions(state));
-
-          commit('updateIsAttackerWithinDecisionTime', { isAttackerWithinDecisionTime });
-
-          return isAttackerWithinDecisionTime;
-        }catch(err){
-          console.log('Fetch Is Attacker Within Decision Time Error Log: ' + err);
-        }
-      },
       async fetchIsCharacterAttackable ({state, commit}, {characterID}){
         const { PvpArena } = state.contracts();
         if(!PvpArena) return;
@@ -3633,7 +3652,9 @@ export function createStore(web3: Web3) {
               from: state.defaultAccount
             });
         } catch(err){
-          console.error('Enter Arena Skill Token Approval Error Log: ' + err);
+          console.log('Enter Arena Skill Token Approval Error Log: ');
+          console.log(err);
+          return err;
         }
 
         try{
@@ -3646,7 +3667,9 @@ export function createStore(web3: Web3) {
           await dispatch('updatePvPDetails', { characterID });
 
         } catch(err){
-          console.error('Enter Arena Error Log: ' + err);
+          console.log('Enter Arena Error Log: ');
+          console.log(err);
+          return err;
         }
 
 
@@ -3664,7 +3687,9 @@ export function createStore(web3: Web3) {
 
           await dispatch('updatePvPDetails',{ characterID });
         } catch(err){
-          console.log('Get Opponent Error Log: ' + err);
+          console.log('Get Opponent Error Log: ');
+          console.log(err);
+          return err;
         }
 
 
@@ -3682,7 +3707,9 @@ export function createStore(web3: Web3) {
               from: state.defaultAccount
             });
         }catch(err){
-          console.log('Reroll Opponent Skill Approval Error Log: ' + err);
+          console.log('Reroll Opponent Skill Approval Error Log: ');
+          console.log(err);
+          return err;
         }
 
         try{
@@ -3694,7 +3721,9 @@ export function createStore(web3: Web3) {
 
           await dispatch('updatePvPDetails', { characterID });
         } catch(err){
-          console.log('Reroll Opponent Error Log: ' + err);
+          console.log('Reroll Opponent Error Log: ');
+          console.log(err);
+          return err;
         }
       },
       async getDuelByAttacker({state, commit, dispatch}, {characterID}){
@@ -3730,29 +3759,68 @@ export function createStore(web3: Web3) {
 
         return duelByAttacker;
       },
-      async performDuel({state, dispatch}, {characterID}){
+      async preparePerformDuel({state, commit}, {characterID}){
         const { PvpArena } = state.contracts();
         if(!PvpArena) return;
 
         try{
-          const duelResult: IDuelResult = duelResultFromContract((await PvpArena.methods
-            .performDuel(characterID)
+          await PvpArena.methods
+            .preparePerformDuel(characterID)
             .send({
               from: state.defaultAccount
-            })).events.DuelFinished.returnValues);
-
-          //This is outside to make sure that performDuel executes before showing the rewards
-          await dispatch('updatePvPDetails', { characterID });
-
-          await Promise.all([
-            dispatch('fetchUnclaimedDuelEarningsById', { characterID }),
-            dispatch('fetchAllUnclaimedDuelEarnings')
-          ]);
-
-          return duelResult;
+            });
         }catch(err){
-          console.log('Perform Duel Error Log: ' + err);
+          commit('updateIsLoading', false);
+          console.log('Prepare Perform Duel Error Log: ');
+          console.log(err);
+          return err;
         }
+
+      },
+      async waitForDuelResult({state, commit, dispatch},{characterID}){
+        const { PvpArena } = state.contracts();
+        if(!PvpArena) return;
+
+        const currentBlock = await web3.eth.getBlockNumber();
+
+        const subscription = web3.eth.subscribe('newBlockHeaders',
+          async function(error: any){
+            if(!error){
+
+              const duelResult = await PvpArena.getPastEvents('DuelFinished', {
+                filter: {attacker: characterID},
+                toBlock: 'latest',
+                fromBlock: currentBlock
+              });
+              if(duelResult.length > 0){
+
+                const processedDuelResult: IDuelResult =
+                duelResultFromContract(duelResult[0].returnValues as [string, string, string, string, string, boolean]);
+
+                console.log(processedDuelResult);
+
+                commit('updateDuelResult', processedDuelResult );
+
+                subscription.unsubscribe((error: any, result: any) =>{
+                  if(!error){
+                    console.log(result);
+                  }
+                });
+
+                commit('updateIsLoading', false);
+                commit('updateIsPerformDuel', true);
+                commit('updateIsDuelResult', true);
+
+                setTimeout(() => {
+                  commit('updateIsPerformDuel', false);
+                }, 6000);
+
+              }
+
+            }});
+
+        await dispatch('updatePvPDetails',{ characterID });
+
       },
       async withdrawFromArena({state, commit, dispatch}, {inDuel,characterID}){
         const { PvpArena, SkillToken } = state.contracts();
@@ -3768,7 +3836,9 @@ export function createStore(web3: Web3) {
                 from: state.defaultAccount
               });
           }catch(err){
-            console.log('Withdraw From Arena Skill Approval Error Log: ' + err);
+            console.log('Withdraw From Arena Skill Approval Error Log: ');
+            console.log(err);
+            return err;
           }
         }
 
@@ -3779,7 +3849,9 @@ export function createStore(web3: Web3) {
               from: state.defaultAccount
             });
         }catch(err){
-          console.log('Withdraw From Arena Error Log: ' + err);
+          console.log('Withdraw From Arena Error Log: ');
+          console.log(err);
+          return err;
         }
 
         await dispatch('fetchParticipatingCharacters');
@@ -3865,6 +3937,22 @@ export function createStore(web3: Web3) {
 
         return arenaTier;
       },
+      async fetchDecisionSeconds({state}){
+        const { PvpArena } = state.contracts();
+        if(!PvpArena) return;
+
+        try{
+          const decisionSeconds = await PvpArena.methods
+            .decisionSeconds()
+            .call(defaultCallOptions(state));
+
+          return decisionSeconds;
+
+        }catch(err){
+          console.log('Fetch Decision Seconds Error Log: ' + err);
+        }
+
+      },
       async fetchRankingRewardsPool({state, commit}, {tier}){
         const { PvpArena } = state.contracts();
         if (!PvpArena) return;
@@ -3881,80 +3969,6 @@ export function createStore(web3: Web3) {
           console.log('Ranking Rewards Pool Error Log: ' + err);
         }
       },
-      async fetchUnclaimedDuelEarningsById({state, commit},{characterID}){
-        const { PvpArena } = state.contracts();
-        if (!PvpArena) return;
-
-        try{
-          const unclaimedDuelEarningsById = await PvpArena.methods
-            .getUnclaimedDuelEarnings(characterID)
-            .call(defaultCallOptions(state));
-
-          commit('updateUnclaimedDuelEarningsById', unclaimedDuelEarningsById);
-
-          return unclaimedDuelEarningsById;
-
-        }catch(err){
-          console.log('Unclaimed Duel Earnings By Id Error Log: ' + err);
-        }
-      },
-      async fetchAllUnclaimedDuelEarnings({state, commit}){
-        const { PvpArena } = state.contracts();
-        if (!PvpArena) return;
-
-        try{
-          const allUnclaimedDuelEarnings = await PvpArena.methods
-            .getAllUnclaimedDuelEarnings()
-            .call(defaultCallOptions(state));
-
-          commit('updateAllUnclaimedDuelEarnings', allUnclaimedDuelEarnings);
-
-          return allUnclaimedDuelEarnings;
-
-        }catch(err){
-          console.log('All Unclaimed Duel Earnings Error Log: ' + err);
-        }
-      },
-      async withdrawUnclaimedDuelEarningsById({state, dispatch},{characterID}){
-        const { PvpArena } = state.contracts();
-        if(!PvpArena) return;
-
-        try{
-          await PvpArena.methods
-            .withdrawDuelEarnings(characterID)
-            .send({
-              from: state.defaultAccount
-            });
-
-          await Promise.all([
-            dispatch('updatePvPDetails', { characterID }),
-            dispatch('fetchUnclaimedDuelEarningsById',{ characterID }),
-            dispatch('fetchAllUnclaimedDuelEarnings')
-          ]);
-        }catch(err){
-          console.log('Withdraw Unclaimed Duel Earnings By Id Error Log: ' + err);
-        }
-      },
-      async withdrawAllUnclaimedDuelEarnings({state, dispatch}){
-        const { PvpArena } = state.contracts();
-        if(!PvpArena) return;
-
-        try{
-          await PvpArena.methods
-            .withdrawAllDuelEarnings()
-            .send({
-              from: state.defaultAccount
-            });
-
-          await Promise.all([
-            dispatch('fetchSkillBalance'),
-            dispatch('fetchAllUnclaimedDuelEarnings'
-            )]);
-
-        }catch(err){
-          console.log('Withdraw All Unclaimed Rewards Error Log: ' + err);
-        }
-      },
       async updatePvPDetails({state, dispatch},{characterID}){
         await Promise.all([
           dispatch('fetchSkillBalance'),
@@ -3963,6 +3977,9 @@ export function createStore(web3: Web3) {
           dispatch('fetchEntryWager', { characterID }),
           dispatch('fetchWageredSkill', { characterID }),
           dispatch('fetchDuelCost', { characterID }),
+          dispatch('fetchCharacterRankingPoints', {characterID}),
+          dispatch('getTierTopRankers',{characterID}),
+          dispatch('hasPendingDuel', {characterID}),
           dispatch('fetchParticipatingCharacters'),
           dispatch('fetchParticipatingWeapons'),
           dispatch('fetchParticipatingShields'),
@@ -4029,6 +4046,186 @@ export function createStore(web3: Web3) {
           console.log('Fetch Character for PvP Error Log: ' + err);
         }
       },
+      async hasPendingDuel({state, commit}, {characterID}){
+        const { PvpArena } = state.contracts();
+        if (!PvpArena) return;
+
+        try{
+          const hasPendingDuel = await PvpArena.methods
+            .hasPendingDuel(characterID)
+            .call(defaultCallOptions(state));
+
+          commit('updateHasPendingDuel', hasPendingDuel);
+          return hasPendingDuel;
+
+        }catch (err){
+          console.log('Has Pending Duel Error Log' + err);
+        }
+      },
+      async fetchCharacterRankingPoints({state, commit},{characterID}){
+        const { PvpArena } = state.contracts();
+        if (!PvpArena) return;
+
+        try{
+          const characterRankingPoints = await PvpArena.methods
+            .getCharacterRankingPoints(characterID)
+            .call(defaultCallOptions(state));
+
+          commit('updateCharacterRankingPoints', characterRankingPoints);
+          return characterRankingPoints;
+        }catch(err){
+          console.log('Get Character Ranking Points Error Log: ' + err);
+        }
+
+      },
+      async fetchLeaderboardCharacterRankingPoints({state},{characterID}){
+        const { PvpArena } = state.contracts();
+        if (!PvpArena) return;
+
+        try{
+          const leaderboardCharacterRankingPoints = await PvpArena.methods
+            .getCharacterRankingPoints(characterID)
+            .call(defaultCallOptions(state));
+
+          return leaderboardCharacterRankingPoints;
+        }catch(err){
+          console.log('Get Leaderboard Character Ranking Points Error Log: ' + err);
+        }
+      },
+      async fetchDuelHistory({state},{characterID}){
+        const { PvpArena } = state.contracts();
+        if (!PvpArena) return;
+
+        try{
+          const attackingDuelHistory = await PvpArena.getPastEvents('DuelFinished', {
+            filter: {attacker: characterID},
+            toBlock: 'latest',
+            fromBlock: 0
+          });
+
+          const defendingDuelHistory = await PvpArena.getPastEvents('DuelFinished', {
+            filter: {defender: characterID},
+            toBlock: 'latest',
+            fromBlock: 0
+          });
+
+          const processedAttackingDuelHistory: any = new Array();
+          const processedDefendingDuelHistory: any = new Array();
+
+          if(attackingDuelHistory.length > 0){
+            attackingDuelHistory.forEach(attack => {
+              processedAttackingDuelHistory?.push(
+                duelResultFromContract(attack.returnValues as [string, string, string, string, string, boolean]));
+            });
+          }
+
+          if(defendingDuelHistory.length > 0){
+            defendingDuelHistory.forEach(defend => {
+              processedDefendingDuelHistory?.push(
+                duelResultFromContract(defend.returnValues as [string, string, string, string, string, boolean]));
+            });
+          }
+
+          const duelHistory = {
+            attack: processedAttackingDuelHistory,
+            defend: processedDefendingDuelHistory
+          };
+
+          return duelHistory;
+
+        }catch(err){
+          console.log('Fetch Duel History Error Log: ' + err);
+        }
+      },
+      async getPrizePercentages({state}){
+        const { PvpArena } = state.contracts();
+        if (!PvpArena) return;
+
+        try{
+          const prizePercentages = await PvpArena.methods
+            .getPrizePercentages()
+            .call(defaultCallOptions(state));
+
+          return prizePercentages;
+        }catch(err){
+          console.log('Get Prize Percentages Error Log: ' + err);
+        }
+      },
+      async getTierTopRankers({state, dispatch},{characterID}){
+        const { PvpArena } = state.contracts();
+        if (!PvpArena) return;
+
+        try{
+          const tierTopRankers = await PvpArena.methods
+            .getTierTopRankers(characterID)
+            .call(defaultCallOptions(state));
+
+          const characterRankingPoints = new Array();
+
+          if(tierTopRankers.length > 0){
+            tierTopRankers.forEach(async (characterID) => {
+              const rankPoints = await dispatch('fetchLeaderboardCharacterRankingPoints', {characterID});
+              characterRankingPoints.push(rankPoints);
+            });
+          }
+
+          const tierTopPlayers = {
+            characterID: tierTopRankers,
+            characterRankPoints: characterRankingPoints
+          };
+
+          return tierTopPlayers;
+        }catch(err){
+          console.log('Get Tier Top Rankers Error Log: ' + err);
+        }
+      },
+      async withdrawRankedRewards({state}){
+        const { PvpArena } = state.contracts();
+        if(!PvpArena) return;
+
+        try{
+          await PvpArena.methods
+            .withdrawRankedRewards()
+            .send({
+              from: state.defaultAccount
+            });
+        }catch(err){
+          console.log('Withdraw Ranked Rewards Error Log: ' + err);
+        }
+      },
+      async fetchWinningPoints({state}){
+        const { PvpArena } = state.contracts();
+        if(!PvpArena) return;
+
+        try{
+          const winningPoints = await PvpArena.methods
+            .winningPoints()
+            .call(defaultCallOptions(state));
+
+          return winningPoints;
+
+        }catch(err){
+          console.log('Fetch Winning Points Error Log:');
+          console.log(err);
+        }
+      },
+      async fetchLosingPoints({state}){
+        const { PvpArena } = state.contracts();
+        if(!PvpArena) return;
+
+        try{
+          const losingPoints = await PvpArena.methods
+            .losingPoints()
+            .call(defaultCallOptions(state));
+
+          return losingPoints;
+        }catch(err){
+          console.log('Fetch Losing Points Error Log:');
+          console.log(err);
+        }
+      },
+
+
       async configureMetaMask({ dispatch }) {
         const currentNetwork = await web3.eth.net.getId();
         if(currentNetwork === +getConfigValue('VUE_APP_NETWORK_ID')) return;
@@ -4225,7 +4422,6 @@ export function createStore(web3: Web3) {
           dispatch('fetchCharacterCosmetic', id)
         ]);
       },
-    }
       async storeItem({ state }, { nftContractAddr, tokenId}: { nftContractAddr: string, tokenId: string}) {
         const { NFTStorage, Weapons, Characters, Shields } = state.contracts();
         if(!NFTStorage || !Weapons || !Characters || !Shields || !state.defaultAccount) return;
