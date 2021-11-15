@@ -68,7 +68,7 @@
     "postdeploy-polygonmainnet-warning-be-careful-this-is-prod": "run-s \"backup-networks 137\" \"verify-contracts -- --network polygonmainnet\"",
     "deploy-mainnet-dry-run": "truffle migrate --network bscmainnet --dry-run",
     "backup-networks": "node scripts/manage-networks.js backup",
-    "verify-contracts": "node scripts/verify-contracts.js"
+    "verify-contracts": "node scripts/verify-contracts.js "
   },
   "keywords": [],
   "author": "",
