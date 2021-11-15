@@ -901,7 +901,6 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         }
 
         require(!_duelQueue.contains(opponentID), "Opponent is in duel queue");
-
         require(foundOpponent, "No opponent found");
 
         duelByAttacker[characterID] = Duel(
