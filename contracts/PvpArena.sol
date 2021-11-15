@@ -846,6 +846,10 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
 
         _fightersByPlayer[msg.sender].remove(characterID);
 
+        if (_duelQueue.contains(characterID)) {
+            _duelQueue.remove(characterID);
+        }
+
         uint8 tier = getArenaTier(characterID);
 
         _fightersByTier[tier].remove(characterID);
