@@ -870,6 +870,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         EnumerableSet.UintSet storage fightersInTier = _fightersByTier[tier];
 
         require(fightersInTier.length() != 0, "No opponents available in tier");
+        require(!_duelQueue.contains(characterID), "Character is in duel queue");
 
         uint256 seed = randoms.getRandomSeed(msg.sender);
         uint256 randomIndex = RandomUtil.randomSeededMinMax(
@@ -898,6 +899,8 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             opponentID = candidateID;
             break;
         }
+
+        require(!_duelQueue.contains(opponentID), "Opponent is in duel queue");
 
         require(foundOpponent, "No opponent found");
 
