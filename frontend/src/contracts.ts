@@ -72,7 +72,7 @@ export function getConfigValue(key: string): any {
     return process.env[key];
   }
 
-  if(process.env.NODE_ENV === 'development') return '';
+  // if(process.env.NODE_ENV === 'development') return '';
   const env = 'test';
   const chain = localStorage.getItem('currentChain') || 'BSC';
   return (config as Config).environments[env].chains[chain][key];
