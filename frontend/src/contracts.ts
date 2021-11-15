@@ -82,6 +82,7 @@ export function getConfigValue(key: string): any {
 
 let networkId = getConfigValue('VUE_APP_NETWORK_ID') || '5777';
 console.log(networkId);
+console.log('appid', getConfigValue('VUE_APP_NETWORK_ID'));
 type Networks = Partial<Record<string, { address: string }>>;
 
 type Abi = any[];
