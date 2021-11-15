@@ -309,6 +309,12 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         _duelQueue.add(attackerID);
     }
 
+    function clearDuelQueue() external restricted {
+        for (uint256 i = 0; i < _duelQueue.length(); i++) {
+            _duelQueue.remove(_duelQueue.at(i));
+        }
+    }
+
     /// @dev performs all queued duels
     function performDuels(uint256[] calldata attackerIDs) external restricted {
         for (uint256 i = 0; i < attackerIDs.length; i++) {
@@ -766,11 +772,13 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             msg.sender,
             blockhash(block.number)
         );
+
         bool useShield = fighterByCharacter[characterID].useShield;
         int128 bonusShieldStats;
         if (useShield) {
             bonusShieldStats = _getShieldStats(characterID);
         }
+
 
         (
             ,
