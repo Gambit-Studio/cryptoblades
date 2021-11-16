@@ -40,7 +40,7 @@
   },
   "scripts": {
     "postinstall": "lerna exec -- npm install",
-    "lint": "lerna exec -- npm run lint ",
+    "lint": "lerna exec -- npm run lint",
     "build:frontend": "npm run contract:prepare && cd frontend && npm run build",
     "start:frontend": "cd frontend && npm start",
     "contract:prepare": "npm run build",
