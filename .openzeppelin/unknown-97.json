@@ -7109,6 +7109,443 @@
           }
         }
       }
+    },
+    "313e351492596fbca78ad2407c14b4965b50ce414415242f0d58e95655a1a7d6": {
+      "address": "0xd6afF718d6d61F498C1326e94173ACE87D9B0A6D",
+      "txHash": "0xaa356844bd664a73ee4a9cbc2ff93426ff18c725d3e5194e580d548b25b47b5c",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)446_storage)",
+            "src": "../@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:61"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:225"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "game",
+            "type": "t_contract(CryptoBlades)40237",
+            "src": "../project:/contracts/PvpArena.sol:49"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "characters",
+            "type": "t_contract(Characters)36509",
+            "src": "../project:/contracts/PvpArena.sol:50"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "weapons",
+            "type": "t_contract(Weapons)51562",
+            "src": "../project:/contracts/PvpArena.sol:51"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "shields",
+            "type": "t_contract(Shields)45810",
+            "src": "../project:/contracts/PvpArena.sol:52"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "skillToken",
+            "type": "t_contract(IERC20)5647",
+            "src": "../project:/contracts/PvpArena.sol:53"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "raids",
+            "type": "t_contract(Raid1)43840",
+            "src": "../project:/contracts/PvpArena.sol:54"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "randoms",
+            "type": "t_contract(IRandoms)40273",
+            "src": "../project:/contracts/PvpArena.sol:55"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_rankingsPoolTaxPercent",
+            "type": "t_uint8",
+            "src": "../project:/contracts/PvpArena.sol:58"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "wageringFactor",
+            "type": "t_uint8",
+            "src": "../project:/contracts/PvpArena.sol:60"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_baseWagerUSD",
+            "type": "t_int128",
+            "src": "../project:/contracts/PvpArena.sol:62"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_tierWagerUSD",
+            "type": "t_int128",
+            "src": "../project:/contracts/PvpArena.sol:64"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "seasonStartedAt",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PvpArena.sol:66"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "seasonDuration",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PvpArena.sol:68"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "unattackableSeconds",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PvpArena.sol:70"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "decisionSeconds",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PvpArena.sol:72"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "currentRankedSeason",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PvpArena.sol:74"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "winningPoints",
+            "type": "t_uint8",
+            "src": "../project:/contracts/PvpArena.sol:76"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "losingPoints",
+            "type": "t_uint8",
+            "src": "../project:/contracts/PvpArena.sol:78"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_maxCharactersPerRanking",
+            "type": "t_uint8",
+            "src": "../project:/contracts/PvpArena.sol:80"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "prizePercentages",
+            "type": "t_array(t_uint256)dyn_storage",
+            "src": "../project:/contracts/PvpArena.sol:83"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_duelQueue",
+            "type": "t_struct(UintSet)6692_storage",
+            "src": "../project:/contracts/PvpArena.sol:85"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "fighterByCharacter",
+            "type": "t_mapping(t_uint256,t_struct(Fighter)31141_storage)",
+            "src": "../project:/contracts/PvpArena.sol:88"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "duelByAttacker",
+            "type": "t_mapping(t_uint256,t_struct(Duel)31150_storage)",
+            "src": "../project:/contracts/PvpArena.sol:90"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "characterRankingPoints",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "src": "../project:/contracts/PvpArena.sol:92"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "seasonByCharacter",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "src": "../project:/contracts/PvpArena.sol:94"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "excessWagerByCharacter",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "src": "../project:/contracts/PvpArena.sol:96"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_rankingEarningsByPlayer",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "../project:/contracts/PvpArena.sol:98"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_lastActivityByCharacter",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "src": "../project:/contracts/PvpArena.sol:100"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_fightersByTier",
+            "type": "t_mapping(t_uint8,t_struct(UintSet)6692_storage)",
+            "src": "../project:/contracts/PvpArena.sol:102"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_fightersByPlayer",
+            "type": "t_mapping(t_address,t_struct(UintSet)6692_storage)",
+            "src": "../project:/contracts/PvpArena.sol:104"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_charactersInArena",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "src": "../project:/contracts/PvpArena.sol:106"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_weaponsInArena",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "src": "../project:/contracts/PvpArena.sol:108"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_shieldsInArena",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "src": "../project:/contracts/PvpArena.sol:110"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_rankingsPoolByTier",
+            "type": "t_mapping(t_uint8,t_uint256)",
+            "src": "../project:/contracts/PvpArena.sol:112"
+          },
+          {
+            "contract": "PvpArena",
+            "label": "_rankingByTier",
+            "type": "t_mapping(t_uint8,t_array(t_uint256)dyn_storage)",
+            "src": "../project:/contracts/PvpArena.sol:114"
+          }
+        ],
+        "types": {
+          "t_contract(CryptoBlades)40237": {
+            "label": "contract CryptoBlades"
+          },
+          "t_contract(Characters)36509": {
+            "label": "contract Characters"
+          },
+          "t_contract(Weapons)51562": {
+            "label": "contract Weapons"
+          },
+          "t_contract(Shields)45810": {
+            "label": "contract Shields"
+          },
+          "t_contract(IERC20)5647": {
+            "label": "contract IERC20"
+          },
+          "t_contract(Raid1)43840": {
+            "label": "contract Raid1"
+          },
+          "t_contract(IRandoms)40273": {
+            "label": "contract IRandoms"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_int128": {
+            "label": "int128"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_struct(UintSet)6692_storage": {
+            "label": "struct EnumerableSet.UintSet",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)6306_storage"
+              }
+            ]
+          },
+          "t_struct(Set)6306_storage": {
+            "label": "struct EnumerableSet.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)"
+              }
+            ]
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)"
+          },
+          "t_mapping(t_uint256,t_struct(Fighter)31141_storage)": {
+            "label": "mapping(uint256 => struct PvpArena.Fighter)"
+          },
+          "t_struct(Fighter)31141_storage": {
+            "label": "struct PvpArena.Fighter",
+            "members": [
+              {
+                "label": "characterID",
+                "type": "t_uint256"
+              },
+              {
+                "label": "weaponID",
+                "type": "t_uint256"
+              },
+              {
+                "label": "shieldID",
+                "type": "t_uint256"
+              },
+              {
+                "label": "wager",
+                "type": "t_uint256"
+              },
+              {
+                "label": "useShield",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_uint256,t_struct(Duel)31150_storage)": {
+            "label": "mapping(uint256 => struct PvpArena.Duel)"
+          },
+          "t_struct(Duel)31150_storage": {
+            "label": "struct PvpArena.Duel",
+            "members": [
+              {
+                "label": "attackerID",
+                "type": "t_uint256"
+              },
+              {
+                "label": "defenderID",
+                "type": "t_uint256"
+              },
+              {
+                "label": "createdAt",
+                "type": "t_uint256"
+              },
+              {
+                "label": "isPending",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint8,t_struct(UintSet)6692_storage)": {
+            "label": "mapping(uint8 => struct EnumerableSet.UintSet)"
+          },
+          "t_mapping(t_address,t_struct(UintSet)6692_storage)": {
+            "label": "mapping(address => struct EnumerableSet.UintSet)"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)"
+          },
+          "t_mapping(t_uint8,t_uint256)": {
+            "label": "mapping(uint8 => uint256)"
+          },
+          "t_mapping(t_uint8,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(uint8 => uint256[])"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)446_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_struct(RoleData)446_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_struct(AddressSet)3641_storage"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_struct(AddressSet)3641_storage": {
+            "label": "struct EnumerableSetUpgradeable.AddressSet",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)3376_storage"
+              }
+            ]
+          },
+          "t_struct(Set)3376_storage": {
+            "label": "struct EnumerableSetUpgradeable.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)"
+              }
+            ]
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
     }
   }
 }
