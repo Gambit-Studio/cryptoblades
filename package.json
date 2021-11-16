@@ -40,7 +40,7 @@
   },
   "scripts": {
     "postinstall": "lerna exec -- npm install",
-    "lint": "lerna exec -- npm run lint",
+    "lint": "lerna exec -- npm run lint ",
     "build:frontend": "npm run contract:prepare && cd frontend && npm run build",
     "start:frontend": "cd frontend && npm start",
     "contract:prepare": "npm run build",
@@ -48,6 +48,7 @@
     "build": "truffle compile",
     "postbuild": "node scripts/generate-ts-from-abis.js",
     "test": "truffle test ",
+    "test:local": "hardhat test",
     "deploy": "truffle migrate --reset",
     "deploy-testnet": "truffle migrate --network bsctestnet",
     "postdeploy-testnet": "run-s \"backup-networks 97\" \"verify-contracts -- --network bsctestnet\"",
