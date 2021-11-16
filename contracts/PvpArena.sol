@@ -445,6 +445,10 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         }
     }
 
+    function showWagers(uint256 characterID) external restricted view returns (uint256) {
+        return fighterByCharacter[characterID].wager;
+    }
+
     /// @dev withdraws a character and its items from the arena.
     /// if the character is in a battle, a penalty is charged
     function withdrawFromArena(uint256 characterID)
@@ -735,7 +739,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     {
         uint256 lastActivity = _lastActivityByCharacter[characterID];
 
-        return lastActivity.add(unattackableSeconds) <= block.timestamp;
+        return lastActivity.add(unattackableSeconds) <= block.timestamp && !_duelQueue.contains(characterID);
     }
 
     /// @dev updates the last activity timestamp of a character
@@ -902,7 +906,6 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             break;
         }
 
-        require(!_duelQueue.contains(opponentID), "Opponent is in duel queue");
         require(foundOpponent, "No opponent found");
 
         duelByAttacker[characterID] = Duel(
