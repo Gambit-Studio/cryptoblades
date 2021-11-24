@@ -78,7 +78,7 @@ export function getConfigValue(key: string): any {
   return (config as Config).environments[env].chains[chain][key];
 }
 
-let networkId = getConfigValue('VUE_APP_NETWORK_ID') || '5777';
+let networkId = getConfigValue('VUE_APP_NETWORK_ID') || '31337';
 console.log(networkId);
 console.log('appid', getConfigValue('VUE_APP_NETWORK_ID'));
 type Networks = Partial<Record<string, { address: string }>>;
