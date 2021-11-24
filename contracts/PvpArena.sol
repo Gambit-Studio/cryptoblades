@@ -786,9 +786,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     {
         uint256 lastActivity = _lastActivityByCharacter[characterID];
 
-        require(!characterDefending[characterID], "Defender duel in process");
-
-        return lastActivity.add(unattackableSeconds) <= block.timestamp && !_duelQueue.contains(characterID);
+        return lastActivity.add(unattackableSeconds) <= block.timestamp && !_duelQueue.contains(characterID) && !characterDefending[characterID];
     }
 
     /// @dev updates the last activity timestamp of a character
