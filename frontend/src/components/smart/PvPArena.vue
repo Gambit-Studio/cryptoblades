@@ -287,7 +287,7 @@ export default {
     },
 
     getNewRankAfterLoss() {
-      return +(this.pvp.characterRankingPoints) - +(this.losingPoints) < 0 ? 0 : this.pvp.characterRankingPoints - +(this.losingPoints);
+      return +(this.pvp.characterRankingPoints) - +(this.losingPoints) < 0 ? 0 : +(this.pvp.characterRankingPoints) - +(this.losingPoints);
     },
 
     getWageredSkill(){
