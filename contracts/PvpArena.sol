@@ -1093,4 +1093,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
 
         return values;
     }
+    function getCharacterPrizePoolRewards() view public returns(uint256){
+        return _rankingEarningsByPlayer[msg.sender];
+    }
 }
