@@ -10,16 +10,16 @@
     </div>
     <div class="weaponWrapper"></div>
     <div class="elementWrapper">
-      <img :src="getElementImageUrl" alt="element" />
+      <!-- <img :src="getElementImageUrl" alt="element" /> -->
     </div>
   </div>
 </template>
 
 <script>
-// import fire from '../../../../assets/fire.png';
-// import water from '../../../../assets/water.png';
-// import earth from '../../../../assets/earth.png';
-// import lightning from '../../../../assets/lightning.png';
+// import fire from '../../../../assets/elements/fire.png';
+// import water from '../../../../assets/elements/water.png';
+// import earth from '../../../../assets/elements/earth.png';
+// import lightning from '../../../../assets/elements/lightning.png';
 
 export default {
   props: {
