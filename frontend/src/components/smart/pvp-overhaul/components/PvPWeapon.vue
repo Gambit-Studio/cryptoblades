@@ -1,0 +1,96 @@
+<template>
+  <div class="mainWrapper">
+    <div class="starsWrapper">
+      <img
+        v-for="index in stars"
+        :key="index"
+        src="../../assets/star.svg"
+        alt="star"
+      />
+    </div>
+    <div class="weaponWrapper"></div>
+    <div class="elementWrapper">
+      <img :src="getElementImageUrl" alt="element" />
+    </div>
+  </div>
+</template>
+
+<script>
+// import fire from '../../../../assets/fire.png';
+// import water from '../../../../assets/water.png';
+// import earth from '../../../../assets/earth.png';
+// import lightning from '../../../../assets/lightning.png';
+
+export default {
+  props: {
+    stars: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 5,
+    },
+    element: {
+      type: String,
+      required: true,
+    },
+  },
+  // computed: {
+  //   getElementImageUrl: function () {
+  //     if (this.element === "fire") {
+  //       return fire;
+  //     }
+  //     if (this.element === "water") {
+  //       return water;
+  //     }
+  //     if (this.element === "earth") {
+  //       return earth;
+  //     } else {
+  //       return lightning;
+  //     }
+  //   },
+  // },
+};
+</script>
+
+<style scoped lang="scss">
+.mainWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 5rem;
+  width: 5rem;
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  background-color: #151515;
+  border: 1px solid #cec198;
+}
+.starsWrapper {
+  display: flex;
+  height: 13%;
+
+  img {
+    height: 0.5rem;
+    width: 0.5rem;
+    margin-right: 0.125rem;
+    pointer-events: none;
+  }
+}
+.weaponWrapper {
+  display: flex;
+  height: 90%;
+}
+.elementWrapper {
+  position: absolute;
+  display: flex;
+  width: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  bottom: -15%;
+  padding: 0.2rem;
+  border: 1px solid #cec198;
+  border-radius: 9999px;
+  background-color: #151515;
+}
+</style>
