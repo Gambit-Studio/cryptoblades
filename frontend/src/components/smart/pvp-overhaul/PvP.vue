@@ -1,7 +1,7 @@
 <template>
   <div>
     <pvp-nav-bar @changeTab="onChangeTab"/>
-    <div v-if="tab === 0">TAB ZERO <pvp-weapon :stars="1" element="fire"/></div>
+    <div v-if="tab === 0">TAB ZERO</div>
     <div v-if="tab === 1">TAB ONE</div>
   </div>
 </template>

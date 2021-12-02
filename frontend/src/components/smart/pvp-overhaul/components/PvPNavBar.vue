@@ -1,11 +1,11 @@
 <template>
   <nav>
-    <button @click="setTab(0)">
-      <img :src="swordsUrl"/>
+    <button @click="setTab(0)" :class="activeTab === 0 ? 'active' : ''">
+      <img src="../../../../assets/swordsIcon.svg"/>
       <span>Arena</span>
     </button>
-    <button @click="setTab(1)">
-      <img :src="crownUrl" />
+    <button @click="setTab(1)" :class="activeTab === 1 ? 'active' : ''">
+      <img src="../../../../assets/crownIcon.svg" />
       <span>Leaderboard</span>
     </button>
   </nav>
@@ -16,13 +16,16 @@
 export default {
   data() {
     return {
-      swordsUrl:'../../../assets/swordsIcon.svg',
-      crownUrl:'../../../assets/crownIcon.svg'
+      activeTab: Number,
     };
+  },
+  mounted() {
+    return this.activeTab = 0;
   },
   methods: {
     setTab(tabNumber) {
       this.$emit('changeTab', tabNumber);
+      this.activeTab = tabNumber;
     }
   }
 };
@@ -34,7 +37,7 @@ nav {
   margin-bottom: 2.5rem;
   border-bottom: 1px solid #363636;
 
-  a {
+  button {
     display: flex;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
@@ -44,7 +47,10 @@ nav {
     font-size: 0.875rem;
     line-height: 1.25rem;
     border-bottom: 2px solid transparent;
-
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    background-color: transparent;
     img {
       width: 1rem;
       height: 1rem;
@@ -53,13 +59,13 @@ nav {
     :hover {
       cursor: pointer;
     }
+    &.active {
+      color: #ffffff;
+      border-bottom: 2px solid #edcd90;
+    }
   }
 
-  a:active {
-    color: #ffffff;
-    border-bottom: 2px solid #edcd90;
-  }
-  a:first-of-type {
+  button:first-of-type {
     margin-right: 2.5rem;
   }
 }
