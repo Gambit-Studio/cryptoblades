@@ -1,10 +1,10 @@
 <template>
   <nav>
-    <button @click="setTab(0)" :class="activeTab === 0 ? 'active' : ''">
+    <button @click="setTab(0)" :class="activeTab === 0 && 'active'">
       <img src="../../../../assets/swordsIcon.svg"/>
       <span>Arena</span>
     </button>
-    <button @click="setTab(1)" :class="activeTab === 1 ? 'active' : ''">
+    <button @click="setTab(1)" :class="activeTab === 1 && 'active'">
       <img src="../../../../assets/crownIcon.svg" />
       <span>Leaderboard</span>
     </button>
