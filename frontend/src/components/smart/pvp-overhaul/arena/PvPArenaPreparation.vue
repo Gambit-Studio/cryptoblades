@@ -1,15 +1,5 @@
 <template>
   <div class="wrapper">
-    <nav>
-      <a href="/">
-        <img src="./assets/swordsImage.svg" />
-        <span>Arena</span>
-      </a>
-      <a href="/">
-        <img src="./assets/crown.svg" />
-        <span>Leaderboard</span>
-      </a>
-    </nav>
     <div class="mainWrapper">
       <div class="arenaSignup">
         <h1 class="title">ARENA SIGNUP</h1>
@@ -17,7 +7,7 @@
         <div>
           <div class="top">
             <div class="circle">
-              <img :src="secondImageSource" alt="check ellipse" />
+              <img :src="secondCheckSource" />
             </div>
             <p>Equip a Sword and a Shield (optional).</p>
           </div>
@@ -25,10 +15,10 @@
             <PvPSeparator dark vertical />
             <div class="weaponsWrapper">
               <button class="selectWeaponButton">
-                <img src="./assets/swordImage.svg" alt="sword" />
+                <img src="../../../../assets/swordPlaceholder.svg" alt="sword" />
               </button>
               <button class="selectWeaponButton">
-                <img src="./assets/shieldImage.svg" alt="shield" />
+                <img src="../../../../assets/shieldPlaceholder.svg" alt="shield" />
               </button>
             </div>
           </div>
@@ -36,14 +26,14 @@
         <div>
           <div class="top">
             <div class="circle">
-              <img :src="secondImageSource" alt="check ellipse" />
+              <img :src="secondCheckSource" />
             </div>
             <p>Enter the Arena</p>
           </div>
           <div class="bottomList">
             <PvPSeparator dark vertical />
-            <div class="">
-              <ul class="">
+            <div>
+              <ul>
                 <li>
                   <PvPBulletpoint /> Entering the Arena will cost you 3 $SKILL.
                 </li>
@@ -77,7 +67,7 @@
       <div class="arenaInformation">
         <h1 class="title">ARENA INFORMATION</h1>
         <div class="tokenCard">
-          <img src="./assets/skillTokenImage.png" alt="skill token" />
+          <img src="../../../../assets/skillToken.png" alt="skill token" />
           <div class="tokenCardInfo">
             <span class="text">PVP Rewards Pool ($SKILL)</span>
             <span class="number">3,099</span>
@@ -110,8 +100,6 @@ import PvPBulletpoint from '../components/PvPBulletpoint.vue';
 import PvPButton from '../components/PvPButton.vue';
 // import PvpCharacter from '../components/PvpCharacter.vue';
 // import PvPWeapon from "../components/PvPWeapon.vue";
-// import checkImageUrl from './assets/checkImage.svg';
-// import ellipseImageUrl from './assets/ellipseImage.svg';
 
 export default {
   components: {
@@ -126,22 +114,28 @@ export default {
     return {
       sword: {},
       shield: {},
-      firstCheckToggle: false,
-      secondCheckToggle: false,
+      firstCheckToggle: Boolean,
+      secondCheckToggle: Boolean,
       checkUrl: '../../../../assets/checkImage.svg',
       ellipseUrl: '../../../../assets/ellipseImage.svg',
     };
   },
-  // computed: {
-  //   firstImageSource: function () {
-  //     return this.firstCheckToggle ? checkImageUrl : ellipseImageUrl;
-  //   },
-  //   secondImageSource: function () {
-  //     return this.secondCheckToggle ? checkImageUrl : ellipseImageUrl;
-  //   },
-  // },
+  mounted() {
+    return (this.firstCheckToggle = false, this.secondCheckToggle = false);
+  },
+  computed: {
+    firstCheckSource () {
+      return this.firstCheckToggle || this.secondCheckToggle ? this.checkUrl : this.ellipseUrl;
+    },
+    secondCheckSource() {
+      return this.secondCheckToggle ? this.checkUrl : this.ellipseUrl;
+    },
+  },
+
   methods: {
     handleAcceptTerms() {
+      console.log('second: ' +this.secondCheckToggle);
+      console.log('first: ' +this.firstCheckToggle);
       return (
         (this.secondCheckToggle = !this.secondCheckToggle) &&
         (this.firstCheckToggle = !this.firstCheckToggle)
@@ -155,29 +149,14 @@ export default {
 .wrapper {
   display: flex;
   flex-direction: column;
-  width: 100vw;
   min-height: 100vh;
-  padding: 3rem;
-  background-color: #151515;
-
-  @media screen and (min-width: 1280px) {
-    padding: 3rem 6rem 3rem 6rem;
-  }
-
-  @media screen and (min-width: 1440px) {
-    padding: 3rem 10rem 3rem 10rem;
-  }
-
-  @media screen and (min-width: 1980px) {
-    padding: 3rem 25rem 3rem 25rem;
-  }
-
-  @media screen and (min-width: 1980px) {
-    padding: 3rem 40rem 3rem 40rem;
-  }
+  background-color: #141414;
 }
 .mainWrapper {
   display: flex;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
   justify-content: space-between;
 }
 .title {
@@ -185,16 +164,19 @@ export default {
   color: #cec198;
   font-size: 1.25rem;
   line-height: 1.75rem;
+  padding: 0;
 }
 .arenaSignup {
   p {
     color: #b4b0a7;
     font-size: 1rem;
+    margin-bottom: 0;
     line-height: 1.5rem;
   }
   .top {
     display: flex;
     margin-top: 1.5rem;
+    margin-bottom: 1rem;
     vertical-align: middle;
     align-items: center;
 
@@ -220,7 +202,6 @@ export default {
   .bottomWeapons,
   .bottomList {
     display: flex;
-    margin-top: 0.75rem;
     margin-left: 0.75rem;
   }
   .bottomWeapons {
@@ -231,7 +212,6 @@ export default {
       display: flex;
       flex-direction: row;
       margin-left: 1.75rem;
-      margin-top: 0.5rem;
 
       .selectWeaponButton {
         display: flex;
@@ -241,7 +221,9 @@ export default {
         vertical-align: middle;
         justify-content: center;
         border-radius: 0.375rem;
+        margin-top: 0.5rem;
         border: 1px solid #cec198;
+        background-color: #141414;
 
         &:first-of-type {
           margin-right: 1rem;
@@ -259,7 +241,8 @@ export default {
 
     ul {
       flex-direction: column;
-      margin-left: 1.75rem;
+      padding-left: 2rem;
+      padding-top: 0.65rem;
 
       li {
         display: flex;
@@ -277,7 +260,7 @@ export default {
       align-items: center;
       vertical-align: middle;
       margin-left: 1.75rem;
-      margin-top: 1.25rem;
+      margin-top: 1rem;
 
       input {
         height: 1rem;
@@ -294,8 +277,8 @@ export default {
     }
   }
   .buttonWrapper {
-    margin-top: 2.25rem;
-    margin-left: 1.5rem;
+    margin-top: 4rem;
+    margin-left: 2.5rem;
   }
 }
 .characterImage {
@@ -344,6 +327,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     margin-top: 1.5rem;
+    padding: 0;
 
     span {
       color: #b4b0a7;
@@ -392,40 +376,6 @@ export default {
       font-size: 1.25rem;
       line-height: 1.75rem;
     }
-  }
-}
-nav {
-  display: flex;
-  margin-bottom: 2.5rem;
-  border-bottom: 1px solid #363636;
-
-  a {
-    display: flex;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    align-items: center;
-    vertical-align: middle;
-    color: #b4b0a7;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    border-bottom: 2px solid transparent;
-
-    img {
-      width: 1rem;
-      height: 1rem;
-      margin-right: 0.5rem;
-    }
-    :hover {
-      cursor: pointer;
-    }
-  }
-
-  a:active {
-    color: #ffffff;
-    border-bottom: 2px solid #edcd90;
-  }
-  a:first-of-type {
-    margin-right: 2.5rem;
   }
 }
 </style>

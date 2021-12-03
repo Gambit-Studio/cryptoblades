@@ -34,7 +34,7 @@ export default {
 <style scoped lang="scss">
 nav {
   display: flex;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   border-bottom: 1px solid #363636;
 
   button {

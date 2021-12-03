@@ -1,17 +1,21 @@
 <template>
-  <div>
+  <div class="pvpWrapper">
     <pvp-nav-bar @changeTab="onChangeTab"/>
-    <div v-if="tab === 0">TAB ZERO</div>
-    <div v-if="tab === 1">TAB ONE</div>
+    <div v-if="tab === 0">
+      <pvp-arena-preparation />
+    </div>
+    <div v-if="tab === 1">LEADERBOARDS</div>
   </div>
 </template>
 
 <script>
+import PvPArenaPreparation from './arena/PvPArenaPreparation.vue';
 import PvPNavBar from './components/PvPNavBar.vue';
 
 export default {
   components: {
-    'pvp-nav-bar': PvPNavBar
+    'pvp-nav-bar': PvPNavBar,
+    'pvp-arena-preparation': PvPArenaPreparation
   },
 
   data() {
@@ -27,3 +31,9 @@ export default {
   }
 };
 </script>
+
+<style scoped lang="scss">
+.pvpWrapper {
+  padding: 0 4rem;
+}
+</style>

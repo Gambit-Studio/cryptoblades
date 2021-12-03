@@ -33,6 +33,7 @@ button {
   vertical-align: middle;
   border: 1px solid #edcd90;
   border-radius: 5px;
+  background-color:#141414;
 
   .text {
     font-size: 1.25rem;
