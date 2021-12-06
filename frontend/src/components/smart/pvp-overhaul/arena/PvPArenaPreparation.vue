@@ -12,7 +12,7 @@
             <p>Equip a Sword and a Shield (optional).</p>
           </div>
           <div class="bottomWeapons">
-            <PvPSeparator dark vertical />
+            <pvp-separator dark vertical />
             <div class="weaponsWrapper">
               <button class="selectWeaponButton">
                 <img src="../../../../assets/swordPlaceholder.svg" alt="sword" />
@@ -31,18 +31,18 @@
             <p>Enter the Arena</p>
           </div>
           <div class="bottomList">
-            <PvPSeparator dark vertical />
+            <pvp-separator dark vertical />
             <div>
               <ul>
                 <li>
-                  <PvPBulletpoint /> Entering the Arena will cost you 3 $SKILL.
+                  <div class="bulletpoint"></div> Entering the Arena will cost you 3 $SKILL.
                 </li>
                 <li>
-                  <PvPBulletpoint /> Players can attack you while you are in the
+                  <div class="bulletpoint"></div> Players can attack you while you are in the
                   Arena.
                 </li>
                 <li>
-                  <PvPBulletpoint /> Leaving the Arena will cost you 1.5 $SKILL.
+                  <div class="bulletpoint"></div> Leaving the Arena will cost you 1.5 $SKILL.
                 </li>
               </ul>
               <label class="checkbox">
@@ -53,7 +53,7 @@
           </div>
         </div>
         <div class="buttonWrapper">
-          <PvPButton
+          <pvp-button
             buttonText="ENTER ARENA"
             buttonsubText="$SKILL: 3"
             :class="{ disabled: !checkToggle }"
@@ -96,7 +96,6 @@
 
 <script>
 import PvPSeparator from '../components/PvPSeparator.vue';
-import PvPBulletpoint from '../components/PvPBulletpoint.vue';
 import PvPButton from '../components/PvPButton.vue';
 import checkIcon from '../../../../assets/checkImage.svg';
 import ellipseIcon from '../../../../assets/ellipseImage.svg';
@@ -106,10 +105,9 @@ import ellipseIcon from '../../../../assets/ellipseImage.svg';
 export default {
   components: {
     // PvpCharacter,
-    PvPBulletpoint,
-    PvPSeparator,
+    'pvp-separator': PvPSeparator,
     // PvPWeapon,
-    PvPButton,
+    'pvp-button': PvPButton,
   },
   props: {},
   data() {
@@ -239,6 +237,13 @@ export default {
         color: #b4b0a7;
         font-size: 0.875rem;
         line-height: 1.25rem;
+      }
+      .bulletpoint {
+        height: 0.5rem;
+        width: 0.5rem;
+        margin-right: 0.75rem;
+        background-color: #dabe75;
+        transform: rotate(45deg);
       }
     }
 
