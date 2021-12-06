@@ -7,7 +7,7 @@
         <div>
           <div class="top">
             <div class="circle">
-              <img :src="secondCheckSource" />
+              <img :src="getIconSource" />
             </div>
             <p>Equip a Sword and a Shield (optional).</p>
           </div>
@@ -26,7 +26,7 @@
         <div>
           <div class="top">
             <div class="circle">
-              <img :src="secondCheckSource" />
+              <img :src="getIconSource" />
             </div>
             <p>Enter the Arena</p>
           </div>
@@ -56,8 +56,8 @@
           <PvPButton
             buttonText="ENTER ARENA"
             buttonsubText="$SKILL: 3"
-            :class="{ disabled: !secondCheckToggle }"
-            :disabled="secondCheckToggle === false"
+            :class="{ disabled: !checkToggle }"
+            :disabled="checkToggle === false"
           />
         </div>
       </div>
@@ -98,6 +98,8 @@
 import PvPSeparator from '../components/PvPSeparator.vue';
 import PvPBulletpoint from '../components/PvPBulletpoint.vue';
 import PvPButton from '../components/PvPButton.vue';
+import checkIcon from '../../../../assets/checkImage.svg';
+import ellipseIcon from '../../../../assets/ellipseImage.svg';
 // import PvpCharacter from '../components/PvpCharacter.vue';
 // import PvPWeapon from "../components/PvPWeapon.vue";
 
@@ -114,32 +116,17 @@ export default {
     return {
       sword: {},
       shield: {},
-      firstCheckToggle: Boolean,
-      secondCheckToggle: Boolean,
-      checkUrl: '../../../../assets/checkImage.svg',
-      ellipseUrl: '../../../../assets/ellipseImage.svg',
+      checkToggle: false,
     };
   },
-  mounted() {
-    return (this.firstCheckToggle = false, this.secondCheckToggle = false);
-  },
   computed: {
-    firstCheckSource () {
-      return this.firstCheckToggle || this.secondCheckToggle ? this.checkUrl : this.ellipseUrl;
-    },
-    secondCheckSource() {
-      return this.secondCheckToggle ? this.checkUrl : this.ellipseUrl;
+    getIconSource () {
+      return this.checkToggle ? checkIcon : ellipseIcon;
     },
   },
-
   methods: {
     handleAcceptTerms() {
-      console.log('second: ' +this.secondCheckToggle);
-      console.log('first: ' +this.firstCheckToggle);
-      return (
-        (this.secondCheckToggle = !this.secondCheckToggle) &&
-        (this.firstCheckToggle = !this.firstCheckToggle)
-      );
+      return this.checkToggle = !this.checkToggle;
     },
   },
 };
