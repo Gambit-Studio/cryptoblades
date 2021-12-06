@@ -1,8 +1,8 @@
 <template>
-  <nav>
-    <div v-if="isMatchmakingActive" class="qwe">
-      <div class="qweTitle">Arena</div>
-      <div class="qweStats">
+  <div class="wrapper">
+    <nav v-if="isMatchmakingActive" class="matchmakingNav">
+      <div class="matchmakingNavTitle">Arena</div>
+      <div class="matchmakingNavStats">
         <div>
           <span>Arena tier:</span>
           <span>5</span>
@@ -16,8 +16,8 @@
           <span>1.4 SKILL</span>
         </div>
       </div>
-    </div>
-    <div v-else class="asd">
+    </nav>
+    <nav v-else class="defaultNav">
       <button @click="setTab(0)" :class="activeTab === 0 && 'active'">
         <img src="../../../../assets/swordsIcon.svg"/>
         <span>Arena</span>
@@ -26,8 +26,8 @@
         <img src="../../../../assets/crownIcon.svg" />
         <span>Leaderboard</span>
       </button>
-    </div>
-  </nav>
+    </nav>
+  </div>
 </template>
 
 <script>
@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       activeTab: Number,
+      default: 0
     };
   },
   props: {
@@ -42,9 +43,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  mounted() {
-    return this.activeTab = 0;
   },
   methods: {
     setTab(tabNumber) {
@@ -56,28 +54,27 @@ export default {
 </script>
 
 <style scoped lang="scss">
-nav {
+.wrapper {
   display: flex;
   margin-bottom: 2rem;
   border-bottom: 1px solid #363636;
 
-  .asd {
+  .defaultNav {
     display: flex;
   }
 
-  .qwe {
+  .matchmakingNav {
     display: flex;
+    width: 100%;
     justify-content: space-between;
-    margin-bottom: 4rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #363636;
 
-    .qweTitle {
+    .matchmakingNavTitle {
       color: #cec198;
       font-size: 1.875rem;
       line-height: 2.25rem;
     }
-    .qweStats {
+    .matchmakingNavStats {
       display: flex;
 
       div:nth-of-type(2) {

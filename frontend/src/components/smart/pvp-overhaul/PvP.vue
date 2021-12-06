@@ -1,6 +1,6 @@
 <template>
   <div class="pvpWrapper">
-    <pvp-nav-bar @changeTab="onChangeTab" :isMatchmakingActive="true" />
+    <pvp-nav-bar @changeTab="onChangeTab" :isMatchmakingActive="false" />
     <div v-if="tab === 0">
       <pvp-arena-preparation />
       <pvp-arena-summary :character="this.character" :opponent="this.opponent"/>
@@ -27,13 +27,13 @@ export default {
     return {
       tab: 0,
       character: {
-        name: 'Test Character',
+        name: 'Dummy Character',
         trait: 'earth',
         level: 55,
         rank: 50,
       },
       opponent: {
-        name: 'Test Opponent',
+        name: 'Dummy Opponent',
         trait: 'fire',
         level: 50,
         rank: 58,

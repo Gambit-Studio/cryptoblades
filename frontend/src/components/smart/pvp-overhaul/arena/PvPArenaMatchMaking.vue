@@ -63,10 +63,10 @@
 // import PvPWeapon from "../components/base/PvPWeapon.vue";
 import PvPSeparator from '../components/PvPSeparator.vue';
 import PvPButton from '../components/PvPSeparator.vue';
-import fire from '../../../../assets/elements/fire.png';
-import water from '../../../../assets/elements/water.png';
-import earth from '../../../../assets/elements/earth.png';
-import lightning from '../../../../assets/elements/lightning.png';
+import fireIcon from '../../../../assets/elements/fire.png';
+import waterIcon from '../../../../assets/elements/water.png';
+import earthIcon from '../../../../assets/elements/earth.png';
+import lightningIcon from '../../../../assets/elements/lightning.png';
 
 export default {
   components: {
@@ -86,27 +86,27 @@ export default {
   computed: {
     getCharacterTraitUrl() {
       if (this.character.trait === 'fire') {
-        return fire;
+        return fireIcon;
       }
       if (this.character.trait === 'water') {
-        return water;
+        return waterIcon;
       }
       if (this.character.trait === 'earth') {
-        return earth;
+        return earthIcon;
       }
-      return lightning;
+      return lightningIcon;
     },
     getOpponentTraitUrl() {
       if (this.opponent.trait === 'fire') {
-        return fire;
+        return fireIcon;
       }
       if (this.opponent.trait === 'water') {
-        return water;
+        return waterIcon;
       }
       if (this.opponent.trait === 'earth') {
-        return earth;
+        return earthIcon;
       }
-      return lightning;
+      return lightningIcon;
     },
   },
 };
