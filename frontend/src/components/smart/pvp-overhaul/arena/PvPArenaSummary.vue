@@ -113,6 +113,7 @@ export default {
   flex-direction: column;
   min-height: 100vh;
   background-color: #141414;
+  border: 2px solid red;
 }
 .mainWrapper {
   display: flex;

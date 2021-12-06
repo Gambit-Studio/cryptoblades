@@ -43,6 +43,7 @@ export default {
   flex-direction: column;
   width: 100%;
   max-height: inherit;
+  border: 1px solid green;
 }
 
 .characterImg {

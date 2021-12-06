@@ -62,7 +62,7 @@
 // import PvPCharacter from "../components/base/PvpCharacter.vue";
 // import PvPWeapon from "../components/base/PvPWeapon.vue";
 import PvPSeparator from '../components/PvPSeparator.vue';
-import PvPButton from '../components/PvPSeparator.vue';
+import PvPButton from '../components/PvPButton.vue';
 import fireIcon from '../../../../assets/elements/fire.png';
 import waterIcon from '../../../../assets/elements/water.png';
 import earthIcon from '../../../../assets/elements/earth.png';
@@ -118,6 +118,7 @@ export default {
   flex-direction: column;
   min-height: 100vh;
   background-color: #141414;
+  border: 2px solid red;
 }
 
 .bottom {
