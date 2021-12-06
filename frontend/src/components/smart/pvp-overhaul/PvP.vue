@@ -1,10 +1,10 @@
 <template>
   <div class="pvpWrapper">
-    <pvp-nav-bar @changeTab="onChangeTab"/>
+    <pvp-nav-bar @changeTab="onChangeTab" :isMatchmakingActive="true" />
     <div v-if="tab === 0">
       <pvp-arena-preparation />
-      <pvp-arena-summary />
-      <pvp-arena-matchmaking />
+      <pvp-arena-summary :character="this.character" :opponent="this.opponent"/>
+      <pvp-arena-matchmaking :character="this.character" :opponent="this.opponent"/>
     </div>
     <div v-if="tab === 1">LEADERBOARDS</div>
   </div>
@@ -23,13 +23,23 @@ export default {
     'pvp-arena-summary': PvPArenaSummary,
     'pvp-arena-matchmaking': PvPArenaMatchMaking
   },
-
   data() {
     return {
-      tab: 0
+      tab: 0,
+      character: {
+        name: 'Test Character',
+        trait: 'earth',
+        level: 55,
+        rank: 50,
+      },
+      opponent: {
+        name: 'Test Opponent',
+        trait: 'fire',
+        level: 50,
+        rank: 58,
+      },
     };
   },
-
   methods: {
     onChangeTab(tabNumber) {
       this.tab = tabNumber;

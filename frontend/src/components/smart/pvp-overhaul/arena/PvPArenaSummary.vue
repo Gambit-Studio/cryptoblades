@@ -8,7 +8,6 @@
         <div class="buttonWrapper">
           <pvp-button
             buttonText="ENTER ARENA"
-            :disabled="secondCheckToggle === false"
           />
         </div>
         <div class="bottomWrapper">
@@ -18,8 +17,8 @@
           </div>
           <div class="bottomWrapperInner">
             <div v-if="activeTab === 0" class="bottomWeapons">
-              <!-- <CBWeapon :stars="5" element="water" />
-              <CBWeapon :stars="2" element="lightning" /> -->
+              <!-- <pvp-weapon :stars="5" element="water" />
+              <pvp-weapon :stars="2" element="lightning" /> -->
               eqsd
             </div>
             <div v-if="activeTab === 1" class="bottomDuels">
@@ -49,7 +48,7 @@
         </div>
       </div>
       <div class="characterImage">
-        <PvpCharacter character="character1" />
+        <!-- <pvp-character character="character1" /> -->
       </div>
       <div class="arenaInformation">
         <h1 class="title">ARENA INFORMATION</h1>
@@ -82,15 +81,15 @@
 </template>
 
 <script>
-// import PvPWeapon from '../components/PvPWeapon.vue';
 import PvPButton from '../components/PvPButton.vue';
+// import PvPWeapon from '../components/PvPWeapon.vue';
 // import PvpCharacter from "./components/base/PvpCharacter.vue";
 
 export default {
   components: {
-    // PvpCharacter,
     'pvp-button': PvPButton,
-    // PvPWeapon
+    // 'pvp-character': PvpCharacter,
+    // 'pvp-weapon': PvPWeapon
   },
   props: {},
   data() {

@@ -1,29 +1,12 @@
 <template>
   <div class="wrapper">
-    <header>
-      <div class="headerTitle">Arena</div>
-      <div class="headerStats">
-        <div>
-          <span>Arena tier:</span>
-          <span>5</span>
-        </div>
-        <div>
-          <span>Wage left:</span>
-          <span>2 SKILL</span>
-        </div>
-        <div>
-          <span>Current earnings:</span>
-          <span>1.4 SKILL</span>
-        </div>
-      </div>
-    </header>
     <div class="bottom">
       <div class="characterWrapper">
-        <div class="elementWrapper">
-          <img :src="getCharacterElementUrl" alt="element" />
+        <div class="traitWrapper">
+          <img :src="getCharacterTraitUrl" alt="element" />
         </div>
         <div class="characterImageWrapper">
-          <!-- <PvpCharacter character="character3" /> -->
+          <!-- <pvp-character character="character3" /> -->
         </div>
         <div class="info">
           <h1 class="characterName">{{ character.name }}</h1>
@@ -34,8 +17,8 @@
           </div>
         </div>
         <div class="weapons">
-          <!-- <CBWeapon :stars="4" element="fire" />
-          <CBWeapon :stars="3" element="water" /> -->
+          <!-- <pvp-weapon :stars="4" element="fire" />
+          <pvp-weapon :stars="3" element="water" /> -->
         </div>
       </div>
       <div class="middleButtons">
@@ -52,11 +35,11 @@
         />
       </div>
       <div class="characterWrapper">
-        <div class="elementWrapper">
-          <img :src="getOpponentElementUrl" alt="element" />
+        <div class="traitWrapper">
+          <img :src="getOpponentTraitUrl" alt="element" />
         </div>
         <div class="characterImageWrapper">
-          <!-- <PvpCharacter character="character0" /> -->
+          <!-- <pvp-character character="character0" /> -->
         </div>
         <div class="info">
           <h1 class="characterName">{{ opponent.name }}</h1>
@@ -67,8 +50,8 @@
           </div>
         </div>
         <div class="weapons">
-          <!-- <CBWeapon :stars="4" element="fire" />
-          <CBWeapon :stars="3" element="water" /> -->
+          <!-- <pvp-weapon :stars="4" element="fire" />
+          <pvp-weapon :stars="3" element="water" /> -->
         </div>
       </div>
     </div>
@@ -76,19 +59,19 @@
 </template>
 
 <script>
-// import PvpCharacter from "./components/base/PvpCharacter.vue";
-// import CBWeapon from "./components/base/CBWeapon.vue";
-import PvPSeparator from './components/PvPSeparator.vue';
-import PvPButton from './components/PvPButton.vue';
-// import fire from "../../assets/elements/fire.png";
-// import water from "../../assets/elements/water.png";
-// import earth from "../../assets/elements/earth.png";
-// import lightning from "../../assets/elements/lightning.png";
+// import PvPCharacter from "../components/base/PvpCharacter.vue";
+// import PvPWeapon from "../components/base/PvPWeapon.vue";
+import PvPSeparator from '../components/PvPSeparator.vue';
+import PvPButton from '../components/PvPSeparator.vue';
+import fire from '../../../../assets/elements/fire.png';
+import water from '../../../../assets/elements/water.png';
+import earth from '../../../../assets/elements/earth.png';
+import lightning from '../../../../assets/elements/lightning.png';
 
 export default {
   components: {
-    // PvpCharacter,
-    // CBWeapon,
+    // 'pvp-character': PvPCharacter,
+    // 'pvp-weapon': PvPWeapon,
     'pvp-separator': PvPSeparator,
     'pvp-button': PvPButton,
   },
@@ -100,88 +83,50 @@ export default {
       required: true,
     },
   },
+  computed: {
+    getCharacterTraitUrl() {
+      if (this.character.trait === 'fire') {
+        return fire;
+      }
+      if (this.character.trait === 'water') {
+        return water;
+      }
+      if (this.character.trait === 'earth') {
+        return earth;
+      }
+      return lightning;
+    },
+    getOpponentTraitUrl() {
+      if (this.opponent.trait === 'fire') {
+        return fire;
+      }
+      if (this.opponent.trait === 'water') {
+        return water;
+      }
+      if (this.opponent.trait === 'earth') {
+        return earth;
+      }
+      return lightning;
+    },
+  },
 };
-//   computed: {
-//     getCharacterElementUrl: function () {
-//       if (this.character.element === "fire") {
-//         return fire;
-//       }
-//       if (this.character.element === "water") {
-//         return water;
-//       }
-//       if (this.character.element === "earth") {
-//         return earth;
-//       }
-//       return lightning;
-//     },
-//     getOpponentElementUrl: function () {
-//       if (this.opponent.element === "fire") {
-//         return fire;
-//       }
-//       if (this.opponent.element === "water") {
-//         return water;
-//       }
-//       if (this.opponent.element === "earth") {
-//         return earth;
-//       }
-//       return lightning;
-//     },
-//   },
-// };
 </script>
 
 <style scoped lang="scss">
 .wrapper {
   display: flex;
   flex-direction: column;
-  width: 100vw;
   min-height: 100vh;
-  padding: 3rem 3rem 3rem 3rem;
-  background-color: #151515;
+  background-color: #141414;
 }
-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 4rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #363636;
 
-  .headerTitle {
-    color: #cec198;
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-  }
-  .headerStats {
-    display: flex;
-
-    div:nth-of-type(2) {
-      margin-left: 1.25rem;
-      margin-right: 1.25rem;
-    }
-
-    div {
-      display: flex;
-      align-items: flex-end;
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-
-      span:first-of-type {
-        margin-right: 0.25rem;
-        color: #cec198;
-      }
-      span:last-of-type {
-        color: #ffffff;
-      }
-    }
-  }
-}
 .bottom {
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: center;
 
-  .elementWrapper {
+  .traitWrapper {
     position: absolute;
     display: flex;
     height: 2.5rem;

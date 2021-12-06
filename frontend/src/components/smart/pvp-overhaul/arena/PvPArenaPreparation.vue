@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="characterImage">
-        <PvpCharacter character="character3" />
+        <!-- <pvp-character character="character3" /> -->
       </div>
       <div class="arenaInformation">
         <h1 class="title">ARENA INFORMATION</h1>
@@ -99,7 +99,7 @@ import PvPSeparator from '../components/PvPSeparator.vue';
 import PvPButton from '../components/PvPButton.vue';
 import checkIcon from '../../../../assets/checkImage.svg';
 import ellipseIcon from '../../../../assets/ellipseImage.svg';
-// import PvpCharacter from '../components/PvpCharacter.vue';
+// import PvPCharacter from '../components/PvPCharacter.vue';
 // import PvPWeapon from "../components/PvPWeapon.vue";
 
 export default {
