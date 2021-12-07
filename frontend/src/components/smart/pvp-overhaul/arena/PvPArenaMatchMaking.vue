@@ -126,6 +126,7 @@ export default {
   flex-direction: row;
   width: 100%;
   justify-content: center;
+  border: 1px solid red;
 
   .traitWrapper {
     position: absolute;
@@ -161,9 +162,25 @@ export default {
 .characterWrapper {
   position: relative;
   flex-direction: column;
-  width: 25%;
+  width: 35%;
   background-color: #000;
   border: 1px solid #cec198;
+
+  @media screen and (min-width: 1240px) {
+    width: 30%;
+  }
+
+  @media screen and (min-width: 1440px) {
+    width: 25%;
+  }
+
+  @media screen and (min-width: 1680px) {
+    width: 20%;
+  }
+
+  @media screen and (min-width: 2560px) {
+    width: 15%;
+  }
 
   .characterImageWrapper {
     display: flex;
@@ -182,7 +199,7 @@ export default {
     flex-direction: column;
     align-items: center;
     color: #ffffff;
-    margin-bottom: 2.2rem;
+    margin-bottom: 2.5rem;
 
     .characterName {
       margin-bottom: 0.3rem;
@@ -206,7 +223,7 @@ export default {
   }
   .weapons {
     position: absolute;
-    bottom: -17%;
+    bottom: -15%;
     display: flex;
     left: 0;
     justify-content: center;

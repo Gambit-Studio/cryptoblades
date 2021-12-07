@@ -1,12 +1,14 @@
 <template>
   <div class="pvpWrapper">
     <pvp-nav-bar @changeTab="onChangeTab" :isMatchmakingActive="false" />
-    <div v-if="tab === 0">
+    <div v-if="tab === 1">
       <!-- <pvp-arena-preparation :character="this.character" :opponent="this.opponent"/> -->
       <!-- <pvp-arena-summary :character="this.character" :opponent="this.opponent"/> -->
       <pvp-arena-matchmaking :character="this.character" :opponent="this.opponent"/>
     </div>
-    <div v-if="tab === 1">LEADERBOARDS</div>
+    <div v-if="tab === 0">
+      <pvp-leaderboards />
+    </div>
   </div>
 </template>
 
@@ -15,6 +17,7 @@
 // import PvPArenaSummary from './arena/PvPArenaSummary.vue';
 import PvPArenaMatchMaking from './arena/PvPArenaMatchMaking.vue';
 import PvPNavBar from './components/PvPNavBar.vue';
+import PvPLeaderboards from './leaderboards/PvPLeaderboards.vue';
 // import PvPModal from './components/PvPModal.vue';
 
 export default {
@@ -23,7 +26,8 @@ export default {
     // 'pvp-modal': PvPModal
     // 'pvp-arena-preparation': PvPArenaPreparation,
     // 'pvp-arena-summary': PvPArenaSummary,
-    'pvp-arena-matchmaking': PvPArenaMatchMaking
+    'pvp-arena-matchmaking': PvPArenaMatchMaking,
+    'pvp-leaderboards': PvPLeaderboards
   },
   data() {
     return {
