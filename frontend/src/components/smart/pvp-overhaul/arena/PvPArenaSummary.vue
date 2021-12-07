@@ -17,9 +17,8 @@
           </div>
           <div class="bottomWrapperInner">
             <div v-if="activeTab === 0" class="bottomWeapons">
-              <!-- <pvp-weapon :stars="5" element="water" />
-              <pvp-weapon :stars="2" element="lightning" /> -->
-              eqsd
+              <pvp-weapon :stars="5" element="fire" />
+              <pvp-weapon :stars="4" element="earth" />
             </div>
             <div v-if="activeTab === 1" class="bottomDuels">
               <ul>
@@ -69,11 +68,11 @@
         </ul>
         <a href="/" class="rankings">View all rankings</a>
         <ul class="characterAttrsList">
-          <li class="characterName">CEYT QUAL</li>
+          <li class="characterName">{{ character.name }}</li>
           <li><span>Power </span><span>500</span></li>
           <li><span>Damage multiplier</span><span>453</span></li>
-          <li><span>Level</span><span>182</span></li>
-          <li><span>Current rank</span><span>182</span></li>
+          <li><span>Level</span><span>{{ character.level }}</span></li>
+          <li><span>Current rank</span><span>{{ character.rank }}</span></li>
         </ul>
       </div>
     </div>
@@ -82,21 +81,26 @@
 
 <script>
 import PvPButton from '../components/PvPButton.vue';
-// import PvPWeapon from '../components/PvPWeapon.vue';
+import PvPWeapon from '../components/PvPWeapon.vue';
 // import PvpCharacter from "./components/base/PvpCharacter.vue";
 
 export default {
   components: {
     'pvp-button': PvPButton,
+    'pvp-weapon': PvPWeapon
     // 'pvp-character': PvpCharacter,
-    // 'pvp-weapon': PvPWeapon
   },
-  props: {},
+  props: {
+    character: {
+      required: true,
+    },
+    opponent: {
+      required: true,
+    },
+  },
   data() {
     return {
       activeTab: 0,
-      sword: {},
-      shield: {}, //optional shield retrieved from the character
     };
   },
   methods: {
@@ -113,7 +117,6 @@ export default {
   flex-direction: column;
   min-height: 100vh;
   background-color: #141414;
-  border: 2px solid red;
 }
 .mainWrapper {
   display: flex;

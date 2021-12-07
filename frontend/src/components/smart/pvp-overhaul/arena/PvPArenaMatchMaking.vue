@@ -17,8 +17,8 @@
           </div>
         </div>
         <div class="weapons">
-          <!-- <pvp-weapon :stars="4" element="fire" />
-          <pvp-weapon :stars="3" element="water" /> -->
+          <pvp-weapon :stars="4" element="fire" />
+          <pvp-weapon :stars="3" element="water" />
         </div>
       </div>
       <div class="middleButtons">
@@ -50,8 +50,8 @@
           </div>
         </div>
         <div class="weapons">
-          <!-- <pvp-weapon :stars="4" element="fire" />
-          <pvp-weapon :stars="3" element="water" /> -->
+          <pvp-weapon :stars="4" element="fire" />
+          <pvp-weapon :stars="3" element="water" />
         </div>
       </div>
     </div>
@@ -59,8 +59,8 @@
 </template>
 
 <script>
-// import PvPCharacter from "../components/base/PvpCharacter.vue";
-// import PvPWeapon from "../components/base/PvPWeapon.vue";
+// import PvPCharacter from "../components/PvpCharacter.vue";
+import PvPWeapon from '../components/PvPWeapon.vue';
 import PvPSeparator from '../components/PvPSeparator.vue';
 import PvPButton from '../components/PvPButton.vue';
 import fireIcon from '../../../../assets/elements/fire.png';
@@ -71,7 +71,7 @@ import lightningIcon from '../../../../assets/elements/lightning.png';
 export default {
   components: {
     // 'pvp-character': PvPCharacter,
-    // 'pvp-weapon': PvPWeapon,
+    'pvp-weapon': PvPWeapon,
     'pvp-separator': PvPSeparator,
     'pvp-button': PvPButton,
   },
@@ -117,8 +117,8 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  margin-top: 3.5rem;
   background-color: #141414;
-  border: 2px solid red;
 }
 
 .bottom {

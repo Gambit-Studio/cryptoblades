@@ -4,22 +4,24 @@
       <img
         v-for="index in stars"
         :key="index"
-        src="../../assets/star.svg"
+        src="../../../../assets/star.svg"
         alt="star"
       />
     </div>
-    <div class="weaponWrapper"></div>
+    <div class="weaponWrapper">
+      <!-- <img src="" alt="weapon image"> -->
+    </div>
     <div class="elementWrapper">
-      <!-- <img :src="getElementImageUrl" alt="element" /> -->
+      <img :src="getElementImageUrl" alt="element icon" />
     </div>
   </div>
 </template>
 
 <script>
-// import fire from '../../../../assets/elements/fire.png';
-// import water from '../../../../assets/elements/water.png';
-// import earth from '../../../../assets/elements/earth.png';
-// import lightning from '../../../../assets/elements/lightning.png';
+import fire from '../../../../assets/elements/fire.png';
+import water from '../../../../assets/elements/water.png';
+import earth from '../../../../assets/elements/earth.png';
+import lightning from '../../../../assets/elements/lightning.png';
 
 export default {
   props: {
@@ -33,22 +35,25 @@ export default {
       type: String,
       required: true,
     },
+    imgUrl: {
+      type: String
+    }
   },
-  // computed: {
-  //   getElementImageUrl: function () {
-  //     if (this.element === "fire") {
-  //       return fire;
-  //     }
-  //     if (this.element === "water") {
-  //       return water;
-  //     }
-  //     if (this.element === "earth") {
-  //       return earth;
-  //     } else {
-  //       return lightning;
-  //     }
-  //   },
-  // },
+  computed: {
+    getElementImageUrl() {
+      if (this.element === 'fire') {
+        return fire;
+      }
+      if (this.element === 'water') {
+        return water;
+      }
+      if (this.element === 'earth') {
+        return earth;
+      } else {
+        return lightning;
+      }
+    },
+  },
 };
 </script>
 
@@ -67,10 +72,11 @@ export default {
 .starsWrapper {
   display: flex;
   height: 13%;
+  margin-left: 0.1rem;
 
   img {
     height: 0.5rem;
-    width: 0.5rem;
+    width: 0.45rem;
     margin-right: 0.125rem;
     pointer-events: none;
   }
@@ -92,5 +98,9 @@ export default {
   border: 1px solid #cec198;
   border-radius: 9999px;
   background-color: #151515;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
 }
 </style>

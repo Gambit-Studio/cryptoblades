@@ -41,7 +41,7 @@ export default {
   props: {
     isMatchmakingActive: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   methods: {
