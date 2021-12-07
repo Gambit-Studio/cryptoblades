@@ -45,11 +45,26 @@ export default {
       type: String,
       values: ['win', 'lose']
     },
-    userRoll: Number,
-    opponentRoll: Number,
-    skillEarned: Number,
-    rankVariation: Number,
-    userCurrentRank: Number
+    userRoll: {
+      type: Number,
+      required: true
+    },
+    opponentRoll: {
+      type: Number,
+      required: true
+    },
+    skillEarned: {
+      type: Number,
+      required: true
+    },
+    rankVariation: {
+      type: Number,
+      required: true
+    },
+    userCurrentRank: {
+      type: Number,
+      required: true
+    }
   },
 };
 </script>
@@ -58,12 +73,11 @@ export default {
 .modalWrapper {
   display: flex;
   flex-direction: column;
+  width: 100vw;
+  height: 100vh;
   align-items: center;
   vertical-align: middle;
   justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  border: 1px solid red;
   background-color: rgb(20, 20, 20, 0.5);
 
   .modalInnerWrapper {
@@ -82,7 +96,6 @@ export default {
     @media only screen and (min-width: 1980px) {
       width: 40%;
     }
-
 
     img {
       &:first-of-type {
@@ -105,16 +118,11 @@ export default {
       display: flex;
       flex-direction: column;
       margin: 1.5rem 0;
-      list-style-type: none;
       padding: 0;
+      list-style-type: none;
       align-items: center;
       justify-content: center;
-      width: 50%;
-
-      @media only screen and (min-width: 1440px) {
-        width: 30%;
-      }
-
+      width: 30%;
       li {
         display: flex;
         text-align: center;
