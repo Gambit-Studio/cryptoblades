@@ -14,13 +14,27 @@
           <span>Element</span>
           <span>Earned SKILLs</span>
         </li>
-        <li :v-for="player in players" :key="player.rank">
+        <li>
+          <span>1</span>
+          <span>Player 1</span>
+          <span>11</span>
+          <span>Fire</span>
+          <span>4</span>
+        </li>
+        <li>
+          <span>2</span>
+          <span>Player 2</span>
+          <span>12</span>
+          <span>Earth</span>
+          <span>3</span>
+        </li>
+        <!-- <li :v-for="player in players" :key="player.name">
           <span>{{ player.rank }}</span>
           <span>{{ player.name }}</span>
           <span>{{ player.level }}</span>
           <span>{{ player.element }}</span>
           <span>{{ player.earnedSkill }}</span>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
