@@ -132,13 +132,14 @@ export default {
         color:#B4B0A7;
         background-color: transparent;
         appearance: none;
+        outline: none;
       }
     }
 
     .selectWrapper::after {
       content: "▼";
       font-size: 0.4rem;
-      right: 10px;
+      right: 0.5rem;
       position: absolute;
     }
 
