@@ -76,9 +76,10 @@ export default {
     'pvp-button': PvPButton,
   },
   props: {
+    characterId: Number,
     characterName: String,
     characterLevel: Number,
-    characterRank: Number,
+    characterRanking: Number,
     characterTrait: String
   },
   computed: {

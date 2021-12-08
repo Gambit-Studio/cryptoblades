@@ -93,8 +93,8 @@ export default {
   props: {
     characterId: Number,
     characterName: String,
-    characterRank: Number,
-    characterLevel: Number
+    characterLevel: Number,
+    characterRanking: Number,
   },
   data() {
     return {

@@ -137,11 +137,11 @@
         </ul>
         <a href="/" class="rankings">View all rankings</a>
         <ul class="characterAttrsList">
-          <li class="characterName">CHARACTER NAME</li>
+          <li class="characterName">{{ characterName }}</li>
           <li><span>Power </span><span>500</span></li>
           <li><span>Damage multiplier</span><span>453</span></li>
-          <li><span>Level</span><span>CHARACTER LEVEL</span></li>
-          <li><span>Current rank</span><span>CHARACTER RANK</span></li>
+          <li><span>Level</span><span>{{ characterLevel }}</span></li>
+          <li><span>Current rank</span><span>{{ characterRanking }}</span></li>
         </ul>
       </div>
     </div>
@@ -175,6 +175,12 @@ export default {
       availableShieldIds: [],
       checkBoxAgreed: false,
     };
+  },
+  props: {
+    characterId: Number,
+    characterName: String,
+    characterLevel: Number,
+    characterRanking: Number,
   },
   computed: {
     ...mapState(['currentCharacterId', 'contracts', 'defaultAccount', 'ownedWeaponIds', 'ownedShieldIds']),
