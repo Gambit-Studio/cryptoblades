@@ -35,18 +35,18 @@
             <div>
               <ul>
                 <li>
-                  <div class="bulletpoint"></div> Entering the Arena will cost you 3 $SKILL.
+                  <div class="bulletpoint"></div> Entering the Arena will cost you {{ formattedEntryWager }} $SKILL.
                 </li>
                 <li>
                   <div class="bulletpoint"></div> Players can attack you while you are in the
                   Arena.
                 </li>
                 <li>
-                  <div class="bulletpoint"></div> Leaving the Arena will cost you 1.5 $SKILL.
+                  <div class="bulletpoint"></div> Leaving the Arena will cost you {{ +formattedEntryWager / 4 }} $SKILL.
                 </li>
               </ul>
               <label class="checkbox">
-                <input type="checkbox" @click="handleAcceptTerms" />
+                <input type="checkbox" v-model="checkBoxAgreed" />
                 <span>I understand.</span>
               </label>
             </div>
@@ -54,6 +54,7 @@
         </div>
         <div class="buttonWrapper">
           <pvp-button
+            @click="handleEnterArenaClick()"
             buttonText="ENTER ARENA"
             buttonsubText="$SKILL: 3"
             :class="{ disabled: !checkToggle }"
