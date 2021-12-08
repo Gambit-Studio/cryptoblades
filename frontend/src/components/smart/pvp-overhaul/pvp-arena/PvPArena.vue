@@ -3,8 +3,7 @@
     <div v-if="loading">
       LOADING!
     </div>
-
-    <div v-if="!loading">
+    <div v-else>
       <pvp-arena-preparation v-if="!isCharacterInArena" />
       <pvp-arena-summary v-if="isCharacterInArena" />
       <pvp-arena-matchmaking v-if="false" />
@@ -47,7 +46,7 @@ export default {
         this.isCharacterInArena = true;
       }
     }
-
+    this.$emit('isCharacterInArena', this.isCharacterInArena);
     this.loading = false;
   },
 

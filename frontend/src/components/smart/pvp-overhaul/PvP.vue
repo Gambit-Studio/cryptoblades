@@ -1,7 +1,7 @@
 <template>
   <div>
-    <pvp-nav-bar @changeTab="onChangeTab"/>
-    <pvp-arena v-if="tab === 0" />
+    <pvp-nav-bar @changeTab="onChangeTab" :isPlayerInArena="this.isPlayerInArena()"/>
+    <pvp-arena v-if="tab === 0" @isCharacterInArena="this.isPlayerInArena()"/>
     <pvp-leaderboards v-if="tab === 1" />
   </div>
 </template>
@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       tab: 0,
+      isPlayerInArena: Boolean
     };
   },
 

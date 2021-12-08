@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <nav v-if="isMatchmakingActive" class="matchmakingNav">
+    <nav v-if="isPlayerInArena" class="matchmakingNav">
       <div class="matchmakingNavTitle">Arena</div>
       <div class="matchmakingNavStats">
         <div>
@@ -39,10 +39,7 @@ export default {
     };
   },
   props: {
-    isMatchmakingActive: {
-      type: Boolean,
-      default: true
-    }
+    isPlayerInArena: Boolean
   },
   methods: {
     setTab(tabNumber) {
