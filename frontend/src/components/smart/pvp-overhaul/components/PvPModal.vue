@@ -1,7 +1,7 @@
 <template>
   <div class="modalWrapper">
     <div class="modalInnerWrapper">
-      <img src="../../../../assets/separatorTop.svg" alt="Top separator">
+      <img src="../../../../../assets/separatorTop.svg" alt="Top separator">
       <div v-if="result === win" class="modalTitle">You have won the duel!</div>
       <div v-else class="modalTitle"> You have lost the duel!</div>
       <ul>
@@ -24,17 +24,17 @@
         <span>{{ userCurrentRank }}</span>
         <span>({{ rankVariation }} Rank)</span>
       </div>
-      <img src="../../../../assets/separatorBottom.svg" alt="Bottom separator">
+      <img src="../../../../../assets/separatorBottom.svg" alt="Bottom separator">
     </div>
     <div class="closeWrapper">
       <p>Tap anywhere to close</p>
-      <button><img src="../../../../assets/closeModal.svg" alt="Bottom separator"></button>
+      <button><img src="../../../../../assets/closeModal.svg" alt="Bottom separator"></button>
     </div>
   </div>
 </template>
 
 <script>
-import PvPSeparator from '../components/PvPSeparator.vue';
+import PvPSeparator from '../../components/PvPSeparator.vue';
 
 export default {
   components: {
@@ -70,6 +70,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.preventScroll {
+  position: fixed;
+  overflow: hidden;
+}
+
 .modalWrapper {
   display: flex;
   flex-direction: column;
@@ -79,6 +84,7 @@ export default {
   vertical-align: middle;
   justify-content: center;
   background-color: rgb(20, 20, 20, 0.5);
+  border: 1px solid red;
 
   .modalInnerWrapper {
     display: flex;

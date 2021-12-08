@@ -8,21 +8,20 @@
         v-if="!isCharacterInArena"
         :characterName="nombredelweon"
         :characterLevel="999"
-        :characterRanking="1"
-        :characterArt="fotodelweon"
+        :characterRanking="rankingdelweon"
       />
-      <pvp-arena-summary
-        v-if="isCharacterInArena"
+      <!-- <pvp-arena-summary
+        v-if="!isCharacterInArena"
         :characterName="nombredelweon"
         :characterLevel="999"
         :characterRanking="1"
-      />
-      <pvp-arena-matchmaking
+      /> -->
+      <!-- <pvp-arena-matchmaking
         v-if="false"
         :characterName="nombredelweon"
         :characterLevel="999"
         :characterRanking="1"
-      />
+      /> -->
     </div>
   </div>
 </template>
@@ -31,7 +30,6 @@
 import { getCharacterNameFromSeed } from '@/character-name';
 import { mapState, mapGetters } from 'vuex';
 import PvPArenaPreparation from './sub-components/PvPArenaPreparation.vue';
-import { getCharacterArt } from '@/character-arts-placeholder';
 // import PvPArenaSummary from './sub-components/PvPArenaSummary.vue';
 // import PvPArenaMatchMaking from './sub-components/PvPArenaMatchMaking.vue';
 
@@ -47,8 +45,7 @@ export default {
       isCharacterInArena: false,
       isMatchMaking: false,
       nombredelweon: '',
-      rankingdelweon: '',
-      fotodelweon: ''
+      rankingdelweon: null,
     };
   },
   computed: {
@@ -64,7 +61,7 @@ export default {
         this.isCharacterInArena = true;
       }
       this.nombredelweon = getCharacterNameFromSeed(this.currentCharacterId);
-      this.fotodelweon = getCharacterArt(this.currentCharacter);
+      this.rankingdelweon = await this.contracts().PvpArena.methods.getCharacterRankingPoints(this.currentCharacterId).call({ from: this.defaultAccount });
     }
 
     this.$emit('isCharacterInArena', this.isCharacterInArena);
@@ -82,7 +79,7 @@ export default {
         }
       }
       this.nombredelweon = getCharacterNameFromSeed(this.currentCharacterId);
-      this.fotodelweon = getCharacterArt(this.currentCharacter);
+      this.rankingdelweon = await this.contracts().PvpArena.methods.getCharacterRankingPoints(this.currentCharacterId).call({ from: this.defaultAccount });
       this.loading = false;
     }
   }
