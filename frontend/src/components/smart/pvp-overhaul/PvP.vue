@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pvpWrapper">
     <pvp-nav-bar @changeTab="onChangeTab" :isPlayerInArena="this.isPlayerInArena()"/>
     <pvp-arena v-if="tab === 0" @isCharacterInArena="this.isPlayerInArena()"/>
     <pvp-leaderboards v-if="tab === 1" />
@@ -33,3 +33,9 @@ export default {
   }
 };
 </script>
+
+<style scoped lang="scss">
+.pvpWrapper {
+  padding: 0 4rem;
+}
+</style>
