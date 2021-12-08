@@ -1,33 +1,33 @@
 <template>
   <div class="leaderboardsWrapper">
     <div class="filtersWrapper">
-        <div class="selectWrapper">
-          <label for="tier">Tier: </label>
-          <select name="tier" id="tier">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
-          </select>
-        </div>
-        <div class="selectWrapper">
-          <label for="element">Element: </label>
-          <select name="element" id="element">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
-          </select>
-        </div>
-        <div class="selectWrapper">
-          <label for="numberOfListings">Listings per page: </label>
-          <select name="numberOfListings" id="numberOfListings">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
-          </select>
-        </div>
+      <div class="selectWrapper">
+        <label for="tier">Tier: </label>
+        <select name="tier" id="tier">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div class="selectWrapper">
+        <label for="element">Element: </label>
+        <select name="element" id="element">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div class="selectWrapper">
+        <label for="numberOfListings">Listings per page: </label>
+        <select name="numberOfListings" id="numberOfListings">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
     </div>
     <div class="listWrapper">
       <ul class="playerList">
@@ -94,30 +94,32 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
+
   .filtersWrapper {
     display: flex;
-    width: 1000px;
-    background-color: black;
+    height: 2.5rem;
     flex-direction: row;
     color: #B4B0A7;
+
     .selectWrapper {
       display: flex;
       position: relative;
       width: 200px;
       align-items: center;
       vertical-align: middle;
+      border-radius: 0.25rem;
       margin-right: 1rem;
-      background-color: red;
-      opacity: 1;
+      padding-right: 10px;
+      background-color: #2C2C2C;
+
       label {
         position: absolute;
-        z-index: 20;
+        z-index: 30;
         margin-left: 0.5rem;
-        margin-top: 1.25rem;
         top: 50%;
-        background-color: #fff;
         transform: translateY(-50%);
       }
+
       select {
         position: absolute;
         top: 0;
@@ -127,16 +129,25 @@ export default {
         width: 100%;
         height: 2.5rem;
         border: none;
-        border-radius: 0.25rem;
         color:#B4B0A7;
-        background: transparent;
+        background-color: transparent;
+        appearance: none;
       }
     }
+
+    .selectWrapper::after {
+      content: "▼";
+      font-size: 0.4rem;
+      right: 10px;
+      position: absolute;
+    }
+
     .selectWrapper:first-of-type {
       select {
         padding-left: 2.5rem;
       }
     }
+
     .selectWrapper:nth-of-type(2) {
       select {
         padding-left: 4rem;
@@ -148,26 +159,34 @@ export default {
       }
     }
   }
+
   .listWrapper {
     width: 100%;
-    margin-top: 3rem;
+    margin-top: 2rem;
+
     .playerList {
       margin: 0;
       padding: 0;
       list-style-type: none;
       justify-content: space-between;
+
       li {
         display: flex;
         width: 100%;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #404857;
+        font-size: 0.9rem;
         span {
           display: flex;
+          flex: 1;
         }
       }
+
       li:first-of-type {
         color: #CEC198;
-        border-bottom: 1px solid #404857;
-        padding: 0.5rem 0;
+        font-size: 1rem;
       }
+
       li:not(first-of-type) {
         color: #B4B0A7;
       }
