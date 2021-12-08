@@ -1,38 +1,36 @@
 <template>
   <div class="pvpCharacterWrapper">
     <img :src="getCharacterImageUrl" alt="character" class="characterImg" />
-    <img src="../../../../assets/standImage.png" alt="stand" class="characterStand" />
+    <img src="../../../../assets/placeholder/standImage.png" alt="stand" class="characterStand" />
   </div>
 </template>
 
 <script>
-// import character0 from "../../assets/chara-0.png";
-// import character1 from "../../assets/chara-1.png";
-// import character3 from "../../assets/chara-3.png";
-// import character4 from "../../assets/chara-4.png";
+import chara0 from '../../../../assets/placeholder/chara-0.png';
+import chara1 from '../../../../assets/placeholder/chara-1.png';
+import chara2 from '../../../../assets/placeholder/chara-2.png';
+import chara3 from '../../../../assets/placeholder/chara-3.png';
 
 export default {
   props: {
     character: {
-      type: String,
-      // values: ["character0", "character1", "character2", "character4"],
-      required: true,
+      type: Number,
     },
   },
-  // computed: {
-  //   getCharacterImageUrl: function () {
-  //     if (this.character === "character0") {
-  //       return character0;
-  //     }
-  //     if (this.character === "character1") {
-  //       return character1;
-  //     }
-  //     if (this.character === "character3") {
-  //       return character3;
-  //     }
-  //     return character4;
-  //   },
-  // },
+  computed: {
+    getCharacterImageUrl() {
+      if (this.character === 0) {
+        return chara0;
+      }
+      if (this.character === 1) {
+        return chara1;
+      }
+      if (this.character === 2) {
+        return chara2;
+      }
+      return chara3;
+    },
+  },
 };
 </script>
 
@@ -42,10 +40,8 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: inherit;
-  border: 1px solid green;
+  height: 100%;
 }
-
 .characterImg {
   position: absolute;
   z-index: 1;
@@ -56,7 +52,7 @@ export default {
 }
 .characterStand {
   position: absolute;
-  bottom: -7%;
+  bottom: -10%;
   display: flex;
   width: 100%;
 }

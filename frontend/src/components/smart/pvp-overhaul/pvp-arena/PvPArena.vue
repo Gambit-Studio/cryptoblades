@@ -4,23 +4,24 @@
       LOADING!
     </div>
     <div v-else>
+      <div>{{ currentCharacterId }}</div>
       <pvp-arena-preparation v-if="!isCharacterInArena" />
-      <pvp-arena-summary v-if="isCharacterInArena" />
+      <!-- <pvp-arena-summary v-if="isCharacterInArena" :characterName="asd"/> -->
       <pvp-arena-matchmaking v-if="false" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import PvPArenaPreparation from './sub-components/PvPArenaPreparation.vue';
-import PvPArenaSummary from './sub-components/PvPArenaSummary.vue';
+// import PvPArenaSummary from './sub-components/PvPArenaSummary.vue';
 import PvPArenaMatchMaking from './sub-components/PvPArenaMatchMaking.vue';
 
 export default {
   components: {
     'pvp-arena-preparation': PvPArenaPreparation,
-    'pvp-arena-summary': PvPArenaSummary,
+    // 'pvp-arena-summary': PvPArenaSummary,
     'pvp-arena-matchmaking': PvPArenaMatchMaking
   },
 
@@ -34,6 +35,22 @@ export default {
 
   computed: {
     ...mapState(['currentCharacterId', 'contracts', 'defaultAccount']),
+    ...mapGetters([
+      'currentCharacter',
+      'currentCharacterStamina',
+      'getCharacterName',
+      'getCharacterStamina',
+      'charactersWithIds',
+      'ownCharacters',
+      'timeUntilCharacterHasMaxStamina',
+      'getIsInCombat',
+      'getIsCharacterViewExpanded',
+      'fightGasOffset',
+      'fightBaseline'
+    ]),
+    asd() {
+      return this.getCharacterName(this.currentCharacterId);
+    }
   },
 
   methods: {

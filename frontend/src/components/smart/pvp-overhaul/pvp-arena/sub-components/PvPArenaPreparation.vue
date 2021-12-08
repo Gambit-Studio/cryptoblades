@@ -52,7 +52,7 @@
       </div>
 
   </div> -->
-    <div class="wrapper">
+    <div class="arenaPreparationWrapper">
     <div class="mainWrapper">
       <div class="arenaSignup">
         <h1 class="title">ARENA SIGNUP</h1>
@@ -116,7 +116,7 @@
         </div>
       </div>
       <div class="characterImage">
-        <!-- <pvp-character character="character3" /> -->
+        <pvp-character :character="0" />
       </div>
       <div class="arenaInformation">
         <h1 class="title">ARENA INFORMATION</h1>
@@ -154,14 +154,15 @@ import BN from 'bignumber.js';
 import { weaponFromContract as formatWeapon } from '../../../../../contract-models';
 import PvPSeparator from '../../components/PvPSeparator.vue';
 import PvPButton from '../../components/PvPButton.vue';
+import PvPCharacter from '../../components/PvPCharacter.vue';
 // import PvPWeapon from '../../components/PvPWeapon.vue';
 import checkIcon from '../../../../../assets/checkImage.svg';
 import ellipseIcon from '../../../../../assets/ellipseImage.svg';
 
 export default {
   components: {
-    // pvp-character: PvpCharacter,
     // 'pvp-weapon': PvPWeapon,
+    'pvp-character': PvPCharacter,
     'pvp-button': PvPButton,
     'pvp-separator': PvPSeparator,
   },
@@ -264,7 +265,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.wrapper {
+.arenaPreparationWrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -273,8 +274,7 @@ export default {
 .mainWrapper {
   display: flex;
   width: 100%;
-  margin-right: auto;
-  margin-left: auto;
+  margin: 0 auto;
   justify-content: space-between;
 }
 .title {
@@ -286,9 +286,9 @@ export default {
 }
 .arenaSignup {
   p {
+    margin-bottom: 0;
     color: #b4b0a7;
     font-size: 1rem;
-    margin-bottom: 0;
     line-height: 1.5rem;
   }
   .top {
@@ -407,10 +407,18 @@ export default {
   }
 }
 .characterImage {
-  height: 100%;
+  display: flex;
+  height: 400px;
   width: 33%;
-  margin-right: 1rem;
-  margin-left: 1rem;
+  margin: 0 1rem;
+
+  @media only screen and (min-width: 1440px) {
+    width: 20%;
+  }
+
+  @media only screen and (min-width: 1980px) {
+    width: 15%;
+  }
 }
 .arenaInformation {
   display: flex;
