@@ -14,7 +14,7 @@ import chara3 from '../../../../assets/placeholder/chara-3.png';
 export default {
   props: {
     character: {
-      type: Number,
+      type: String,
     },
   },
   computed: {

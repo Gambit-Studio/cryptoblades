@@ -4,12 +4,12 @@
       LOADING!
     </div>
     <div v-else>
-      <div>{{ currentCharacter }}</div>
       <pvp-arena-preparation
         v-if="!isCharacterInArena"
         :characterName="nombredelweon"
         :characterLevel="999"
         :characterRanking="1"
+        :characterArt="fotodelweon"
       />
       <pvp-arena-summary
         v-if="isCharacterInArena"
@@ -29,8 +29,9 @@
 
 <script>
 import { getCharacterNameFromSeed } from '@/character-name';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import PvPArenaPreparation from './sub-components/PvPArenaPreparation.vue';
+import { getCharacterArt } from '@/character-arts-placeholder';
 // import PvPArenaSummary from './sub-components/PvPArenaSummary.vue';
 // import PvPArenaMatchMaking from './sub-components/PvPArenaMatchMaking.vue';
 
@@ -46,11 +47,13 @@ export default {
       isCharacterInArena: false,
       isMatchMaking: false,
       nombredelweon: '',
-      rankingdelweon: ''
+      rankingdelweon: '',
+      fotodelweon: ''
     };
   },
   computed: {
     ...mapState(['currentCharacterId', 'contracts', 'defaultAccount']),
+    ...mapGetters(['currentCharacter'])
   },
   methods: {
   },
@@ -61,7 +64,7 @@ export default {
         this.isCharacterInArena = true;
       }
       this.nombredelweon = getCharacterNameFromSeed(this.currentCharacterId);
-      // this.rankingdelweon = this.contracts().PvpArena.methods.getCharacterRankingPoints(this.currentCharacterId);
+      this.fotodelweon = getCharacterArt(this.currentCharacter);
     }
 
     this.$emit('isCharacterInArena', this.isCharacterInArena);
@@ -79,7 +82,7 @@ export default {
         }
       }
       this.nombredelweon = getCharacterNameFromSeed(this.currentCharacterId);
-      // this.rankingdelweon = this.contracts().PvpArena.methods.getCharacterRankingPoints(this.currentCharacterId);
+      this.fotodelweon = getCharacterArt(this.currentCharacter);
       this.loading = false;
     }
   }

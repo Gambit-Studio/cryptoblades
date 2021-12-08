@@ -116,7 +116,7 @@
         </div>
       </div>
       <div class="characterImage">
-        <pvp-character :character="3" />
+        <pvp-character :character="1" />
       </div>
       <div class="arenaInformation">
         <h1 class="title">ARENA INFORMATION</h1>
@@ -177,7 +177,7 @@ export default {
     };
   },
   props: {
-    characterId: Number,
+    characterArt: String,
     characterName: String,
     characterLevel: Number,
     characterRanking: Number,
