@@ -116,7 +116,7 @@
         </div>
       </div>
       <div class="characterImage">
-        <pvp-character :character="0" />
+        <pvp-character :character="3" />
       </div>
       <div class="arenaInformation">
         <h1 class="title">ARENA INFORMATION</h1>
@@ -414,16 +414,16 @@ export default {
 }
 .characterImage {
   display: flex;
-  height: 400px;
-  width: 33%;
-  margin: 0 1rem;
+  width: 50%;
+  padding: 3rem 0;
 
   @media only screen and (min-width: 1440px) {
-    width: 20%;
+    width: 40%;
+    margin: 0;
   }
 
   @media only screen and (min-width: 1980px) {
-    width: 15%;
+    width: 30%;
   }
 }
 .arenaInformation {

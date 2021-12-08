@@ -5,9 +5,24 @@
     </div>
     <div v-else>
       <div>{{ currentCharacter }}</div>
-      <pvp-arena-preparation v-if="!isCharacterInArena" :characterName="nombredelweon" :characterLevel="999" :characterRanking="1" />
-      <pvp-arena-summary v-if="isCharacterInArena" :characterName="nombredelweon" :characterLevel="999" :characterRanking="1" />
-      <pvp-arena-matchmaking v-if="false" :characterName="nombredelweon" :characterLevel="999" :characterRanking="1" />
+      <pvp-arena-preparation
+        v-if="!isCharacterInArena"
+        :characterName="nombredelweon"
+        :characterLevel="999"
+        :characterRanking="1"
+      />
+      <pvp-arena-summary
+        v-if="isCharacterInArena"
+        :characterName="nombredelweon"
+        :characterLevel="999"
+        :characterRanking="1"
+      />
+      <pvp-arena-matchmaking
+        v-if="false"
+        :characterName="nombredelweon"
+        :characterLevel="999"
+        :characterRanking="1"
+      />
     </div>
   </div>
 </template>
@@ -59,12 +74,12 @@ export default {
       if (value !== null) {
         if (await this.contracts().PvpArena.methods.isCharacterInArena(value).call({ from: this.defaultAccount })) {
           this.isCharacterInArena = true;
-          this.nombredelweon = getCharacterNameFromSeed(this.currentCharacterId);
-          // this.rankingdelweon = this.contracts().PvpArena.methods.getCharacterRankingPoints(this.currentCharacterId);
         } else {
           this.isCharacterInArena = false;
         }
       }
+      this.nombredelweon = getCharacterNameFromSeed(this.currentCharacterId);
+      // this.rankingdelweon = this.contracts().PvpArena.methods.getCharacterRankingPoints(this.currentCharacterId);
       this.loading = false;
     }
   }

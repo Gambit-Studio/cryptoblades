@@ -243,11 +243,21 @@ export default {
     }
   }
 }
-
 .characterImage {
-  width: 33%;
-  margin-right: 1rem;
-  margin-left: 1rem;
+  display: flex;
+  width: 50%;
+  padding: 3rem 0;
+  margin: 0 1rem;
+  border: 1px solid red;
+
+  @media only screen and (min-width: 1440px) {
+    width: 40%;
+    margin: 0;
+  }
+
+  @media only screen and (min-width: 1980px) {
+    width: 30%;
+  }
 }
 .arenaInformation {
   display: flex;

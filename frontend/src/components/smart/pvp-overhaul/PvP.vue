@@ -17,14 +17,12 @@ export default {
     'pvp-arena': PvPArena,
     'pvp-leaderboards': PvPLeaderboards
   },
-
   data() {
     return {
       tab: 0,
       isPlayerInArena: Boolean
     };
   },
-
   methods: {
     // TODO: Use router for this.
     onChangeTab(tabNumber) {
