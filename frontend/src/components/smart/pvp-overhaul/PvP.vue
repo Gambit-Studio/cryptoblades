@@ -34,6 +34,6 @@ export default {
 
 <style scoped lang="scss">
 .pvpWrapper {
-  padding: 0 4rem;
+  padding: 0 4rem 4rem 4rem;
 }
 </style>

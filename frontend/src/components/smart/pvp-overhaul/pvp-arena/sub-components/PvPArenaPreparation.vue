@@ -131,13 +131,15 @@ import { mapState } from 'vuex';
 import BN from 'bignumber.js';
 import PvPWeapon from '../../components/PvPWeapon.vue';
 import PvPShield from '../../components/PvPShield.vue';
+import PvPButton from '../../components/PvPButton.vue';
 import { weaponFromContract as formatWeapon } from '../../../../../contract-models';
 import { shieldFromContract as formatShield } from '../../../../../contract-models';
 
 export default {
   components: {
     'pvp-weapon': PvPWeapon,
-    'pvp-shield': PvPShield
+    'pvp-shield': PvPShield,
+    'pvp-button': PvPButton
   },
 
   props: {
