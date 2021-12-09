@@ -1,57 +1,4 @@
 <template>
-  <!-- <div>
-    <div>
-      <div>
-        <h2>Equip a Sword and a Shield (optional)</h2>
-        <br/>
-        <div>
-          <h3>WEAPON TITLE</h3>
-          <button
-            v-for="weaponId in ownedWeaponIds"
-            :key="weaponId"
-            @click="handleWeaponClick(weaponId)"
-            :disabled="ownedWeaponIds.includes(weaponId) && !availableWeaponIds.includes(weaponId)"
-          >
-            Weapon ID: {{ weaponId }}
-          </button>
-          <br/>
-          <span>Weapon: {{ selectedWeaponId }}</span>
-        </div>
-        <br/>
-        <div>
-          <h3>SHIELD TITLE</h3>
-          <button
-            v-for="shieldId in ownedShieldIds"
-            :key="shieldId"
-            @click="handleShieldClick(shieldId)"
-            :disabled="ownedShieldIds.includes(shieldId) && !availableShieldIds.includes(shieldId)"
-          >
-            Shield ID: {{ shieldId }}
-          </button>
-          <br/>
-          <span>Shield: {{ selectedShieldId }}</span>
-        </div>
-      </div>
-
-      <div>
-        <h2>Enter the Arena</h2>
-        <br/>
-        <span>Entering the Arena will cost you {{ formattedEntryWager }} $SKILL.</span>
-        <br/>
-        <span>Players can attack you while you are in the Arena.</span>
-        <br/>
-        <span>Leaving the Arena will cost you {{ +formattedEntryWager / 4 }} $SKILL.</span>
-        <br/>
-        <input type="checkbox" v-model="checkBoxAgreed" /><span>I understand.</span>
-        <br/>
-        <button @click="handleEnterArenaClick()">
-          Enter Arena
-          <br/>
-          $SKILL: {{ formattedEntryWager }}
-        </button>
-      </div>
-
-  </div> -->
     <div class="arenaPreparationWrapper">
     <div class="mainWrapper">
       <div class="arenaSignup">
@@ -63,6 +10,35 @@
               <img :src="getIconSource" />
             </div>
             <p>Equip a Sword and a Shield (optional).</p>
+          </div>
+          <div class="temporary">
+            <div>
+              <h3>WEAPON TITLE</h3>
+              <button
+                v-for="weaponId in ownedWeaponIds"
+                :key="weaponId"
+                @click="handleWeaponClick(weaponId)"
+                :disabled="ownedWeaponIds.includes(weaponId) && !availableWeaponIds.includes(weaponId)"
+              >
+              WeaponID: {{ weaponId}}
+              </button>
+              <br/>
+              <span>Weapon: {{ selectedWeaponId }}</span>
+            </div>
+            <br/>
+            <div>
+              <h3>SHIELD TITLE</h3>
+              <button
+                v-for="shieldId in ownedShieldIds"
+                :key="shieldId"
+                @click="handleShieldClick(shieldId)"
+                :disabled="ownedShieldIds.includes(shieldId) && !availableShieldIds.includes(shieldId)"
+              >
+                Shield ID: {{ shieldId }}
+              </button>
+              <br/>
+              <span>Shield: {{ selectedShieldId }}</span>
+            </div>
           </div>
           <div class="bottomWeapons">
             <pvp-separator dark vertical />
@@ -276,6 +252,9 @@ export default {
   flex-direction: column;
   min-height: 100vh;
   background-color: #141414;
+}
+.temporary {
+  border: 1px solid red;
 }
 .mainWrapper {
   display: flex;
