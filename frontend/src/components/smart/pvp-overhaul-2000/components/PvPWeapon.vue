@@ -1,23 +1,18 @@
 <template>
-  <div>
-    <div v-if="disabled">
-      DISABLED
+  <div class="mainWrapper">
+    <div class="starsWrapper">
+      <img
+        v-for="index in stars"
+        :key="index"
+        src="../../../../assets/star.svg"
+        alt="star"
+      />
     </div>
-    <div v-else class="mainWrapper" @click="$emit('click')">
-      <div class="starsWrapper">
-        <img
-          v-for="index in stars"
-          :key="index"
-          src="../../../../assets/star.svg"
-          alt="star"
-        />
-      </div>
-      <div class="weaponWrapper">
-        <img :src="getWeaponArtById(weaponId)" alt="weapon image">
-      </div>
-      <div class="elementWrapper">
-        <img :src="getElementImageUrl" alt="element icon" />
-      </div>
+    <div class="weaponWrapper">
+      <!-- <img src="" alt="weapon image"> -->
+    </div>
+    <div class="elementWrapper">
+      <img :src="getElementImageUrl" alt="element icon" />
     </div>
   </div>
 </template>
@@ -27,49 +22,38 @@ import fire from '../../../../assets/elements/fire.png';
 import water from '../../../../assets/elements/water.png';
 import earth from '../../../../assets/elements/earth.png';
 import lightning from '../../../../assets/elements/lightning.png';
-import { getWeaponArtById } from '../../../../weapon-arts-placeholder';
 
 export default {
   props: {
     stars: {
       type: Number,
       required: true,
-      min: 0,
+      min: 1,
       max: 5,
-      default: 0
     },
     element: {
       type: String,
       required: true,
-      default: ''
     },
-    weaponId: {
+    imgUrl: {
       type: String
-    },
-    disabled: {
-      type: Boolean,
-      default: false
     }
   },
   computed: {
     getElementImageUrl() {
-      if (this.element === 'Fire') {
+      if (this.element === 'fire') {
         return fire;
       }
-      if (this.element === 'Water') {
+      if (this.element === 'water') {
         return water;
       }
-      if (this.element === 'Earth') {
+      if (this.element === 'earth') {
         return earth;
       } else {
         return lightning;
       }
     },
   },
-
-  methods: {
-    getWeaponArtById,
-  }
 };
 </script>
 
@@ -114,7 +98,6 @@ export default {
   border: 1px solid #cec198;
   border-radius: 9999px;
   background-color: #151515;
-
   img {
     max-width: 100%;
     max-height: 100%;
