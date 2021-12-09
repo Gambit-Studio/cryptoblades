@@ -6,7 +6,7 @@
           <img :src="getCharacterTraitUrl" alt="element" />
         </div>
         <div class="characterImageWrapper">
-          <pvp-character :characterId="currentCharacterId" />
+          <!-- <pvp-character :characterId="currentCharacterId" /> -->
         </div>
         <div class="info">
           <h1 class="characterName">{{ characterName }}</h1>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-// import PvPCharacter from '../../components/PvpCharacter.vue';
+// import PvPCharacter from '../../components/PvPCharacter.vue';
 import PvPWeapon from '../../components/PvPWeapon.vue';
 import PvPSeparator from '../../components/PvPSeparator.vue';
 import PvPButton from '../../components/PvPButton.vue';
