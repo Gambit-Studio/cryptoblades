@@ -84,6 +84,9 @@ export default {
   border-radius: 0.375rem;
   background-color: #151515;
   border: 1px solid #cec198;
+  :hover {
+    cursor: pointer;
+  }
 }
 .starsWrapper {
   display: flex;
