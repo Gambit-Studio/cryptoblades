@@ -3,8 +3,7 @@
     <div v-if="loading">
       LOADING!
     </div>
-
-    <div v-if="!loading">
+    <div v-else>
       <pvp-arena-preparation
         v-if="!isCharacterInArena"
         :tierRewardsPool="tierRewardsPool"
