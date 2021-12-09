@@ -7,41 +7,32 @@
         <div></div>
         <div class="buttonWrapper">
           <pvp-button
+            @click="handleEnterArenaClick()"
             buttonText="ENTER ARENA"
           />
         </div>
         <div class="bottomWrapper">
           <div class="bottomWrapperNav">
-            <button @click="setTab(0)" :class="activeTab === 0 && 'active'">Equipment</button>
-            <button @click="setTab(1)" :class="activeTab === 1 && 'active'">Duel history</button>
+            <button @click="setTab(0)" :class="tab === 0 && 'active'">Equipment</button>
+            <button @click="setTab(1)" :class="tab === 1 && 'active'">Duel history</button>
           </div>
           <div class="bottomWrapperInner">
-            <div v-if="activeTab === 0" class="bottomWeapons">
-              <pvp-weapon :stars="5" element="fire" />
-              <pvp-weapon :stars="4" element="earth" />
+            <div v-if="tab === 0" class="bottomWeapons">
+          <pvp-weapon
+            v-if="activeWeaponWithInformation.weaponId"
+            :stars="activeWeaponWithInformation.information.stars + 1"
+            :element="activeWeaponWithInformation.information.element"
+            :weaponId="activeWeaponWithInformation.weaponId"
+          />
+          <pvp-shield
+            v-if="activeShieldWithInformation.shieldId"
+            :stars="activeShieldWithInformation.information.stars + 1"
+            :element="activeShieldWithInformation.information.element"
+            :shieldId="activeShieldWithInformation.shieldId"
+          />
             </div>
-            <div v-if="activeTab === 1" class="bottomDuels">
-              <ul>
-                <li>Date</li>
-                <li>22/11/2021</li>
-                <li>22/11/2021</li>
-                <li>22/11/2021</li>
-                <li>22/11/2021</li>
-              </ul>
-              <ul>
-                <li>Result</li>
-                <li>Win</li>
-                <li>Lose</li>
-                <li>Win</li>
-                <li>Win</li>
-              </ul>
-              <ul>
-                <li>MMR</li>
-                <li>2000</li>
-                <li>1990</li>
-                <li>1809</li>
-                <li>1790</li>
-              </ul>
+            <div v-if="tab === 1" class="bottomDuels">
+              DUEL HISTORY
             </div>
           </div>
         </div>
@@ -79,35 +70,80 @@
   </div>
 </template>
 
+
+
 <script>
-import PvPButton from '../../components/PvPButton.vue';
+import { mapState } from 'vuex';
+import BN from 'bignumber.js';
 import PvPWeapon from '../../components/PvPWeapon.vue';
+import PvPShield from '../../components/PvPShield.vue';
+import PvPButton from '../../components/PvPButton.vue';
 import PvPCharacter from '../../components/PvPCharacter.vue';
 
 export default {
   components: {
-    'pvp-button': PvPButton,
     'pvp-weapon': PvPWeapon,
+    'pvp-shield': PvPShield,
+    'pvp-button': PvPButton,
     'pvp-character': PvPCharacter
   },
+
   props: {
-    characterId: Number,
-    characterName: String,
-    characterLevel: Number,
-    characterRanking: Number,
+    tierRewardsPool: {
+      default: null
+    },
+    tierTopRankers: {
+      default: []
+    },
+    characterInformation: {
+      default: {
+        tier: null,
+        name: '',
+        level: null,
+        power: null,
+        rank: null
+      }
+    },
+    activeWeaponWithInformation: {
+      default: {
+        weaponId: null,
+        information: {}
+      }
+    },
+    activeShieldWithInformation: {
+      default: {
+        shieldId: null,
+        information: {}
+      }
+    },
   },
+
   data() {
     return {
-      activeTab: 0,
+      tab: 0
     };
   },
+
+  computed: {
+    ...mapState(['currentCharacterId', 'contracts', 'defaultAccount']),
+
+    formatedTierRewardsPool() {
+      return new BN(this.tierRewardsPool).div(new BN(10).pow(18)).toFixed(3);
+    },
+  },
+
   methods: {
     setTab(tabNumber) {
-      this.activeTab = tabNumber;
-    }
-  }
+      this.tab = tabNumber;
+    },
+
+    async handleEnterArenaClick() {
+      return 2;
+    },
+  },
 };
 </script>
+
 
 <style scoped lang="scss">
 .wrapper {
