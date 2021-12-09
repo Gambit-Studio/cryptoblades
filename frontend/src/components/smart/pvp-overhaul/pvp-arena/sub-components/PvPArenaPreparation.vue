@@ -41,7 +41,7 @@
                   @click="handleWeaponClick(weapon.weaponId)"
                   :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
                 />
-                <button @click="() => selectedWeaponId = null" class="clearWeaponButton">x</button>
+                <button @click="() => selectedWeaponId = null" class="clearWeaponButton">Clear</button>
               </div>
               <div v-if="!selectedShieldId" :class="{ disabledStyles: ownedShieldsWithInformation.length === 0 }" class="shieldButtonWrapper">
                 <button class="selectWeaponButton" id="popover-target-2">
@@ -70,7 +70,7 @@
                   @click="handleShieldClick(shield.shieldId)"
                   :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
                 />
-                <button @click="() => selectedShieldId = null" class="clearShieldButton">x</button>
+                <button @click="() => selectedShieldId = null" class="clearShieldButton">Clear</button>
               </div>
             </div>
           </div>
@@ -406,15 +406,15 @@ export default {
         position: absolute;
         top: -10px;
         right: -10px;
-        height: 1.5rem;
-        width: 1.5rem;
+
         align-items: center;
         vertical-align: middle;
         justify-content: center;
         background: #b53c48;
         border: none;
         color: white;
-        border-radius: 999px;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
       }
 
       .weaponButtonWrapper {
