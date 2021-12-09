@@ -1,6 +1,6 @@
 <template>
   <div class="pvpCharacterWrapper">
-    <img :src="getCharacterImageUrl" alt="character" class="characterImg" />
+    <img :src="characterPlaceholderSrc" alt="character" class="characterImg" />
     <img src="../../../../assets/placeholder/standImage.png" alt="stand" class="characterStand" />
   </div>
 </template>
@@ -15,7 +15,7 @@ export default {
     },
   },
   computed: {
-    getCharacterImageUrl() {
+    characterPlaceholderSrc() {
       return getCharacterArtById(this.characterId);
     }
   }
