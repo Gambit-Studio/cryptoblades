@@ -130,9 +130,18 @@
           <li class="header">
             <span>Top Players</span><span>$SKILL Earned</span>
           </li>
-          <li><span>Rank 1: {{ tierTopRankers[0] && tierTopRankers[0].name || '-' }}</span><span>{{ tierTopRankers[0] && tierTopRankers[0].rank }}</span></li>
-          <li><span>Rank 2: {{ tierTopRankers[1] && tierTopRankers[1].name || '-' }} </span><span>{{ tierTopRankers[1] && tierTopRankers[1].rank }}</span></li>
-          <li><span>Rank 3: {{ tierTopRankers[2] && tierTopRankers[2].name || '-' }} </span><span>{{ tierTopRankers[2] && tierTopRankers[2].rank }}</span></li>
+          <li>
+            <span>Rank 1: {{ tierTopRankers[0] && tierTopRankers[0].name || 'N/A' }}</span>
+            <span>{{ tierTopRankers[0] && tierTopRankers[0].rank || 'N/A' }}</span>
+          </li>
+          <li>
+            <span>Rank 2: {{ tierTopRankers[1] && tierTopRankers[1].name || 'N/A' }}</span>
+            <span>{{ tierTopRankers[1] && tierTopRankers[1].rank || 'N/A'}}</span>
+          </li>
+          <li>
+            <span>Rank 3: {{ tierTopRankers[2] && tierTopRankers[2].name || 'N/A' }}</span>
+            <span>{{ tierTopRankers[2] && tierTopRankers[2].rank || 'N/A'}}</span>
+          </li>
         </ul>
         <a href="/" class="rankings">View all rankings</a>
         <ul class="characterAttrsList">
