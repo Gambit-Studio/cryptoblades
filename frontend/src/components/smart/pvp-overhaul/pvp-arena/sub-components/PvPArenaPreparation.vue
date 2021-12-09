@@ -42,54 +42,54 @@
           <span>Shield: {{ selectedShieldId }}</span>
           <button @click="() => selectedShieldId = null">Clear Shield</button>
         </div>
-          <div class="bottomWeapons">
-            <pvp-separator dark vertical />
-            <div class="weaponsWrapper">
-              <button class="selectWeaponButton">
-                <img src="../../../../../assets/swordPlaceholder.svg" alt="sword" />
-              </button>
-              <button class="selectWeaponButton">
-                <img src="../../../../../assets/shieldPlaceholder.svg" alt="shield" />
-              </button>
-            </div>
+        <div class="bottomWeapons">
+          <pvp-separator dark vertical />
+          <div class="weaponsWrapper">
+            <button class="selectWeaponButton">
+              <img src="../../../../../assets/swordPlaceholder.svg" alt="sword" />
+            </button>
+            <button class="selectWeaponButton">
+              <img src="../../../../../assets/shieldPlaceholder.svg" alt="shield" />
+            </button>
           </div>
+        </div>
         </div>
         <div>
-          <div class="top">
-            <div class="circle">
-              <img :src="getIconSource" />
-            </div>
-            <p>Enter the Arena</p>
+        <div class="top">
+          <div class="circle">
+            <img :src="getIconSource" />
           </div>
-          <div class="bottomList">
-            <pvp-separator dark vertical />
-            <div>
-              <ul>
-                <li>
-                  <div class="bulletpoint"></div> Entering the Arena will cost you {{ formattedEntryWager }} $SKILL.
-                </li>
-                <li>
-                  <div class="bulletpoint"></div> Players can attack you while you are in the
-                  Arena.
-                </li>
-                <li>
-                  <div class="bulletpoint"></div> Leaving the Arena will cost you {{ +formattedEntryWager / 4 }} $SKILL.
-                </li>
-              </ul>
-              <label class="checkbox">
-                <input type="checkbox" v-model="checkBoxAgreed" />
-                <span>I understand.</span>
-              </label>
-            </div>
+          <p>Enter the Arena</p>
+        </div>
+        <div class="bottomList">
+          <pvp-separator dark vertical />
+          <div>
+            <ul>
+              <li>
+                <div class="bulletpoint"></div> Entering the Arena will cost you {{ formattedEntryWager }} $SKILL.
+              </li>
+              <li>
+                <div class="bulletpoint"></div> Players can attack you while you are in the
+                Arena.
+              </li>
+              <li>
+                <div class="bulletpoint"></div> Leaving the Arena will cost you {{ +formattedEntryWager / 4 }} $SKILL.
+              </li>
+            </ul>
+            <label class="checkbox">
+              <input type="checkbox" v-model="checkBoxAgreed" />
+              <span>I understand.</span>
+            </label>
           </div>
         </div>
-        <div class="buttonWrapper">
+        </div>
+        <div class="enterArenaButtonWrapper">
           <pvp-button
             @click="handleEnterArenaClick()"
             buttonText="ENTER ARENA"
             :buttonsubText="'$SKILL: ' + formattedEntryWager"
-            :class="{ disabled: !selectedWeaponId }"
-            :disabled="!selectedWeaponId"
+            :class="{ disabled: !this.checkBoxAgreed || !this.selectedWeaponId}"
+            :disabled="!this.checkBoxAgreed || !this.selectedWeaponId"
           />
         </div>
       </div>
@@ -132,6 +132,9 @@ import BN from 'bignumber.js';
 import PvPWeapon from '../../components/PvPWeapon.vue';
 import PvPShield from '../../components/PvPShield.vue';
 import PvPButton from '../../components/PvPButton.vue';
+import PvPSeparator from '../../components/PvPSeparator.vue';
+import checkIcon from '../../../../../assets/checkImage.svg';
+import ellipseIcon from '../../../../../assets/ellipseImage.svg';
 import { weaponFromContract as formatWeapon } from '../../../../../contract-models';
 import { shieldFromContract as formatShield } from '../../../../../contract-models';
 
@@ -139,7 +142,8 @@ export default {
   components: {
     'pvp-weapon': PvPWeapon,
     'pvp-shield': PvPShield,
-    'pvp-button': PvPButton
+    'pvp-button': PvPButton,
+    'pvp-separator': PvPSeparator
   },
 
   props: {
@@ -170,7 +174,7 @@ export default {
       availableShieldIds: [],
       checkBoxAgreed: false,
       ownedWeaponsWithInformation: [],
-      ownedShieldsWithInformation: []
+      ownedShieldsWithInformation: [],
     };
   },
 
@@ -183,6 +187,10 @@ export default {
 
     formatedTierRewardsPool() {
       return new BN(this.tierRewardsPool).div(new BN(10).pow(18)).toFixed(3);
+    },
+
+    getIconSource () {
+      return this.checkBoxAgreed && this.selectedWeaponId ? checkIcon : ellipseIcon;
     },
   },
 
@@ -432,9 +440,22 @@ export default {
       }
     }
   }
-  .buttonWrapper {
-    margin-top: 4rem;
+  .enterArenaButtonWrapper {
+    display: flex;
+    flex-direction: column;
     margin-left: 2.5rem;
+    height: 7rem;
+    margin-top: 4rem;
+
+    span {
+      height: 2rem;
+    }
+
+    button {
+      max-width: max-content;
+      margin-top: auto;
+      color: #dabe75;
+    }
   }
 }
 .characterImage {
