@@ -447,7 +447,7 @@ export default {
   .enterArenaButtonWrapper {
     display: flex;
     flex-direction: column;
-    margin: 6rem 0 0 2.5rem;
+    margin: 4rem 0 0 2.5rem;
 
     button {
       max-width: max-content;
