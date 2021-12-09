@@ -276,13 +276,6 @@ export default {
 
 
 <style scoped lang="scss">
-.disabledStyles {
-  pointer-events: none;
-  opacity: 25%;
-}
-.temporaryDiv {
-  border: 1px solid red;
-}
 .arenaPreparationWrapper {
   display: flex;
   flex-direction: column;
