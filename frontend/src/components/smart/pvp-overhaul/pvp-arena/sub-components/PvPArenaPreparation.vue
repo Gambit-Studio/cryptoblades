@@ -4,38 +4,6 @@
       <div class="arenaSignup">
         <h1 class="title">ARENA SIGNUP</h1>
         <p>Enter the arena and win rewards ($SKILL).</p>
-        <!-- <div class="temporaryDiv">
-          <div>
-            <h3>WEAPON</h3>
-            <pvp-weapon
-              v-for="weapon in ownedWeaponsWithInformation"
-              :key="weapon.weaponId"
-              :stars="weapon.information.stars + 1"
-              :element="weapon.information.element"
-              :weaponId="weapon.weaponId"
-              @click="handleWeaponClick(weapon.weaponId)"
-              :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
-            />
-            <br/>
-            <span>Weapon: {{ selectedWeaponId }}</span>
-            <button @click="() => selectedWeaponId = null">Clear Weapon</button>
-          </div>
-          <br/>
-          <div>
-            <h3>SHIELD</h3>
-            <pvp-shield
-              v-for="shield in ownedShieldsWithInformation"
-              :key="shield.shieldId"
-              :stars="shield.information.stars + 1"
-              :element="shield.information.element"
-              :shieldId="shield.shieldId"
-              @click="handleShieldClick(shield.shieldId)"
-              :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
-            />
-            <br/>
-            <span>Shield: {{ selectedShieldId }}</span>
-          </div>
-        </div> -->
         <div>
           <div class="top">
             <div class="circle">
@@ -49,8 +17,8 @@
               <div v-if="!selectedWeaponId" class="weaponButtonWrapper">
                 <button class="selectWeaponButton" id="popover-target-1">
                   <img class="placeholderImage" src="../../../../../assets/swordPlaceholder.svg" alt="sword" />
-                  <b-popover target="popover-target-1" triggers="hover" placement="right">
-                    <template #title>WEAPONS</template>
+                  <b-popover target="popover-target-1" triggers="hover" placement="right" custom-class="asd">
+                    <p class="popoverTitle">Weapons</p>
                     <pvp-weapon
                       v-for="weapon in ownedWeaponsWithInformation"
                       :key="weapon.weaponId"
@@ -63,7 +31,7 @@
                   </b-popover>
                 </button>
               </div>
-              <div v-else>
+              <div v-else class="weaponButtonWrapper">
                 <pvp-weapon
                   v-for="weapon in ownedWeaponsWithInformation"
                   :key="weapon.weaponId"
@@ -73,13 +41,13 @@
                   @click="handleWeaponClick(weapon.weaponId)"
                   :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
                 />
-                <button @click="() => selectedWeaponId = null" class="clearWeaponButton">clear</button>
+                <button @click="() => selectedWeaponId = null" class="clearWeaponButton">x</button>
               </div>
               <div v-if="!selectedShieldId" class="shieldButtonWrapper">
                 <button class="selectWeaponButton" id="popover-target-2">
                   <img class="placeholderImage" src="../../../../../assets/shieldPlaceholder.svg" alt="shield" />
                   <b-popover target="popover-target-2" triggers="hover" placement="right">
-                    <template #title>SHIELDS</template>
+                    <p class="popoverTitle">Shields</p>
                     <pvp-shield
                       v-for="shield in ownedShieldsWithInformation"
                       :key="shield.shieldId"
@@ -92,7 +60,7 @@
                   </b-popover>
                 </button>
               </div>
-              <div v-else>
+              <div v-else class="shieldButtonWrapper">
                 <pvp-shield
                   v-for="shield in ownedShieldsWithInformation"
                   :key="shield.shieldId"
@@ -102,7 +70,7 @@
                   @click="handleShieldClick(shield.shieldId)"
                   :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
                 />
-                <button @click="() => selectedShieldId = null" class="clearShieldButton">clear</button>
+                <button @click="() => selectedShieldId = null" class="clearShieldButton">x</button>
               </div>
             </div>
           </div>
@@ -435,11 +403,32 @@ export default {
     .weaponsWrapper {
       display: flex;
       flex-direction: row;
+      justify-content: space-between;
       margin-left: 1.75rem;
 
       .clearWeaponButton, .clearShieldButton {
         display: flex;
-        margin: 0 auto;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        height: 1.5rem;
+        width: 1.5rem;
+        align-items: center;
+        vertical-align: middle;
+        justify-content: center;
+        background: #b53c48;
+        border: none;
+        color: white;
+        border-radius: 999px;
+      }
+
+      .weaponButtonWrapper {
+        margin-right: 1.5rem;
+        position: relative;
+      }
+
+      .shieldButtonWrapper {
+        position: relative;
       }
 
       .selectWeaponButton {
@@ -450,16 +439,16 @@ export default {
         vertical-align: middle;
         justify-content: center;
         border-radius: 0.375rem;
-        margin-top: 0.5rem;
         border: 1px solid #cec198;
         background-color: #141414;
 
-        &:first-of-type {
-          margin-right: 1rem;
-        }
         .placeholderImage {
           width: 2.25rem;
           height: 2.25rem;
+        }
+
+        .asd {
+          background-color: #fff;
         }
       }
     }
