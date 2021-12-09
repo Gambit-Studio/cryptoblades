@@ -6,7 +6,7 @@
           <img :src="getCharacterTraitUrl" alt="element" />
         </div>
         <div class="characterImageWrapper">
-          <!-- <pvp-character :character="character3" /> -->
+          <pvp-character :characterId="currentCharacterId" />
         </div>
         <div class="info">
           <h1 class="characterName">{{ characterName }}</h1>

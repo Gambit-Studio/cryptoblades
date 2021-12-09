@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="characterImage">
-        <pvp-character character="chara1" />
+        <pvp-character :characterId="currentCharacterId" />
       </div>
       <div class="arenaInformation">
         <h1 class="title">ARENA INFORMATION</h1>
