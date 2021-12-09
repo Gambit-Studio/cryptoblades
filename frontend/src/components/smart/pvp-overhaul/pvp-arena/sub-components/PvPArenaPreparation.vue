@@ -14,10 +14,10 @@
           <div class="bottomWeapons">
             <pvp-separator dark vertical />
             <div class="weaponsWrapper">
-              <div v-if="!selectedWeaponId" class="weaponButtonWrapper">
+              <div v-if="!selectedWeaponId" :class="{ disabledStyles: ownedWeaponsWithInformation.length === 0 }" class="weaponButtonWrapper">
                 <button class="selectWeaponButton" id="popover-target-1">
                   <img class="placeholderImage" src="../../../../../assets/swordPlaceholder.svg" alt="sword" />
-                  <b-popover target="popover-target-1" triggers="hover" placement="right" custom-class="asd">
+                  <b-popover target="popover-target-1" triggers="hover" placement="right">
                     <p class="popoverTitle">Weapons</p>
                     <pvp-weapon
                       v-for="weapon in ownedWeaponsWithInformation"
@@ -43,7 +43,7 @@
                 />
                 <button @click="() => selectedWeaponId = null" class="clearWeaponButton">x</button>
               </div>
-              <div v-if="!selectedShieldId" class="shieldButtonWrapper">
+              <div v-if="!selectedShieldId" :class="{ disabledStyles: ownedShieldsWithInformation.length === 0 }" class="shieldButtonWrapper">
                 <button class="selectWeaponButton" id="popover-target-2">
                   <img class="placeholderImage" src="../../../../../assets/shieldPlaceholder.svg" alt="shield" />
                   <b-popover target="popover-target-2" triggers="hover" placement="right">
@@ -324,14 +324,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.popoverTest {
-  margin: 0;
-  padding: 0;
-  background-color: red;
-}
-.tooltipTest {
-  display: flex;
-  background-color: #fff;
+.disabledStyles {
+  pointer-events: none;
+  opacity: 25%;
 }
 .temporaryDiv {
   border: 1px solid red;
@@ -445,10 +440,6 @@ export default {
         .placeholderImage {
           width: 2.25rem;
           height: 2.25rem;
-        }
-
-        .asd {
-          background-color: #fff;
         }
       }
     }
