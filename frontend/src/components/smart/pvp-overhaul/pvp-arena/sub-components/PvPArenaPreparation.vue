@@ -413,6 +413,7 @@ export default {
         color: #b4b0a7;
         font-size: 0.875rem;
         line-height: 1.25rem;
+        white-space: nowrap;
       }
       .bulletpoint {
         height: 0.5rem;
