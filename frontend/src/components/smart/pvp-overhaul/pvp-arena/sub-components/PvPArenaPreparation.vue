@@ -40,12 +40,9 @@
               <span>Shield: {{ selectedShieldId }}</span>
             </div>
           </div> -->
-          <!-- <pvp-modal :parentShowModal="this.openModal" @close="this.openModal = false" @show-modal="showModalFromChild" />
-          <button @click="openTheModal()">OPEN MODAL</button> -->
           <div class="bottomWeapons">
             <pvp-separator dark vertical />
             <div class="weaponsWrapper">
-            <button v-tooltip.top-center="msg">Hover me</button>
               <button class="selectWeaponButton">
                 <img src="../../../../../assets/swordPlaceholder.svg" alt="sword" />
               </button>
@@ -129,7 +126,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import VTooltip from 'v-tooltip';
 import BN from 'bignumber.js';
 import { weaponFromContract as formatWeapon } from '../../../../../contract-models';
 import PvPSeparator from '../../components/PvPSeparator.vue';
