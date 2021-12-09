@@ -1,8 +1,8 @@
 <template>
-  <div class="modalWrapper">
-    <div class="modalInnerWrapper">
-      <img src="../../../../../assets/separatorTop.svg" alt="Top separator">
-      <div v-if="result === win" class="modalTitle">You have won the duel!</div>
+  <div class="overlay" v-if="showModal" @click="showModal = false">
+    <div class="modalInnerWrapper" v-if="showModal">
+      <img src="../../../../assets/separatorTop.svg" alt="Top separator">
+      <div v-if="true" class="modalTitle">You have won the duel!</div>
       <div v-else class="modalTitle"> You have lost the duel!</div>
       <ul>
         <li>
@@ -24,69 +24,100 @@
         <span>{{ userCurrentRank }}</span>
         <span>({{ rankVariation }} Rank)</span>
       </div>
-      <img src="../../../../../assets/separatorBottom.svg" alt="Bottom separator">
+      <img src="../../../../assets/separatorBottom.svg" alt="Bottom separator">
     </div>
     <div class="closeWrapper">
       <p>Tap anywhere to close</p>
-      <button><img src="../../../../../assets/closeModal.svg" alt="Bottom separator"></button>
+      <button><img src="../../../../assets/closeModal.svg" alt="Bottom separator"></button>
     </div>
   </div>
 </template>
 
 <script>
-import PvPSeparator from '../../components/PvPSeparator.vue';
+import PvPSeparator from '../components/PvPSeparator.vue';
 
 export default {
   components: {
     'pvp-separator': PvPSeparator
   },
+  data() {
+    return {
+      localShowModal: false
+    };
+  },
   props: {
+    parentShowModal: {
+      type: Boolean,
+    },
     result: {
       type: String,
-      values: ['win', 'lose']
+      // values: ['win', 'lose']
     },
     userRoll: {
       type: Number,
-      required: true
+      // required: true
     },
     opponentRoll: {
       type: Number,
-      required: true
+      // required: true
     },
     skillEarned: {
       type: Number,
-      required: true
+      // required: true
     },
     rankVariation: {
       type: Number,
-      required: true
+      // required: true
     },
     userCurrentRank: {
       type: Number,
-      required: true
+      // required: true
     }
+  },
+  methods: {
+    close() {
+      this.localShowModal = false;
+      this.$emit('show-modal', this.localShowModal);
+    },
+  },
+  watch: {
+    showModal() {
+      if (this.showModal) {
+        document.body.classList.add('preventScroll');
+      } else {
+        document.body.classList.remove('preventScroll');
+      }
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .preventScroll {
-  position: fixed;
+  position: relative;
   overflow: hidden;
+  border: 3px solid red;
 }
 
-.modalWrapper {
+.overlay {
   display: flex;
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   flex-direction: column;
   width: 100vw;
   height: 100vh;
   align-items: center;
   vertical-align: middle;
   justify-content: center;
-  background-color: rgb(20, 20, 20, 0.5);
-  border: 1px solid red;
+  background-color: rgb(20, 20, 20, 0.96);
 
   .modalInnerWrapper {
+    position: relative;
+    z-index: 9999;
     display: flex;
     width: 90%;
     flex-direction: column;

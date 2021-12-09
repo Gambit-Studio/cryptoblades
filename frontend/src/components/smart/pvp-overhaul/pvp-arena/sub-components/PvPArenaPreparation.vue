@@ -11,7 +11,7 @@
             </div>
             <p>Equip a Sword and a Shield (optional).</p>
           </div>
-          <div class="temporary">
+          <!-- <div class="temporary">
             <div>
               <h3>WEAPON TITLE</h3>
               <button
@@ -39,7 +39,9 @@
               <br/>
               <span>Shield: {{ selectedShieldId }}</span>
             </div>
-          </div>
+          </div> -->
+          <pvp-modal :parentShowModal="this.openModal" @close="this.openModal = false" @show-modal="showModalFromChild" />
+          <button @click="openTheModal()">OPEN MODAL</button>
           <div class="bottomWeapons">
             <pvp-separator dark vertical />
             <div class="weaponsWrapper">
@@ -92,7 +94,7 @@
         </div>
       </div>
       <div class="characterImage">
-        <pvp-character :character="1" />
+        <!-- <pvp-character :character="1" /> -->
       </div>
       <div class="arenaInformation">
         <h1 class="title">ARENA INFORMATION</h1>
@@ -130,7 +132,8 @@ import BN from 'bignumber.js';
 import { weaponFromContract as formatWeapon } from '../../../../../contract-models';
 import PvPSeparator from '../../components/PvPSeparator.vue';
 import PvPButton from '../../components/PvPButton.vue';
-import PvPCharacter from '../../components/PvPCharacter.vue';
+import PvPModal from '../../components/PvPModal.vue';
+// import PvPCharacter from '../../components/PvPCharacter.vue';
 // import PvPWeapon from '../../components/PvPWeapon.vue';
 import checkIcon from '../../../../../assets/checkImage.svg';
 import ellipseIcon from '../../../../../assets/ellipseImage.svg';
@@ -138,9 +141,10 @@ import ellipseIcon from '../../../../../assets/ellipseImage.svg';
 export default {
   components: {
     // 'pvp-weapon': PvPWeapon,
-    'pvp-character': PvPCharacter,
+    // 'pvp-character': PvPCharacter,
     'pvp-button': PvPButton,
     'pvp-separator': PvPSeparator,
+    'pvp-modal': PvPModal,
   },
   data() {
     return {
@@ -150,6 +154,8 @@ export default {
       availableWeaponIds: [],
       availableShieldIds: [],
       checkBoxAgreed: false,
+      parentOpenModal: false,
+      showModalFromChild: false
     };
   },
   props: {
@@ -176,6 +182,9 @@ export default {
 
     handleShieldClick(shieldId) {
       this.selectedShieldId = shieldId;
+    },
+    openTheModal() {
+      return this.parentOpenModal = true;
     },
 
     async handleEnterArenaClick() {
