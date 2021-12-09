@@ -4,6 +4,39 @@
       <div class="arenaSignup">
         <h1 class="title">ARENA SIGNUP</h1>
         <p>Enter the arena and win rewards ($SKILL).</p>
+        <div class="temporaryDiv">
+          <div>
+            <h3>WEAPON</h3>
+            <pvp-weapon
+              v-for="weapon in ownedWeaponsWithInformation"
+              :key="weapon.weaponId"
+              :stars="weapon.information.stars + 1"
+              :element="weapon.information.element"
+              :weaponId="weapon.weaponId"
+              @click="handleWeaponClick(weapon.weaponId)"
+              :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
+            />
+            <br/>
+            <span>Weapon: {{ selectedWeaponId }}</span>
+            <button @click="() => selectedWeaponId = null">Clear Weapon</button>
+          </div>
+          <br/>
+          <div>
+            <h3>SHIELD</h3>
+            <pvp-shield
+              v-for="shield in ownedShieldsWithInformation"
+              :key="shield.shieldId"
+              :stars="shield.information.stars + 1"
+              :element="shield.information.element"
+              :shieldId="shield.shieldId"
+              @click="handleShieldClick(shield.shieldId)"
+              :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
+            />
+            <br/>
+            <span>Shield: {{ selectedShieldId }}</span>
+            <button @click="() => selectedShieldId = null">Clear Shield</button>
+          </div>
+        </div>
         <div>
           <div class="top">
             <div class="circle">
@@ -11,48 +44,17 @@
             </div>
             <p>Equip a Sword and a Shield (optional).</p>
           </div>
-        <div>
-          <h3>WEAPON TITLE</h3>
-          <pvp-weapon
-            v-for="weapon in ownedWeaponsWithInformation"
-            :key="weapon.weaponId"
-            :stars="weapon.information.stars + 1"
-            :element="weapon.information.element"
-            :weaponId="weapon.weaponId"
-            @click="handleWeaponClick(weapon.weaponId)"
-            :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
-          />
-          <br/>
-          <span>Weapon: {{ selectedWeaponId }}</span>
-          <button @click="() => selectedWeaponId = null">Clear Weapon</button>
-        </div>
-        <br/>
-        <div>
-          <h3>SHIELD TITLE</h3>
-          <pvp-shield
-            v-for="shield in ownedShieldsWithInformation"
-            :key="shield.shieldId"
-            :stars="shield.information.stars + 1"
-            :element="shield.information.element"
-            :shieldId="shield.shieldId"
-            @click="handleShieldClick(shield.shieldId)"
-            :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
-          />
-          <br/>
-          <span>Shield: {{ selectedShieldId }}</span>
-          <button @click="() => selectedShieldId = null">Clear Shield</button>
-        </div>
-        <div class="bottomWeapons">
-          <pvp-separator dark vertical />
-          <div class="weaponsWrapper">
-            <button class="selectWeaponButton">
-              <img src="../../../../../assets/swordPlaceholder.svg" alt="sword" />
-            </button>
-            <button class="selectWeaponButton">
-              <img src="../../../../../assets/shieldPlaceholder.svg" alt="shield" />
-            </button>
+          <div class="bottomWeapons">
+            <pvp-separator dark vertical />
+            <div class="weaponsWrapper">
+              <button class="selectWeaponButton">
+                <img src="../../../../../assets/swordPlaceholder.svg" alt="sword" />
+              </button>
+              <button class="selectWeaponButton">
+                <img src="../../../../../assets/shieldPlaceholder.svg" alt="shield" />
+              </button>
+            </div>
           </div>
-        </div>
         </div>
         <div>
         <div class="top">
@@ -301,6 +303,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.temporaryDiv {
+  border: 1px solid red;
+}
 .arenaPreparationWrapper {
   display: flex;
   flex-direction: column;
@@ -444,12 +449,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-left: 2.5rem;
-    height: 7rem;
     margin-top: 4rem;
-
-    span {
-      height: 2rem;
-    }
 
     button {
       max-width: max-content;
