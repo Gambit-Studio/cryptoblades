@@ -6,31 +6,19 @@
 </template>
 
 <script>
-import chara0 from '../../../../assets/placeholder/chara-0.png';
-import chara1 from '../../../../assets/placeholder/chara-1.png';
-import chara2 from '../../../../assets/placeholder/chara-2.png';
-import chara3 from '../../../../assets/placeholder/chara-3.png';
+import { getCharacterArtById } from '../../../../character-arts-placeholder';
 
 export default {
   props: {
-    character: {
-      type: String,
+    characterId: {
+      type: Number,
     },
   },
   computed: {
     getCharacterImageUrl() {
-      if (this.character === 0) {
-        return chara0;
-      }
-      if (this.character === 1) {
-        return chara1;
-      }
-      if (this.character === 2) {
-        return chara2;
-      }
-      return chara3;
-    },
-  },
+      return getCharacterArtById(this.characterId);
+    }
+  }
 };
 </script>
 

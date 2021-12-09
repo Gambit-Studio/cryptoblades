@@ -115,7 +115,7 @@
         </div>
       </div>
       <div class="characterImage">
-        <!-- <pvp-character :character="1" /> -->
+        <pvp-character :characterId="currentCharacterId" />
       </div>
       <div class="arenaInformation">
         <h1 class="title">ARENA INFORMATION</h1>
@@ -154,6 +154,7 @@ import { BPopover } from 'bootstrap-vue';
 import PvPWeapon from '../../components/PvPWeapon.vue';
 import PvPShield from '../../components/PvPShield.vue';
 import PvPButton from '../../components/PvPButton.vue';
+import PvPCharacter from '../../components/PvPCharacter.vue';
 import PvPSeparator from '../../components/PvPSeparator.vue';
 import checkIcon from '../../../../../assets/checkImage.svg';
 import ellipseIcon from '../../../../../assets/ellipseImage.svg';
@@ -164,6 +165,7 @@ export default {
     'pvp-shield': PvPShield,
     'pvp-button': PvPButton,
     'pvp-separator': PvPSeparator,
+    'pvp-character': PvPCharacter,
     'b-popover': BPopover
   },
 
