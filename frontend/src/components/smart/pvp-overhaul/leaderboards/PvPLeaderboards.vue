@@ -13,19 +13,19 @@
       <div class="selectWrapper">
         <label for="element">Element: </label>
         <select name="element" id="element">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+          <option value="1">Fire</option>
+          <option value="2">Earth</option>
+          <option value="3">Lightning</option>
+          <option value="4">Water</option>
         </select>
       </div>
       <div class="selectWrapper">
         <label for="numberOfListings">Listings per page: </label>
         <select name="numberOfListings" id="numberOfListings">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+          <option value="1">10</option>
+          <option value="2">20</option>
+          <option value="3">30</option>
+          <option value="4">40</option>
         </select>
       </div>
     </div>
