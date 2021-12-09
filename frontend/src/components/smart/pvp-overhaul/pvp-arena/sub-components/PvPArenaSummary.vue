@@ -46,24 +46,24 @@
           <img src="../../../../../assets/skillToken.png" alt="skill token" />
           <div class="tokenCardInfo">
             <span class="text">PVP Rewards Pool ($SKILL)</span>
-            <span class="number">3,099</span>
+            <span class="number">{{ formatedTierRewardsPool }}</span>
           </div>
         </div>
         <ul class="topPlayersList">
           <li class="header">
             <span>Top Players</span><span>$SKILL Earned</span>
           </li>
-          <li><span>Rank 1: Player1 </span><span>500</span></li>
-          <li><span>Rank 2: Player2 </span><span>453</span></li>
-          <li><span>Rank 3: Player3 </span><span>182</span></li>
+          <li><span>Rank 1: {{ tierTopRankers[0] && tierTopRankers[0].name || '-' }} </span><span>{{ tierTopRankers[0] && tierTopRankers[0].rank }}</span></li>
+          <li><span>Rank 2: {{ tierTopRankers[1] && tierTopRankers[1].name || '-' }} </span><span>{{ tierTopRankers[1] && tierTopRankers[1].rank }}</span></li>
+          <li><span>Rank 3: {{ tierTopRankers[0] && tierTopRankers[2].name || '-' }} </span><span>{{ tierTopRankers[2] && tierTopRankers[2].rank }}</span></li>
         </ul>
         <a href="/" class="rankings">View all rankings</a>
         <ul class="characterAttrsList">
-          <li class="characterName">{{characterName}}</li>
-          <li><span>Power </span><span>500</span></li>
-          <li><span>Damage multiplier</span><span>453</span></li>
-          <li><span>Level</span><span>{{characterLevel}}</span></li>
-          <li><span>Current rank</span><span>{{characterRank}}</span></li>
+          <li class="characterName">{{ characterInformation.name || '' }}</li>
+          <li><span>Power </span><span>{{ characterInformation.power }}</span></li>
+          <!-- <li><span>Damage multiplier</span><span>453</span></li> -->
+          <li><span>Level</span><span>{{ characterInformation.level }}</span></li>
+          <li><span>Current rank</span><span>{{ characterInformation.rank }}</span></li>
         </ul>
       </div>
     </div>

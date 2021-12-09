@@ -5,7 +5,7 @@
     </div>
     <div v-else>
       <pvp-arena-preparation
-        v-if="isCharacterInArena"
+        v-if="!isCharacterInArena"
         :tierRewardsPool="tierRewardsPool"
         :tierTopRankers="tierTopRankers"
         :characterInformation="characterInformation"
@@ -17,7 +17,7 @@
         @enteredArena="handleEnteredArena"
       />
       <pvp-arena-summary
-        v-if="!isCharacterInArena"
+        v-if="isCharacterInArena"
         :tierRewardsPool="tierRewardsPool"
         :tierTopRankers="tierTopRankers"
         :characterInformation="characterInformation"
