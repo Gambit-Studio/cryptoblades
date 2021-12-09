@@ -146,7 +146,6 @@ export default {
   },
   data() {
     return {
-      msg: 'hellooo',
       entryWager: null,
       selectedWeaponId: null,
       selectedShieldId: null,
@@ -161,7 +160,7 @@ export default {
     characterArt: String,
     characterName: String,
     characterLevel: Number,
-    characterRanking: Number,
+    characterRanking: String,
   },
   computed: {
     ...mapState(['currentCharacterId', 'contracts', 'defaultAccount', 'ownedWeaponIds', 'ownedShieldIds']),
