@@ -1,5 +1,5 @@
 <template>
-  <button :disabled="disabled" :class="disabled && 'disabled'">
+  <button @click="$emit('click')" :disabled="disabled" :class="{'disabled': disabled, 'secondary': this.secondary}">
     <span class="text" :class="secondary && 'whiteText'">{{ buttonText }}</span
     ><span class="subtext" :class="secondary && 'whiteText'">{{
       buttonsubText
@@ -25,26 +25,41 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// @font-face {
+//   font-family: 'Trajan';
+//   src: url('../../../../assets/fonts/Trajan.ttf') format('truetype');
+// }
+
 button {
   display: flex;
   flex-direction: column;
-  padding: 0.75rem;
+  padding: 1.5rem 2rem;
   align-items: center;
   vertical-align: middle;
-  border: 1px solid #edcd90;
-  border-radius: 5px;
-  background-color:#141414;
+  background-image: url('../../../../assets/buttonOutline.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: transparent;
+  border: none;
+
+  &.secondary {
+    background-color:#141414;
+    border: 1px solid #edcd90;
+    border-radius: 5px;
+    padding: 0.75rem;
+    background-image: none;
+  }
 
   .text {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #dabe75;
+    font-family: 'Trajan';
 
     &.whiteText {
       font-size: 1rem;
-      line-height: 1.5rem;
       font-weight: 400;
+      font-family: 'Roboto';
       color: white;
     }
   }

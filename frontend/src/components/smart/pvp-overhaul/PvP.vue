@@ -43,9 +43,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@font-face {
+  font-family: 'Trajan';
+  src: url('../../../assets/fonts/Trajan.ttf') format('truetype');
+}
+
 .pvpWrapper {
   background-image: url('../../../assets/pvpBackgroundImage.png');
   padding: 0 4rem 4rem 4rem;
+
+  li, p, span {
+    font-family: inherit;
+  }
 
   @media only screen and (min-width: 1440px) {
     padding: 0 6rem 6rem 6rem;

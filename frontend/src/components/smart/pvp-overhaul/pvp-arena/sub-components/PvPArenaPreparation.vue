@@ -102,7 +102,7 @@
         </div>
         <div class="enterArenaButtonWrapper">
           <pvp-button
-            @click.native="handleEnterArenaClick()"
+            @click="handleEnterArenaClick()"
             buttonText="ENTER ARENA"
             :buttonsubText="'$SKILL: ' + formattedEntryWager"
             :class="{ disabled: !this.checkBoxAgreed || !this.selectedWeaponId}"

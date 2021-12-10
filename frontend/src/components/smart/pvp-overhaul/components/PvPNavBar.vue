@@ -59,6 +59,9 @@ export default {
       height: 1rem;
       margin-right: 0.5rem;
     }
+    span {
+      font-family: 'Roboto';
+    }
     :hover {
       cursor: pointer;
     }

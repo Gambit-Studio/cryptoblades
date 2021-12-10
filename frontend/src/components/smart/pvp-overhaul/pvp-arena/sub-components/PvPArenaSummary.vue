@@ -6,11 +6,10 @@
         <p>Enter the arena and win rewards ($SKILL).</p>
         <div></div>
         <div class="buttonWrapper">
-          <!-- <pvp-button
-            @click.native="handleEnterArenaClick()"
+          <pvp-button
+            @click="handleEnterArenaClick()"
             buttonText="ENTER ARENA"
-          /> -->
-          <button @click="handleEnterArenaClick()">enter arena</button>
+          />
         </div>
         <div class="bottomWrapper">
           <div class="bottomWrapperNav">
@@ -88,14 +87,14 @@ import { mapState } from 'vuex';
 import BN from 'bignumber.js';
 import PvPWeapon from '../../components/PvPWeapon.vue';
 import PvPShield from '../../components/PvPShield.vue';
-// import PvPButton from '../../components/PvPButton.vue';
+import PvPButton from '../../components/PvPButton.vue';
 import PvPCharacter from '../../components/PvPCharacter.vue';
 
 export default {
   components: {
     'pvp-weapon': PvPWeapon,
     'pvp-shield': PvPShield,
-    // 'pvp-button': PvPButton,
+    'pvp-button': PvPButton,
     'pvp-character': PvPCharacter
   },
 
@@ -163,6 +162,11 @@ export default {
   flex-direction: column;
   min-height: 100vh;
 }
+
+span, p, li, button, a {
+  font-family: 'Roboto';
+}
+
 .mainWrapper {
   display: flex;
   justify-content: space-between;
@@ -172,6 +176,7 @@ export default {
   color: #cec198;
   font-size: 1.25rem;
   line-height: 1.75rem;
+  font-family: 'Trajan';
 }
 .arenaSignup {
   p {
@@ -218,37 +223,37 @@ export default {
     display: flex;
     border-bottom: 1px solid #363636;
 
-  button {
-    display: flex;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    align-items: center;
-    vertical-align: middle;
-    color: #b4b0a7;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    border-bottom: 2px solid transparent;
-    border-right: none;
-    border-left: none;
-    border-top: none;
-    background-color: transparent;
-    img {
-      width: 1rem;
-      height: 1rem;
-      margin-right: 0.5rem;
+    button {
+      display: flex;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      align-items: center;
+      vertical-align: middle;
+      color: #b4b0a7;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      border-bottom: 2px solid transparent;
+      border-right: none;
+      border-left: none;
+      border-top: none;
+      background-color: transparent;
+      img {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.5rem;
+      }
+      :hover {
+        cursor: pointer;
+      }
+      &.active {
+        color: #CEC198;
+        border-bottom: 2px solid #CEC198;
+      }
     }
-    :hover {
-      cursor: pointer;
-    }
-    &.active {
-      color: #CEC198;
-      border-bottom: 2px solid #CEC198;
-    }
-  }
 
-  button:first-of-type {
-    margin-right: 2rem;
-  }
+    button:first-of-type {
+      margin-right: 2rem;
+    }
   }
 
   .bottomWrapperInner {
@@ -393,6 +398,7 @@ export default {
       color: #cec198;
       font-size: 1.25rem;
       line-height: 1.75rem;
+      font-family: 'Trajan';
     }
   }
 }

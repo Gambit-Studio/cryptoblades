@@ -379,18 +379,22 @@ export default {
   margin-top: 3.5rem;
 }
 
+span, p, li, button {
+  font-family: 'Roboto';
+}
+
   nav {
     display: flex;
     width: 100%;
     justify-content: space-between;
     margin-bottom: 4rem;
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid #363636;
 
     .navTitle {
       color: #cec198;
-      font-size: 1.875rem;
-      line-height: 2.25rem;
+      font-size: 1.25rem;
+      font-family: 'Trajan';
     }
     .navStats {
       display: flex;
@@ -494,9 +498,10 @@ export default {
 
     .characterName {
       margin-bottom: 0.3rem;
-      color: #cec198;
+      color: #EDCD90;
       font-size: 1.25rem;
       line-height: 1.75rem;
+      font-family: 'Trajan';
     }
     .infoDetails {
       height: 1.25rem;
@@ -537,9 +542,11 @@ export default {
   .matchButtonsWrapper {
     width: 100%;
   }
-.reRollOpponentButton {
-  margin-top: 1.5rem;
-}
+
+  .reRollOpponentButton {
+    margin-top: 1.5rem;
+  }
+
   .spinner {
     margin-bottom: 4rem;
     animation: spin 1s linear infinite;
