@@ -187,7 +187,8 @@ export default {
         name: '',
         level: null,
         power: null,
-        rank: null
+        rank: null,
+        element: null,
       }
     },
     entryWager: {
@@ -274,7 +275,7 @@ export default {
         return;
       }
 
-      if (this.currentCharacterId && this.selectedWeaponId && this.entryWager) {
+      if ((this.currentCharacterId || this.currentCharacterId === 0) && (this.selectedWeaponId || this.selectedWeaponId === 0) && this.entryWager) {
         const isUsingShield = this.selectedShieldId !== null;
         const shieldId = this.selectedShieldId === null ? 0 : this.selectedShieldId;
 
@@ -302,6 +303,9 @@ export default {
 
         this.$emit('enteredArena');
       } else {
+        console.log(this.currentCharacterId);
+        console.log(this.selectedWeaponId);
+        console.log(this.entryWager);
         console.log('Missing data');
       }
     },

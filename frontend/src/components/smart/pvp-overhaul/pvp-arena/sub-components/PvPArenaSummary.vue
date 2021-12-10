@@ -25,6 +25,7 @@
                 :element="activeWeaponWithInformation.information.element"
                 :weaponId="activeWeaponWithInformation.weaponId"
               />
+              <br/>
               <pvp-shield
                 v-if="activeShieldWithInformation.shieldId"
                 :stars="activeShieldWithInformation.information.stars + 1"
@@ -111,7 +112,8 @@ export default {
         name: '',
         level: null,
         power: null,
-        rank: null
+        rank: null,
+        element: null,
       }
     },
     activeWeaponWithInformation: {
@@ -148,7 +150,7 @@ export default {
     },
 
     async handleEnterArenaClick() {
-      return this.$emit('enterMatchMaking');
+      this.$emit('enterMatchMaking');
     },
   },
 };

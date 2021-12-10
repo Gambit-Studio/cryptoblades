@@ -25,7 +25,20 @@
         :activeShieldWithInformation="activeShieldWithInformation"
         @enterMatchMaking="handleEnterMatchMaking"
       />
-      <pvp-arena-matchmaking v-else-if="isCharacterInArena && isMatchMaking" />
+      <!-- Should use router -->
+      <!-- TODO: delete go back to summary functionality -->
+      <pvp-arena-matchmaking
+        v-else-if="isCharacterInArena && isMatchMaking"
+        :characterInformation="characterInformation"
+        :activeWeaponWithInformation="activeWeaponWithInformation"
+        :activeShieldWithInformation="activeShieldWithInformation"
+        :opponentInformation="opponentInformation"
+        :opponentActiveWeaponWithInformation="opponentActiveWeaponWithInformation"
+        :opponentActiveShieldWithInformation="opponentActiveShieldWithInformation"
+        @updateOpponentInformation="updateOpponentInformation"
+        @clearOpponentInformation="clearOpponentInformation"
+        @goBackToSummary="goBackToSummary"
+      />
     </div>
   </div>
 </template>
@@ -39,6 +52,7 @@ import { getCharacterNameFromSeed } from '../../../../character-name';
 import { weaponFromContract as formatWeapon } from '../../../../contract-models';
 import { shieldFromContract as formatShield } from '../../../../contract-models';
 import { pvpFighterFromContract as formatFighter } from '../../../../contract-models';
+import { characterFromContract as formatCharacter } from '../../../../contract-models';
 
 export default {
   components: {
@@ -60,7 +74,8 @@ export default {
         name: '',
         level: null,
         power: null,
-        rank: null
+        rank: null,
+        element: null,
       },
       availableWeaponIds: [],
       availableShieldIds: [],
@@ -74,6 +89,20 @@ export default {
         shieldId: null,
         information: {}
       },
+      opponentInformation: {
+        element: '',
+        name: '',
+        level: null,
+        rank: null
+      },
+      opponentActiveWeaponWithInformation: {
+        weaponId: null,
+        information: {}
+      },
+      opponentActiveShieldWithInformation: {
+        shieldId: null,
+        information: {}
+      },
     };
   },
 
@@ -82,8 +111,9 @@ export default {
   },
 
   methods: {
-    handleEnterMatchMaking() {
-      this.isMatchMaking = true;
+    // TODO: delete this
+    goBackToSummary() {
+      this.isMatchMaking = false;
     },
 
     async getWeaponInformation(weaponId) {
@@ -106,6 +136,53 @@ export default {
 
     handleEnteredArena() {
       this.isCharacterInArena = true;
+    },
+
+    handleEnterMatchMaking() {
+      this.isMatchMaking = true;
+    },
+
+    async updateOpponentInformation(defenderId) {
+      this.opponentInformation.name = getCharacterNameFromSeed(defenderId);
+
+      this.opponentInformation.level = await this.contracts().Characters.methods.getLevel(defenderId).call({ from: this.defaultAccount });
+
+      this.opponentInformation.rank = await this.contracts().PvpArena.methods.getCharacterRankingPoints(defenderId)
+        .call({ from: this.defaultAccount });
+
+      this.opponentInformation.element = formatCharacter(defenderId, await this.contracts().Characters.methods.get(`${defenderId}`)
+        .call({ from: this.defaultAccount })).traitName;
+
+      const fighter = formatFighter(await this.contracts().PvpArena.methods.fighterByCharacter(defenderId).call({ from: this.defaultAccount }));
+
+      this.opponentActiveWeaponWithInformation = {
+        weaponId: fighter.weaponID,
+        information: await this.getWeaponInformation(fighter.weaponID)
+      };
+
+      this.opponentActiveShieldWithInformation = {
+        shieldId: fighter.shieldID,
+        information: await this.getShieldInformation(fighter.shieldID)
+      };
+    },
+
+    async clearOpponentInformation() {
+      this.opponentInformation = {
+        element: '',
+        name: '',
+        level: null,
+        rank: null
+      };
+
+      this.opponentActiveWeaponWithInformation = {
+        weaponId: null,
+        information: {}
+      };
+
+      this.opponentActiveShieldWithInformation = {
+        shieldId: null,
+        information: {}
+      };
     }
   },
 
@@ -122,6 +199,9 @@ export default {
 
       this.characterInformation.rank = await this.contracts().PvpArena.methods.getCharacterRankingPoints(this.currentCharacterId)
         .call({ from: this.defaultAccount });
+
+      this.characterInformation.element = formatCharacter(this.currentCharacterId, await this.contracts().Characters.methods.get(`${this.currentCharacterId}`)
+        .call({ from: this.defaultAccount })).traitName;
 
       this.entryWager = await this.contracts().PvpArena.methods.getEntryWager(this.currentCharacterId).call({ from: this.defaultAccount });
 
@@ -208,6 +288,9 @@ export default {
 
         this.characterInformation.rank = await this.contracts().PvpArena.methods.getCharacterRankingPoints(value).call({ from: this.defaultAccount });
 
+        this.characterInformation.element = formatCharacter(value, await this.contracts().Characters.methods.get(`${value}`)
+          .call({ from: this.defaultAccount })).traitName;
+
         this.entryWager = await this.contracts().PvpArena.methods.getEntryWager(this.currentCharacterId).call({ from: this.defaultAccount });
 
         const weaponAvailability = await Promise.all(this.ownedWeaponIds.map(async (weaponId) => {
@@ -255,12 +338,12 @@ export default {
 
           this.activeWeaponWithInformation = {
             weaponId: fighter.weaponID,
-            information: this.getWeaponInformation(fighter.weaponID)
+            information: await this.getWeaponInformation(fighter.weaponID)
           };
 
           this.activeShieldWithInformation = {
             shieldId: fighter.shieldID,
-            information: this.getShieldInformation(fighter.shieldID)
+            information: await this.getShieldInformation(fighter.shieldID)
           };
         }
 
@@ -276,6 +359,8 @@ export default {
             rank: await this.contracts().PvpArena.methods.getCharacterRankingPoints(rankerId).call({ from: this.defaultAccount })
           };
         }));
+
+        this.isMatchMaking = false;
       }
 
       this.loading = false;
