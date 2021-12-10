@@ -25,7 +25,7 @@
                       :stars="weapon.information.stars + 1"
                       :element="weapon.information.element"
                       :weaponId="weapon.weaponId"
-                      @click="handleWeaponClick(weapon.weaponId)"
+                      @click="handleWeaponClick(weapon.weaponId, weapon.information.stars, weapon.information.element)"
                       :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
                     />
                   </b-popover>
@@ -33,13 +33,9 @@
               </div>
               <div v-else class="weaponButtonWrapper">
                 <pvp-weapon
-                  v-for="weapon in ownedWeaponsWithInformation"
-                  :key="weapon.weaponId"
-                  :stars="weapon.information.stars + 1"
-                  :element="weapon.information.element"
-                  :weaponId="weapon.weaponId"
-                  @click="handleWeaponClick(weapon.weaponId)"
-                  :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
+                  :stars="selectedWeaponStars + 1"
+                  :element="selectedWeaponElement"
+                  :weaponId="selectedWeaponId"
                 />
                 <button @click="() => selectedWeaponId = null" class="clearWeaponButton">Clear</button>
               </div>
@@ -214,6 +210,8 @@ export default {
   data() {
     return {
       selectedWeaponId: null,
+      selectedWeaponStars: null,
+      selectedWeaponElement: null,
       selectedShieldId: null,
       checkBoxAgreed: false,
     };
@@ -236,8 +234,10 @@ export default {
   },
 
   methods: {
-    handleWeaponClick(weaponId) {
+    handleWeaponClick(weaponId, weaponStars, weaponElement) {
       this.selectedWeaponId = weaponId;
+      this.selectedWeaponStars = weaponStars;
+      this.selectedWeaponElement = weaponElement;
     },
 
     handleShieldClick(shieldId) {
