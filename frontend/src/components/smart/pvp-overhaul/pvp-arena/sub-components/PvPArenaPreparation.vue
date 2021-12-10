@@ -37,7 +37,7 @@
                   :element="selectedWeaponElement"
                   :weaponId="selectedWeaponId"
                 />
-                <button @click="() => selectedWeaponId = null" class="clearWeaponButton">Clear</button>
+                <button @click="handleClearWeapon()" class="clearWeaponButton">Clear</button>
               </div>
               <div v-if="!selectedShieldId" :class="{ disabledStyles: ownedShieldsWithInformation.length === 0 }" class="shieldButtonWrapper">
                 <button class="selectWeaponButton" id="popover-target-2">
@@ -50,7 +50,7 @@
                       :stars="shield.information.stars + 1"
                       :element="shield.information.element"
                       :shieldId="shield.shieldId"
-                      @click="handleShieldClick(shield.shieldId)"
+                      @click="handleShieldClick(shield.shieldId, shield.information.stars, shield.information.element)"
                       :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
                     />
                   </b-popover>
@@ -58,15 +58,11 @@
               </div>
               <div v-else class="shieldButtonWrapper">
                 <pvp-shield
-                  v-for="shield in ownedShieldsWithInformation"
-                  :key="shield.shieldId"
-                  :stars="shield.information.stars + 1"
-                  :element="shield.information.element"
-                  :shieldId="shield.shieldId"
-                  @click="handleShieldClick(shield.shieldId)"
-                  :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
+                  :stars="selectedShieldStars + 1"
+                  :element="selectedShieldElement"
+                  :shieldId="selectedShieldId"
                 />
-                <button @click="() => selectedShieldId = null" class="clearShieldButton">Clear</button>
+                <button @click="handleClearShield()" class="clearShieldButton">Clear</button>
               </div>
             </div>
           </div>
@@ -213,6 +209,8 @@ export default {
       selectedWeaponStars: null,
       selectedWeaponElement: null,
       selectedShieldId: null,
+      selectedShieldStars: null,
+      selectedShieldElement: null,
       checkBoxAgreed: false,
     };
   },
@@ -240,8 +238,22 @@ export default {
       this.selectedWeaponElement = weaponElement;
     },
 
-    handleShieldClick(shieldId) {
+    handleClearWeapon() {
+      this.selectedWeaponId = null;
+      this.selectedWeaponStars = null;
+      this.selectedWeaponElement = null;
+    },
+
+    handleShieldClick(shieldId, shieldStars, shieldElement) {
       this.selectedShieldId = shieldId;
+      this.selectedShieldStars = shieldStars;
+      this.selectedShieldElement = shieldElement;
+    },
+
+    handleClearShield() {
+      this.selectedShieldId = null;
+      this.selectedShieldStars = null;
+      this.selectedShieldElement = null;
     },
 
     async handleEnterArenaClick() {
