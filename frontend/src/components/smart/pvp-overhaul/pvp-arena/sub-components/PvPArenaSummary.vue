@@ -6,10 +6,11 @@
         <p>Enter the arena and win rewards ($SKILL).</p>
         <div></div>
         <div class="buttonWrapper">
-          <pvp-button
-            @click="handleEnterArenaClick()"
+          <!-- <pvp-button
+            @click.native="handleEnterArenaClick()"
             buttonText="ENTER ARENA"
-          />
+          /> -->
+          <button @click="handleEnterArenaClick()">enter arena</button>
         </div>
         <div class="bottomWrapper">
           <div class="bottomWrapperNav">
@@ -18,18 +19,18 @@
           </div>
           <div class="bottomWrapperInner">
             <div v-if="tab === 0" class="bottomWeapons">
-          <pvp-weapon
-            v-if="activeWeaponWithInformation.weaponId"
-            :stars="activeWeaponWithInformation.information.stars + 1"
-            :element="activeWeaponWithInformation.information.element"
-            :weaponId="activeWeaponWithInformation.weaponId"
-          />
-          <pvp-shield
-            v-if="activeShieldWithInformation.shieldId"
-            :stars="activeShieldWithInformation.information.stars + 1"
-            :element="activeShieldWithInformation.information.element"
-            :shieldId="activeShieldWithInformation.shieldId"
-          />
+              <pvp-weapon
+                v-if="activeWeaponWithInformation.weaponId"
+                :stars="activeWeaponWithInformation.information.stars + 1"
+                :element="activeWeaponWithInformation.information.element"
+                :weaponId="activeWeaponWithInformation.weaponId"
+              />
+              <pvp-shield
+                v-if="activeShieldWithInformation.shieldId"
+                :stars="activeShieldWithInformation.information.stars + 1"
+                :element="activeShieldWithInformation.information.element"
+                :shieldId="activeShieldWithInformation.shieldId"
+              />
             </div>
             <div v-if="tab === 1" class="bottomDuels">
               DUEL HISTORY
@@ -86,14 +87,14 @@ import { mapState } from 'vuex';
 import BN from 'bignumber.js';
 import PvPWeapon from '../../components/PvPWeapon.vue';
 import PvPShield from '../../components/PvPShield.vue';
-import PvPButton from '../../components/PvPButton.vue';
+// import PvPButton from '../../components/PvPButton.vue';
 import PvPCharacter from '../../components/PvPCharacter.vue';
 
 export default {
   components: {
     'pvp-weapon': PvPWeapon,
     'pvp-shield': PvPShield,
-    'pvp-button': PvPButton,
+    // 'pvp-button': PvPButton,
     'pvp-character': PvPCharacter
   },
 

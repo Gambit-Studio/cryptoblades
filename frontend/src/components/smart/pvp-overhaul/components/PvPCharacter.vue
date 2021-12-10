@@ -48,6 +48,7 @@ export default {
   @media only screen and (min-width: 1280px) {
     bottom: 10%;
   }
+
   @media only screen and (min-width: 1680px) {
     bottom: 12%;
   }
