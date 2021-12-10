@@ -35,5 +35,13 @@ export default {
 <style scoped lang="scss">
 .pvpWrapper {
   padding: 0 4rem 4rem 4rem;
+
+  @media only screen and (min-width: 1440px) {
+    padding: 0 6rem 6rem 6rem;
+  }
+
+  @media only screen and (min-width: 1980px) {
+    padding: 0 12rem 12rem 12rem;
+  }
 }
 </style>
