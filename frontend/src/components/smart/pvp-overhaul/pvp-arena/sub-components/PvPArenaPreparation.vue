@@ -26,6 +26,7 @@
                         :stars="weapon.information.stars + 1"
                         :element="weapon.information.element"
                         :weaponId="weapon.weaponId"
+                        :class="{'disabled': ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)}"
                         @click="handleWeaponClick(weapon.weaponId, weapon.information.stars, weapon.information.element)"
                         :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
                       />
@@ -53,6 +54,7 @@
                         :stars="shield.information.stars + 1"
                         :element="shield.information.element"
                         :shieldId="shield.shieldId"
+                        :class="{'disabled': ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)}"
                         @click="handleShieldClick(shield.shieldId, shield.information.stars, shield.information.element)"
                         :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
                       />
@@ -341,6 +343,10 @@ export default {
     grid-template-rows: repeat(4, 1fr);
     grid-column-gap: 1rem;
     grid-row-gap: 2rem;
+
+    .disabled {
+      color: white;
+    }
   }
 }
 .mainWrapper {
