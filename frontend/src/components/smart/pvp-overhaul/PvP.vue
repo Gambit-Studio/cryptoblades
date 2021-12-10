@@ -50,18 +50,20 @@ export default {
 
 .pvpWrapper {
   background-image: url('../../../assets/pvpBackgroundImage.png');
-  padding: 0 4rem 4rem 4rem;
+  padding: 1rem 4rem 4rem 4rem;
+  // Hacky way below to avoid parent padding
+  margin: -2rem -1rem 0 -1rem;
 
   li, p, span {
     font-family: inherit;
   }
 
   @media only screen and (min-width: 1440px) {
-    padding: 0 6rem 6rem 6rem;
+    padding: 1 6rem 6rem 6rem;
   }
 
-  @media only screen and (min-width: 1980px) {
-    padding: 0 12rem 12rem 12rem;
+  @media only screen and (min-width: 1981px) {
+    padding: 1 12rem 12rem 12rem;
   }
 }
 </style>
