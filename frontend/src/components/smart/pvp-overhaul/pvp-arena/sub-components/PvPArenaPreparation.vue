@@ -15,9 +15,9 @@
             <pvp-separator dark vertical />
             <div class="weaponsWrapper">
               <div v-if="!selectedWeaponId" :class="{ disabledStyles: ownedWeaponsWithInformation.length === 0 }" class="weaponButtonWrapper">
-                <button class="selectWeaponButton" id="popover-target-1">
+                <button class="selectWeaponButton" id="weapon-popover">
                   <img class="placeholderImage" src="../../../../../assets/swordPlaceholder.svg" alt="sword" />
-                  <b-popover target="popover-target-1" triggers="hover" placement="right" custom-class="popoverWrapper">
+                  <b-popover ref="popover" target="weapon-popover" triggers="hover" placement="right" custom-class="popoverWrapper">
                     <p class="popoverTitle">Weapons</p>
                     <div class="popoverGrid">
                       <pvp-weapon
@@ -42,9 +42,9 @@
                 <button @click="handleClearWeapon()" class="clearWeaponButton">Clear</button>
               </div>
               <div v-if="!selectedShieldId" :class="{ disabledStyles: ownedShieldsWithInformation.length === 0 }" class="shieldButtonWrapper">
-                <button class="selectWeaponButton" id="popover-target-2">
+                <button class="selectWeaponButton" id="shield-popover">
                   <img class="placeholderImage" src="../../../../../assets/shieldPlaceholder.svg" alt="shield" />
-                  <b-popover target="popover-target-2" triggers="hover" placement="right" custom-class="popoverWrapper">
+                  <b-popover target="shield-popover" placement="right" triggers="hover" custom-class="popoverWrapper">
                     <p class="popoverTitle">Shields</p>
                     <div class="popoverGrid">
                       <pvp-shield
@@ -258,6 +258,14 @@ export default {
       this.selectedShieldId = null;
       this.selectedShieldStars = null;
       this.selectedShieldElement = null;
+    },
+
+    onOpen() {
+      this.$refs.popover.$emit('open');
+    },
+
+    onClose() {
+      this.$refs.popover.$emit('close');
     },
 
     async handleEnterArenaClick() {
