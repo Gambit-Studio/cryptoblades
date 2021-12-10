@@ -15,7 +15,7 @@
     </nav>
     <div class="bottom">
       <div class="characterWrapper">
-        <div class="traitWrapper">
+        <div class="elementWrapper">
           <img :src="getCharacterElementSrc" alt="element" />
         </div>
         <div class="characterImageWrapper">
@@ -69,7 +69,7 @@
         />
       </div>
       <div class="characterWrapper">
-        <div class="traitWrapper">
+        <div class="elementWrapper">
           <!-- <img :src="getOpponentElementSrc" alt="element" /> -->
         </div>
         <div class="characterImageWrapper">
@@ -377,7 +377,6 @@ export default {
   flex-direction: column;
   min-height: 100vh;
   margin-top: 3.5rem;
-  background-color: #141414;
 }
 
   nav {
@@ -424,7 +423,7 @@ export default {
   width: 100%;
   justify-content: center;
 
-  .traitWrapper {
+  .elementWrapper {
     position: absolute;
     display: flex;
     height: 2.5rem;
@@ -542,6 +541,7 @@ export default {
   margin-top: 1.5rem;
 }
   .spinner {
+    margin-bottom: 4rem;
     animation: spin 1s linear infinite;
     @keyframes spin {
       from {
@@ -567,7 +567,8 @@ export default {
   }
 
   p {
-    font-size: 2rem;
+    font-size: 2.75rem;
+    margin-bottom: 4rem;
     color: white;
   }
 

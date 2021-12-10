@@ -315,6 +315,11 @@ export default {
 
 
 <style scoped lang="scss">
+.arenaPreparationWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 .popoverWrapper {
   height: 450px;
   overflow-y: auto;
@@ -337,15 +342,6 @@ export default {
     grid-column-gap: 1rem;
     grid-row-gap: 2rem;
   }
-}
-.arenaPreparationWrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #141414;
-}
-.temporary {
-  border: 1px solid red;
 }
 .mainWrapper {
   display: flex;

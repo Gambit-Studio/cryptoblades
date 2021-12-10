@@ -44,6 +44,7 @@ export default {
 
 <style scoped lang="scss">
 .pvpWrapper {
+  background-image: url('../../../assets/pvpBackgroundImage.png');
   padding: 0 4rem 4rem 4rem;
 
   @media only screen and (min-width: 1440px) {
