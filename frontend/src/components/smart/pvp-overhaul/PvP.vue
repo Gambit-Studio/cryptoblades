@@ -43,6 +43,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+//TODO: Check for proper font-family inheritance
 @font-face {
   font-family: 'Trajan';
   src: url('../../../assets/fonts/Trajan.ttf') format('truetype');
@@ -51,18 +52,13 @@ export default {
 .pvpWrapper {
   background-image: url('../../../assets/pvpBackgroundImage.png');
   padding: 1rem 4rem 4rem 4rem;
-  // Hacky way below to avoid parent padding
   margin: -2rem -1rem 0 -1rem;
-
-  li, p, span {
-    font-family: inherit;
-  }
 
   @media only screen and (min-width: 1440px) {
     padding: 1 6rem 6rem 6rem;
   }
 
-  @media only screen and (min-width: 1981px) {
+  @media only screen and (min-width: 1980px) {
     padding: 1 12rem 12rem 12rem;
   }
 }
