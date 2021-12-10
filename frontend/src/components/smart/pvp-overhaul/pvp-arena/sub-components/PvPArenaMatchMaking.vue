@@ -45,16 +45,17 @@
         </div>
       </div>
       <div class="middleButtons">
-        <img class="spinner" src="../../../../../assets/loadingSpinner.svg" />
-        <p>
-          {{ this.loading ? '...' : this.decisionTimeLeft }}
-        </p>
+        <div v-if="this.loading">
+          <img class="spinner" src="../../../../../assets/loadingSpinner.svg" />
+        </div>
+        <p v-else>{{ this.decisionTimeLeft }}</p>
         <button v-if="isCharacterInDuelQueue">IN-PROGRESS</button>
-        <div v-else>
+        <div v-else class="matchButtonsWrapper">
           <pvp-button v-if="!hasPendingDuel" @click="findMatch" :disabled="loading" buttonText="FIND MATCH" />
           <pvp-button v-else @click="preparePerformDuel" :disabled="loading || !decisionTimeLeft || isCharacterInDuelQueue" buttonText="DUEL" />
         </div>
         <pvp-button
+          class="reRollOpponentButton"
           @click="reRollOpponent" :disabled="loading || !hasPendingDuel || isCharacterInDuelQueue"
           buttonText="Re-roll Opponent"
           :buttonsubText="'$SKILL: ' + formattedReRollCost"
@@ -534,6 +535,12 @@ export default {
   margin-left: 3rem;
   width: 12rem;
 
+  .matchButtonsWrapper {
+    width: 100%;
+  }
+.reRollOpponentButton {
+  margin-top: 1.5rem;
+}
   .spinner {
     animation: spin 1s linear infinite;
     @keyframes spin {
@@ -546,8 +553,12 @@ export default {
     }
   }
 
+  .findMatchButton {
+    margin-bottom: 5rem;
+  }
+
   button {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     width: 100%;
   }
 
