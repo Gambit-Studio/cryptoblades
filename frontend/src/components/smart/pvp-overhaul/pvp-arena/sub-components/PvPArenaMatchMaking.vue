@@ -1,18 +1,25 @@
 <template>
   <div class="wrapper">
-    <div>
-      <h1>ARENA</h1>
-      <span>Arena Tier: {{ characterInformation.tier || '-' }}</span>
-      <br/>
-      <span>Wager Left: {{ formattedWager || '-' }}</span>
-    </div>
+    <nav>
+      <div class="navTitle">Arena</div>
+      <div class="navStats">
+        <div>
+          <span>Arena tier:</span>
+          <span>{{ characterInformation.tier || '-' }}</span>
+        </div>
+        <div>
+          <span>Wager left:</span>
+          <span>{{ formattedWager || '-' }}</span>
+        </div>
+      </div>
+    </nav>
     <div class="bottom">
       <div class="characterWrapper">
         <div class="traitWrapper">
-          <img :src="getCharacterTraitUrl" alt="element" />
+          <img :src="getCharacterElementSrc" alt="element" />
         </div>
         <div class="characterImageWrapper">
-          <!-- <pvp-character :characterId="currentCharacterId" /> -->
+          <pvp-character :characterId="currentCharacterId" />
         </div>
         <div class="info">
           <h1 class="characterName">{{ characterInformation.name }}</h1>
@@ -38,25 +45,23 @@
         </div>
       </div>
       <div class="middleButtons">
+        <img class="spinner" src="../../../../../assets/loadingSpinner.svg" />
         <p>
-          DECISION TIME: {{ this.loading ? '...' : this.decisionTimeLeft}}
+          {{ this.loading ? '...' : this.decisionTimeLeft }}
         </p>
         <button v-if="isCharacterInDuelQueue">IN-PROGRESS</button>
         <div v-else>
-          <button v-if="!hasPendingDuel" @click="findMatch" :disabled="loading">Find match</button>
-          <button v-else @click="preparePerformDuel" :disabled="loading || !decisionTimeLeft || isCharacterInDuelQueue">DUEL</button>
+          <pvp-button v-if="!hasPendingDuel" @click="findMatch" :disabled="loading" buttonText="FIND MATCH" />
+          <pvp-button v-else @click="preparePerformDuel" :disabled="loading || !decisionTimeLeft || isCharacterInDuelQueue" buttonText="DUEL" />
         </div>
-        <button @click="reRollOpponent" :disabled="loading || !hasPendingDuel || isCharacterInDuelQueue">
-          Re-roll Opponent {{ formattedReRollCost }} $SKILL
-        </button>
-        <button @click="leaveArena" :disabled="loading">Leave arena</button>
-        <pvp-button buttonText="FIND MATCH" />
         <pvp-button
+          @click="reRollOpponent" :disabled="loading || !hasPendingDuel || isCharacterInDuelQueue"
           buttonText="Re-roll Opponent"
-          buttonsubText="0.05 $SKILL"
+          :buttonsubText="'$SKILL: ' + formattedReRollCost"
           :secondary="true"
         />
         <pvp-button
+          @click="leaveArena" :disabled="loading"
           buttonText="Leave Arena"
           buttonsubText="0.5 $SKILL"
           :secondary="true"
@@ -64,10 +69,10 @@
       </div>
       <div class="characterWrapper">
         <div class="traitWrapper">
-          <!-- <img :src="getOpponentTraitUrl" alt="element" /> -->
+          <!-- <img :src="getOpponentElementSrc" alt="element" /> -->
         </div>
         <div class="characterImageWrapper">
-          <!-- <pvp-character character="character0" /> -->
+          <!-- <pvp-character :characterId="op" /> -->
         </div>
         <div class="info">
           <h1 class="characterName">{{ opponentInformation.name }}</h1>
@@ -106,6 +111,7 @@ import { mapState } from 'vuex';
 import PvPWeapon from '../../components/PvPWeapon.vue';
 import PvPShield from '../../components/PvPShield.vue';
 import PvPSeparator from '../../components/PvPSeparator.vue';
+import PvPCharacter from '../../components/PvPCharacter.vue';
 import PvPButton from '../../components/PvPButton.vue';
 import fireIcon from '../../../../../assets/elements/fire.png';
 import waterIcon from '../../../../../assets/elements/water.png';
@@ -118,7 +124,7 @@ export default {
   components: {
     'pvp-weapon': PvPWeapon,
     'pvp-shield': PvPShield,
-    // 'pvp-character': PvPCharacter,
+    'pvp-character': PvPCharacter,
     'pvp-separator': PvPSeparator,
     'pvp-button': PvPButton,
   },
@@ -203,27 +209,27 @@ export default {
       return new BN(this.reRollCost).div(new BN(10).pow(18)).toFixed(2);
     },
 
-    getCharacterTraitUrl() {
-      if (this.characterTrait === 'Fire') {
+    getCharacterElementSrc() {
+      if (this.characterInformation.element === 'Fire') {
         return fireIcon;
       }
-      if (this.characterTrait === 'Water') {
+      if (this.characterInformation.element === 'Water') {
         return waterIcon;
       }
-      if (this.characterTrait === 'Earth') {
+      if (this.characterInformation.element === 'Earth') {
         return earthIcon;
       }
       return lightningIcon;
     },
 
-    getOpponentTraitUrl() {
-      if (this.opponent.trait === 'fire') {
+    getOpponentElementSrc() {
+      if (this.currentOpponent.element === 'fire') {
         return fireIcon;
       }
-      if (this.opponent.trait === 'water') {
+      if (this.currentOpponent.element === 'water') {
         return waterIcon;
       }
-      if (this.opponent.trait === 'earth') {
+      if (this.currentOpponent.element === 'earth') {
         return earthIcon;
       }
       return lightningIcon;
@@ -373,12 +379,49 @@ export default {
   background-color: #141414;
 }
 
+  nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 4rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #363636;
+
+    .navTitle {
+      color: #cec198;
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+    .navStats {
+      display: flex;
+
+      div:nth-of-type(2) {
+        margin-left: 1.25rem;
+        margin-right: 1.25rem;
+      }
+
+      div {
+        display: flex;
+        align-items: flex-end;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+
+        span:first-of-type {
+          margin-right: 0.25rem;
+          color: #cec198;
+        }
+        span:last-of-type {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
 .bottom {
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: center;
-  border: 1px solid red;
 
   .traitWrapper {
     position: absolute;
@@ -403,13 +446,9 @@ export default {
 .characterWrapper,
 .middleButtons {
   display: flex;
-  height: 24rem;
+  height: 25rem;
   justify-content: flex-end;
-
-  button:nth-of-type(2) {
-    margin-top: 2rem;
-    margin-bottom: 1.5rem;
-  }
+  align-items: center;
 }
 .characterWrapper {
   position: relative;
@@ -488,11 +527,38 @@ export default {
     }
   }
 }
+
 .middleButtons {
   flex-direction: column;
   margin-right: 3rem;
   margin-left: 3rem;
   width: 12rem;
+
+  .spinner {
+    animation: spin 1s linear infinite;
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+
+  button {
+    margin-bottom: 2rem;
+    width: 100%;
+  }
+
+  button:last-of-type {
+    margin-bottom: 0;
+  }
+
+  p {
+    font-size: 2rem;
+    color: white;
+  }
 
   @media screen and (min-width: 1280px) {
     margin-right: 5rem;

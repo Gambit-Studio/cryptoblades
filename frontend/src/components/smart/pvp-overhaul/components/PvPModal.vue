@@ -1,6 +1,6 @@
 <template>
-  <div class="overlay" v-if="showModal" @click="showModal = false">
-    <div class="modalInnerWrapper" v-if="showModal">
+  <div class="modalWrapper">
+    <div class="modalInnerWrapper">
       <img src="../../../../assets/separatorTop.svg" alt="Top separator">
       <div v-if="true" class="modalTitle">You have won the duel!</div>
       <div v-else class="modalTitle"> You have lost the duel!</div>
@@ -40,15 +40,7 @@ export default {
   components: {
     'pvp-separator': PvPSeparator
   },
-  data() {
-    return {
-      localShowModal: false
-    };
-  },
   props: {
-    parentShowModal: {
-      type: Boolean,
-    },
     result: {
       type: String,
       // values: ['win', 'lose']
@@ -99,7 +91,7 @@ export default {
   border: 3px solid red;
 }
 
-.overlay {
+.modalWrapper {
   display: flex;
   position: fixed;
   z-index: 9998;

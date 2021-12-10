@@ -1,23 +1,6 @@
 <template>
   <div class="wrapper">
-    <nav v-if="isPlayerInArena" class="matchmakingNav">
-      <div class="matchmakingNavTitle">Arena</div>
-      <div class="matchmakingNavStats">
-        <div>
-          <span>Arena tier:</span>
-          <span>5</span>
-        </div>
-        <div>
-          <span>Wage left:</span>
-          <span>2 SKILL</span>
-        </div>
-        <div>
-          <span>Current earnings:</span>
-          <span>1.4 SKILL</span>
-        </div>
-      </div>
-    </nav>
-    <nav v-else class="defaultNav">
+    <nav class="defaultNav">
       <button @click="setTab(0)" :class="activeTab === 0 && 'active'">
         <img src="../../../../assets/swordsIcon.svg"/>
         <span>Arena</span>
@@ -38,9 +21,6 @@ export default {
       default: 0
     };
   },
-  props: {
-    isPlayerInArena: Boolean
-  },
   methods: {
     setTab(tabNumber) {
       this.$emit('changeTab', tabNumber);
@@ -58,42 +38,6 @@ export default {
 
   .defaultNav {
     display: flex;
-  }
-
-  .matchmakingNav {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding-bottom: 0.5rem;
-
-    .matchmakingNavTitle {
-      color: #cec198;
-      font-size: 1.875rem;
-      line-height: 2.25rem;
-    }
-    .matchmakingNavStats {
-      display: flex;
-
-      div:nth-of-type(2) {
-        margin-left: 1.25rem;
-        margin-right: 1.25rem;
-      }
-
-      div {
-        display: flex;
-        align-items: flex-end;
-        font-size: 0.875rem;
-        line-height: 1.25rem;
-
-        span:first-of-type {
-          margin-right: 0.25rem;
-          color: #cec198;
-        }
-        span:last-of-type {
-          color: #ffffff;
-        }
-      }
-    }
   }
 
   button {
