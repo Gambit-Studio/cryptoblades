@@ -1,6 +1,6 @@
 <template>
   <div class="pvpCharacterWrapper">
-    <img :src="characterPlaceholderSrc" alt="character" class="characterImg" />
+    <img :src="characterArtSrc" alt="character" class="characterImg" />
     <img src="../../../../assets/placeholder/standImage.png" alt="stand" class="characterStand" />
   </div>
 </template>
@@ -11,11 +11,11 @@ import { getCharacterArtById } from '../../../../character-arts-placeholder';
 export default {
   props: {
     characterId: {
-      type: Number,
-    },
+      default: null
+    }
   },
   computed: {
-    characterPlaceholderSrc() {
+    characterArtSrc() {
       return getCharacterArtById(this.characterId);
     }
   }
