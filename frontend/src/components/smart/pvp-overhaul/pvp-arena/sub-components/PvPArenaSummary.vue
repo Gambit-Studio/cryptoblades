@@ -148,7 +148,7 @@ export default {
     },
 
     async handleEnterArenaClick() {
-      return 2;
+      return this.$emit('enterMatchMaking');
     },
   },
 };

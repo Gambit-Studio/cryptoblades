@@ -17,14 +17,15 @@
         @enteredArena="handleEnteredArena"
       />
       <pvp-arena-summary
-        v-if="isCharacterInArena"
+        v-else-if="isCharacterInArena && !isMatchMaking"
         :tierRewardsPool="tierRewardsPool"
         :tierTopRankers="tierTopRankers"
         :characterInformation="characterInformation"
         :activeWeaponWithInformation="activeWeaponWithInformation"
         :activeShieldWithInformation="activeShieldWithInformation"
+        @enterMatchMaking="handleEnterMatchMaking"
       />
-      <pvp-arena-matchmaking v-if="false" />
+      <pvp-arena-matchmaking v-else-if="isCharacterInArena && isMatchMaking" />
     </div>
   </div>
 </template>
@@ -81,6 +82,10 @@ export default {
   },
 
   methods: {
+    handleEnterMatchMaking() {
+      this.isMatchMaking = true;
+    },
+
     async getWeaponInformation(weaponId) {
       const { element, stars } = formatWeapon(`${weaponId}`, await this.contracts().Weapons.methods.get(`${weaponId}`).call({ from: this.defaultAccount }));
 
