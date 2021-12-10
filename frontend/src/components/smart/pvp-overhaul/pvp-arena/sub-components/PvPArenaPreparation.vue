@@ -17,17 +17,19 @@
               <div v-if="!selectedWeaponId" :class="{ disabledStyles: ownedWeaponsWithInformation.length === 0 }" class="weaponButtonWrapper">
                 <button class="selectWeaponButton" id="popover-target-1">
                   <img class="placeholderImage" src="../../../../../assets/swordPlaceholder.svg" alt="sword" />
-                  <b-popover target="popover-target-1" triggers="hover" placement="right">
+                  <b-popover target="popover-target-1" triggers="hover" placement="right" custom-class="popoverWrapper">
                     <p class="popoverTitle">Weapons</p>
-                    <pvp-weapon
-                      v-for="weapon in ownedWeaponsWithInformation"
-                      :key="weapon.weaponId"
-                      :stars="weapon.information.stars + 1"
-                      :element="weapon.information.element"
-                      :weaponId="weapon.weaponId"
-                      @click="handleWeaponClick(weapon.weaponId, weapon.information.stars, weapon.information.element)"
-                      :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
-                    />
+                    <div class="popoverGrid">
+                      <pvp-weapon
+                        v-for="weapon in ownedWeaponsWithInformation"
+                        :key="weapon.weaponId"
+                        :stars="weapon.information.stars + 1"
+                        :element="weapon.information.element"
+                        :weaponId="weapon.weaponId"
+                        @click="handleWeaponClick(weapon.weaponId, weapon.information.stars, weapon.information.element)"
+                        :disabled="ownedWeaponIds.includes(weapon.weaponId) && !availableWeaponIds.includes(weapon.weaponId)"
+                      />
+                    </div>
                   </b-popover>
                 </button>
               </div>
@@ -42,17 +44,19 @@
               <div v-if="!selectedShieldId" :class="{ disabledStyles: ownedShieldsWithInformation.length === 0 }" class="shieldButtonWrapper">
                 <button class="selectWeaponButton" id="popover-target-2">
                   <img class="placeholderImage" src="../../../../../assets/shieldPlaceholder.svg" alt="shield" />
-                  <b-popover target="popover-target-2" triggers="hover" placement="right">
+                  <b-popover target="popover-target-2" triggers="hover" placement="right" custom-class="popoverWrapper">
                     <p class="popoverTitle">Shields</p>
-                    <pvp-shield
-                      v-for="shield in ownedShieldsWithInformation"
-                      :key="shield.shieldId"
-                      :stars="shield.information.stars + 1"
-                      :element="shield.information.element"
-                      :shieldId="shield.shieldId"
-                      @click="handleShieldClick(shield.shieldId, shield.information.stars, shield.information.element)"
-                      :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
-                    />
+                    <div class="popoverGrid">
+                      <pvp-shield
+                        v-for="shield in ownedShieldsWithInformation"
+                        :key="shield.shieldId"
+                        :stars="shield.information.stars + 1"
+                        :element="shield.information.element"
+                        :shieldId="shield.shieldId"
+                        @click="handleShieldClick(shield.shieldId, shield.information.stars, shield.information.element)"
+                        :disabled="ownedShieldIds.includes(shield.shieldId) && !availableShieldIds.includes(shield.shieldId)"
+                      />
+                    </div>
                   </b-popover>
                 </button>
               </div>
@@ -62,7 +66,7 @@
                   :element="selectedShieldElement"
                   :shieldId="selectedShieldId"
                 />
-                <button @click="handleClearShield()" class="clearShieldButton">Clear</button>
+                <button @click="handleClearShield" class="clearShieldButton">Clear</button>
               </div>
             </div>
           </div>
@@ -135,7 +139,7 @@
             <span>{{ tierTopRankers[2] && tierTopRankers[2].rank || 'N/A'}}</span>
           </li>
         </ul>
-        <a href="/" class="rankings">View all rankings</a>
+        <a href="#" class="rankings">View all rankings</a>
         <ul class="characterAttrsList">
           <li class="characterName">{{ characterInformation.name || '' }}</li>
           <li><span>Power </span><span>{{ characterInformation.power }}</span></li>
@@ -299,6 +303,29 @@ export default {
 
 
 <style scoped lang="scss">
+.popoverWrapper {
+  height: 450px;
+  overflow-y: auto;
+  min-width: max-content;
+  padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+  background-color: black;
+  border: 1px solid #cec198;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  .popoverTitle {
+    color: #cec198;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .popoverGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-column-gap: 1rem;
+    grid-row-gap: 2rem;
+  }
+}
 .arenaPreparationWrapper {
   display: flex;
   flex-direction: column;
