@@ -481,6 +481,7 @@ export default {
       vertical-align: middle;
       margin-left: 1.75rem;
       margin-top: 1rem;
+      user-select: none;
 
       input {
         height: 1rem;
@@ -489,10 +490,10 @@ export default {
       }
 
       span {
-        margin-left: 0.75rem;
+        margin-left: 0.5rem;
         color: #b4b0a7;
         font-size: 0.875rem;
-        line-height: 1.25rem;
+        line-height: 1rem;
       }
     }
   }
