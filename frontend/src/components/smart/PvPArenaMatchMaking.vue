@@ -270,6 +270,13 @@ export default {
   },
 
   methods: {
+    setErrorMessage(error, errorMessage, returnedMessage) {
+      if(error.includes(`reverted with reason string '${errorMessage}'`)) {
+        return this.$dialog.notify.error(returnedMessage);
+      }
+      return 'There has been an error';
+    },
+
     async leaveArena() {
       this.loading = true;
       try {
@@ -277,12 +284,8 @@ export default {
         this.$emit('leaveArena');
       } catch (err) {
         console.log('leave arena error: ', err);
-        if(err.message.includes('Character not in arena')) {
-          this.$dialog.notify.error('The character is not in the arena.');
-        }
-        if(err.message.includes('Defender duel in process')) {
-          this.$dialog.notify.error('Duel already in process.');
-        }
+        this.setErrorMessage(err.message, 'Character not in arena', 'The character is not in the arena');
+        this.setErrorMessage(err.message, 'Defender duel in process', 'Duel already in process');
       }
 
       this.loading = false;
@@ -295,24 +298,14 @@ export default {
         await this.contracts().PvpArena.methods.requestOpponent(this.currentCharacterId).send({ from: this.defaultAccount });
       } catch (err) {
         console.log('find match error: ', err.message);
-        if(err.message.includes('No opponent found')) {
-          this.$dialog.notify.error('No opponent has been found. Try again.');
-        }
-        if(err.message.includes('Opponent already requested')) {
-          this.$dialog.notify.error('An opponent has already been requested.');
-        }
-        if(err.message.includes('No opponents available in tier')) {
-          this.$dialog.notify.error('No opponents available in this tier.');
-        }
-        if(err.message.includes('Character is in duel queue')) {
-          this.$dialog.notify.error('The character is already in a duel queue.');
-        }
-        if(err.message.includes('Character is not in the arena')) {
-          this.$dialog.notify.error('The character is not in the arena.');
-        }
-        if(err.message.includes('Character is not owned by sender')) {
-          this.$dialog.notify.error('The character is not owned by the sender.');
-        }
+
+        this.setErrorMessage(err.message, 'No opponent found', 'No opponent has been found. Try again.');
+        this.setErrorMessage(err.message, 'Opponent already requested', 'An opponent has already been requested.');
+        this.setErrorMessage(err.message, 'No opponents available in tier', 'No opponents available in this tier.');
+        this.setErrorMessage(err.message, 'Character is in duel queue', 'The character is already in a duel queue.');
+        this.setErrorMessage(err.message, 'Character is not in the arena', 'The character is not in the arena.');
+        this.setErrorMessage(err.message, 'Character is not owned by sender', 'The character is not owned by the sender.');
+
         this.loading = false;
         return;
       }
@@ -332,23 +325,14 @@ export default {
         await this.contracts().PvpArena.methods.reRollOpponent(this.currentCharacterId).send({ from: this.defaultAccount });
       } catch (err) {
         console.log('reroll opponent error: ', err.message);
-        if(err.message.includes('Character is not dueling')) {
-          this.$dialog.notify.error('The character is not dueling. Try again.');
-        }
-        if(err.message.includes('No opponent found')) {
-          this.$dialog.notify.error('No opponent has been found. Try again.');
-        }
-        if(err.message.includes('No opponents available in tier')) {
-          this.$dialog.notify.error('No opponents available in this tier.');
-        }
-        if(err.message.includes('Character is in duel queue')) {
-          this.$dialog.notify.error('The character is already in a duel queue.');
-        }
-        if(err.message.includes('Character is not owned by sender')) {
-          this.$dialog.notify.error('The character is not owned by the sender.');
-        }
-        this.loading = false;
 
+        this.setErrorMessage(err.message, 'No opponent found', 'No opponent has been found. Try again.');
+        this.setErrorMessage(err.message, 'Character is not dueling', 'The character is not dueling. Try again.');
+        this.setErrorMessage(err.message, 'No opponents available in tier', 'No opponents available in this tier.');
+        this.setErrorMessage(err.message, 'Character is in duel queue', 'The character is already in a duel queue.');
+        this.setErrorMessage(err.message, 'Character is not owned by sender', 'The character is not owned by the sender.');
+
+        this.loading = false;
         return;
       }
 
@@ -399,23 +383,15 @@ export default {
 
       try {
         await this.listenForDuel(this.contracts());
-
         await this.contracts().PvpArena.methods.preparePerformDuel(this.currentCharacterId).send({from: this.defaultAccount});
       } catch (err) {
         console.log('prepare perform duel error: ', err.message);
 
-        if(err.message.includes('Character not in a duel')) {
-          this.$dialog.notify.error('The character is not in a duel. Try again.');
-        }
-        if(err.message.includes('Decision time expired')) {
-          this.$dialog.notify.error('Decision time expired.');
-        }
-        if(err.message.includes('Character is already in duel queue')) {
-          this.$dialog.notify.error('The character is already waiting for an opponent.');
-        }
-        if(err.message.includes('Character has no pending duel')) {
-          this.$dialog.notify.error('The character has no pending duel.');
-        }
+        this.setErrorMessage(err.message, 'Decision time expired', 'Decision time expired.');
+        this.setErrorMessage(err.message, 'Character is already in duel queue', 'The character is already waiting for an opponent.');
+        this.setErrorMessage(err.message, 'Character has no pending duel', 'The character has no pending duel.');
+        this.setErrorMessage(err.message, 'Character not in a duel', 'The character is not in a duel. Try again.');
+
         this.loading = false;
 
         return;
