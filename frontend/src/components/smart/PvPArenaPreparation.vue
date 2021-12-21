@@ -298,7 +298,7 @@ export default {
             });
         } catch(err){
           console.log('Enter Arena Error: ', err);
-            this.handleErrorMessage();
+          this.handleErrorMessage();
           return;
         }
         this.$emit('enteredArena');
