@@ -283,7 +283,8 @@ export default {
         await this.contracts().PvpArena.methods.withdrawFromArena(this.currentCharacterId).send({ from: this.defaultAccount });
         this.$emit('leaveArena');
       } catch (err) {
-        console.log('leave arena error: ', err);
+        console.log('leave arena error: ', err.message);
+
         this.setErrorMessage(err.message, 'Character not in arena', 'The character is not in the arena');
         this.setErrorMessage(err.message, 'Defender duel in process', 'Duel already in process');
       }
