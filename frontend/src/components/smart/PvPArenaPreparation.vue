@@ -238,6 +238,12 @@ export default {
     },
   },
   methods: {
+    handleErrorMessage(value, errorMessage, returnedMessage) {
+      if(value.includes(`reverted with reason string '${errorMessage}'`)) {
+        return this.$dialog.notify.error(returnedMessage);
+      }
+      return 'There has been an error. Try again.';
+    },
     handleWeaponClick(weaponId, weaponStars, weaponElement) {
       this.selectedWeaponId = weaponId;
       this.selectedWeaponStars = weaponStars;
@@ -281,7 +287,7 @@ export default {
             });
         } catch(err) {
           console.log('Enter Arena Approval Error: ', err);
-          this.$dialog.notify.error('There has been an error while trying to enter the arena. Try again.');
+          this.handleErrorMessage();
           return;
         }
         try {

@@ -274,7 +274,7 @@ export default {
       if(value.includes(`reverted with reason string '${errorMessage}'`)) {
         return this.$dialog.notify.error(returnedMessage);
       }
-      return 'There has been an error';
+      return 'There has been an error. Try again.';
     },
 
     async leaveArena() {
