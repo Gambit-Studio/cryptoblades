@@ -222,7 +222,8 @@ export default {
         defenderRoll: null,
         skillDifference: null,
         rankDifference: null,
-        result: ''
+        result: '',
+        attackerWon: null
       }
     };
   },
@@ -334,10 +335,12 @@ export default {
 
         if (duelFinishedResult.length) {
           const formattedResult = formatDuelResult(duelFinishedResult[0].returnValues);
-
-          this.duelResult.result = formattedResult.attackerRoll > formattedResult.defenderRoll ? 'win' : 'lose';
+          console.log(formattedResult.attackerWon);
+          this.duelResult.result = formattedResult.attackerWon? 'win' : 'lose';
+          console.log(this.duelResult.result);
           this.duelResult.attackerRoll = formattedResult.attackerRoll;
           this.duelResult.defenderRoll = formattedResult.defenderRoll;
+
           this.duelResult.skillDifference = this.duelResult.result === 'win' ?
             +this.formattedDuelCost * 0.7 :
             -this.formattedDuelCost;
@@ -386,7 +389,8 @@ export default {
         attackerRoll: null,
         defenderRoll: null,
         skillDifference: null,
-        rankDifference: null
+        rankDifference: null,
+        attackerWon: null,
       };
     },
 
