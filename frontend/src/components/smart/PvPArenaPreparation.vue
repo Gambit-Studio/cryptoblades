@@ -1,5 +1,8 @@
 <template>
-    <div class="arenaPreparationWrapper">
+    <div v-if="loading">
+      <img class="loadingSpinner" src="../../assets/loadingSpinner.svg" />
+    </div>
+    <div v-else class="arenaPreparationWrapper">
     <div class="mainWrapper">
       <div class="arenaSignup">
         <h1 class="title">ARENA SIGNUP</h1>
@@ -212,6 +215,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       selectedWeaponId: null,
       selectedWeaponStars: null,
       selectedWeaponElement: null,
@@ -234,6 +238,12 @@ export default {
     },
   },
   methods: {
+    handleErrorMessage(value, errorMessage, returnedMessage) {
+      if(value.includes(`reverted with reason string '${errorMessage}'`)) {
+        return this.$dialog.notify.error(returnedMessage);
+      }
+      return 'There has been an error. Try again.';
+    },
     handleWeaponClick(weaponId, weaponStars, weaponElement) {
       this.selectedWeaponId = weaponId;
       this.selectedWeaponStars = weaponStars;
@@ -265,6 +275,7 @@ export default {
         alert('Please check the \'I understand\' box to proceed.');
         return;
       }
+      this.loading = true;
       if ((this.currentCharacterId || this.currentCharacterId === 0) && (this.selectedWeaponId || this.selectedWeaponId === 0) && this.entryWager) {
         const isUsingShield = this.selectedShieldId !== null;
         const shieldId = this.selectedShieldId === null ? 0 : this.selectedShieldId;
@@ -276,6 +287,7 @@ export default {
             });
         } catch(err) {
           console.log('Enter Arena Approval Error: ', err);
+          this.handleErrorMessage();
           return;
         }
         try {
@@ -286,6 +298,7 @@ export default {
             });
         } catch(err){
           console.log('Enter Arena Error: ', err);
+          this.handleErrorMessage();
           return;
         }
         this.$emit('enteredArena');
@@ -295,6 +308,7 @@ export default {
         console.log(this.entryWager);
         console.log('Missing data');
       }
+      this.loading = false;
     },
   },
 };
@@ -406,8 +420,9 @@ p, li, span {
         background: #b53c48;
         border: none;
         color: white;
-        border-radius: 0.25rem;
-        font-size: 0.75rem;
+        border-radius: 0.2rem;
+        font-size: 0.7rem;
+        font-family: 'Roboto';
       }
       .weaponButtonWrapper {
         margin-right: 1.5rem;
@@ -589,6 +604,22 @@ p, li, span {
       color: #cec198;
       font-size: 1.25rem;
       font-family: 'Trajan';
+    }
+  }
+}
+.loadingSpinner {
+  display: flex;
+  height: 3rem;
+  width: 3rem;
+  margin: 0 auto;
+  margin-top: 3rem ;
+  animation: spin 1s linear infinite;
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
     }
   }
 }

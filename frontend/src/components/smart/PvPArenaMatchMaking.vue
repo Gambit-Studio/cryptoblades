@@ -270,15 +270,23 @@ export default {
   },
 
   methods: {
+    handleErrorMessage(value, errorMessage, returnedMessage) {
+      if(value.includes(`reverted with reason string '${errorMessage}'`)) {
+        return this.$dialog.notify.error(returnedMessage);
+      }
+      return 'There has been an error. Try again.';
+    },
+
     async leaveArena() {
       this.loading = true;
-
       try {
         await this.contracts().PvpArena.methods.withdrawFromArena(this.currentCharacterId).send({ from: this.defaultAccount });
-
         this.$emit('leaveArena');
       } catch (err) {
-        console.log('leave arena error: ', err);
+        console.log('leave arena error: ', err.message);
+
+        this.handleErrorMessage(err.message, 'Character not in arena', 'The character is not in the arena');
+        this.handleErrorMessage(err.message, 'Defender duel in process', 'Duel already in process');
       }
 
       this.loading = false;
@@ -290,7 +298,14 @@ export default {
       try {
         await this.contracts().PvpArena.methods.requestOpponent(this.currentCharacterId).send({ from: this.defaultAccount });
       } catch (err) {
-        console.log('find match error: ', err);
+        console.log('find match error: ', err.message);
+
+        this.handleErrorMessage(err.message, 'No opponent found', 'No opponent has been found. Try again.');
+        this.handleErrorMessage(err.message, 'Opponent already requested', 'An opponent has already been requested.');
+        this.handleErrorMessage(err.message, 'No opponents available in tier', 'No opponents available in this tier.');
+        this.handleErrorMessage(err.message, 'Character is in duel queue', 'The character is already in a duel queue.');
+        this.handleErrorMessage(err.message, 'Character is not in the arena', 'The character is not in the arena.');
+        this.handleErrorMessage(err.message, 'Character is not owned by sender', 'The character is not owned by the sender.');
 
         this.loading = false;
         return;
@@ -310,10 +325,15 @@ export default {
 
         await this.contracts().PvpArena.methods.reRollOpponent(this.currentCharacterId).send({ from: this.defaultAccount });
       } catch (err) {
-        console.log('reroll opponent error: ', err);
+        console.log('reroll opponent error: ', err.message);
+
+        this.handleErrorMessage(err.message, 'No opponent found', 'No opponent has been found. Try again.');
+        this.handleErrorMessage(err.message, 'Character is not dueling', 'The character is not dueling. Try again.');
+        this.handleErrorMessage(err.message, 'No opponents available in tier', 'No opponents available in this tier.');
+        this.handleErrorMessage(err.message, 'Character is in duel queue', 'The character is already in a duel queue.');
+        this.handleErrorMessage(err.message, 'Character is not owned by sender', 'The character is not owned by the sender.');
 
         this.loading = false;
-
         return;
       }
 
@@ -364,10 +384,14 @@ export default {
 
       try {
         await this.listenForDuel(this.contracts());
-
         await this.contracts().PvpArena.methods.preparePerformDuel(this.currentCharacterId).send({from: this.defaultAccount});
       } catch (err) {
-        console.log('prepare perform duel error: ', err);
+        console.log('prepare perform duel error: ', err.message);
+
+        this.handleErrorMessage(err.message, 'Decision time expired', 'Decision time expired.');
+        this.handleErrorMessage(err.message, 'Character is already in duel queue', 'The character is already waiting for an opponent.');
+        this.handleErrorMessage(err.message, 'Character has no pending duel', 'The character has no pending duel.');
+        this.handleErrorMessage(err.message, 'Character not in a duel', 'The character is not in a duel. Try again.');
 
         this.loading = false;
 
