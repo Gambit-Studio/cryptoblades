@@ -270,7 +270,7 @@ export default {
   },
 
   methods: {
-    setErrorMessage(value, errorMessage, returnedMessage) {
+    handleErrorMessage(value, errorMessage, returnedMessage) {
       if(value.includes(`reverted with reason string '${errorMessage}'`)) {
         return this.$dialog.notify.error(returnedMessage);
       }
@@ -285,8 +285,8 @@ export default {
       } catch (err) {
         console.log('leave arena error: ', err.message);
 
-        this.setErrorMessage(err.message, 'Character not in arena', 'The character is not in the arena');
-        this.setErrorMessage(err.message, 'Defender duel in process', 'Duel already in process');
+        this.handleErrorMessage(err.message, 'Character not in arena', 'The character is not in the arena');
+        this.handleErrorMessage(err.message, 'Defender duel in process', 'Duel already in process');
       }
 
       this.loading = false;
@@ -300,12 +300,12 @@ export default {
       } catch (err) {
         console.log('find match error: ', err.message);
 
-        this.setErrorMessage(err.message, 'No opponent found', 'No opponent has been found. Try again.');
-        this.setErrorMessage(err.message, 'Opponent already requested', 'An opponent has already been requested.');
-        this.setErrorMessage(err.message, 'No opponents available in tier', 'No opponents available in this tier.');
-        this.setErrorMessage(err.message, 'Character is in duel queue', 'The character is already in a duel queue.');
-        this.setErrorMessage(err.message, 'Character is not in the arena', 'The character is not in the arena.');
-        this.setErrorMessage(err.message, 'Character is not owned by sender', 'The character is not owned by the sender.');
+        this.handleErrorMessage(err.message, 'No opponent found', 'No opponent has been found. Try again.');
+        this.handleErrorMessage(err.message, 'Opponent already requested', 'An opponent has already been requested.');
+        this.handleErrorMessage(err.message, 'No opponents available in tier', 'No opponents available in this tier.');
+        this.handleErrorMessage(err.message, 'Character is in duel queue', 'The character is already in a duel queue.');
+        this.handleErrorMessage(err.message, 'Character is not in the arena', 'The character is not in the arena.');
+        this.handleErrorMessage(err.message, 'Character is not owned by sender', 'The character is not owned by the sender.');
 
         this.loading = false;
         return;
@@ -327,11 +327,11 @@ export default {
       } catch (err) {
         console.log('reroll opponent error: ', err.message);
 
-        this.setErrorMessage(err.message, 'No opponent found', 'No opponent has been found. Try again.');
-        this.setErrorMessage(err.message, 'Character is not dueling', 'The character is not dueling. Try again.');
-        this.setErrorMessage(err.message, 'No opponents available in tier', 'No opponents available in this tier.');
-        this.setErrorMessage(err.message, 'Character is in duel queue', 'The character is already in a duel queue.');
-        this.setErrorMessage(err.message, 'Character is not owned by sender', 'The character is not owned by the sender.');
+        this.handleErrorMessage(err.message, 'No opponent found', 'No opponent has been found. Try again.');
+        this.handleErrorMessage(err.message, 'Character is not dueling', 'The character is not dueling. Try again.');
+        this.handleErrorMessage(err.message, 'No opponents available in tier', 'No opponents available in this tier.');
+        this.handleErrorMessage(err.message, 'Character is in duel queue', 'The character is already in a duel queue.');
+        this.handleErrorMessage(err.message, 'Character is not owned by sender', 'The character is not owned by the sender.');
 
         this.loading = false;
         return;
@@ -388,10 +388,10 @@ export default {
       } catch (err) {
         console.log('prepare perform duel error: ', err.message);
 
-        this.setErrorMessage(err.message, 'Decision time expired', 'Decision time expired.');
-        this.setErrorMessage(err.message, 'Character is already in duel queue', 'The character is already waiting for an opponent.');
-        this.setErrorMessage(err.message, 'Character has no pending duel', 'The character has no pending duel.');
-        this.setErrorMessage(err.message, 'Character not in a duel', 'The character is not in a duel. Try again.');
+        this.handleErrorMessage(err.message, 'Decision time expired', 'Decision time expired.');
+        this.handleErrorMessage(err.message, 'Character is already in duel queue', 'The character is already waiting for an opponent.');
+        this.handleErrorMessage(err.message, 'Character has no pending duel', 'The character has no pending duel.');
+        this.handleErrorMessage(err.message, 'Character not in a duel', 'The character is not in a duel. Try again.');
 
         this.loading = false;
 
