@@ -270,8 +270,8 @@ export default {
   },
 
   methods: {
-    setErrorMessage(error, errorMessage, returnedMessage) {
-      if(error.includes(`reverted with reason string '${errorMessage}'`)) {
+    setErrorMessage(value, errorMessage, returnedMessage) {
+      if(value.includes(`reverted with reason string '${errorMessage}'`)) {
         return this.$dialog.notify.error(returnedMessage);
       }
       return 'There has been an error';
