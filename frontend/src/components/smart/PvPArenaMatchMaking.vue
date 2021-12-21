@@ -307,6 +307,12 @@ export default {
         if(err.message.includes('Character is in duel queue')) {
           this.$dialog.notify.error('The character is already in a duel queue.');
         }
+        if(err.message.includes('Character is not in the arena')) {
+          this.$dialog.notify.error('The character is not in the arena.');
+        }
+        if(err.message.includes('Character is not owned by sender')) {
+          this.$dialog.notify.error('The character is not owned by the sender.');
+        }
         this.loading = false;
         return;
       }
@@ -337,6 +343,9 @@ export default {
         }
         if(err.message.includes('Character is in duel queue')) {
           this.$dialog.notify.error('The character is already in a duel queue.');
+        }
+        if(err.message.includes('Character is not owned by sender')) {
+          this.$dialog.notify.error('The character is not owned by the sender.');
         }
         this.loading = false;
 
@@ -396,13 +405,16 @@ export default {
         console.log('prepare perform duel error: ', err.message);
 
         if(err.message.includes('Character not in a duel')) {
-          this.$dialog.notify.error('The character is not in a duel. Try again');
+          this.$dialog.notify.error('The character is not in a duel. Try again.');
         }
         if(err.message.includes('Decision time expired')) {
           this.$dialog.notify.error('Decision time expired.');
         }
         if(err.message.includes('Character is already in duel queue')) {
           this.$dialog.notify.error('The character is already waiting for an opponent.');
+        }
+        if(err.message.includes('Character has no pending duel')) {
+          this.$dialog.notify.error('The character has no pending duel.');
         }
         this.loading = false;
 
