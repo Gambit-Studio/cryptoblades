@@ -61,9 +61,6 @@ export default {
     },
     userCurrentRank: {
       default: null
-    },
-    attackerWon: {
-      default: null
     }
   },
 
