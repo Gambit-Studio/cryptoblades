@@ -298,7 +298,7 @@ export default {
             });
         } catch(err){
           console.log('Enter Arena Error: ', err);
-          this.$dialog.notify.error('There has been an error while trying to enter the arena. Try again.');
+            this.handleErrorMessage();
           return;
         }
         this.$emit('enteredArena');
