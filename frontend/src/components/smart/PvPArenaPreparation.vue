@@ -18,7 +18,9 @@
             <div class="weaponsWrapper">
               <div v-if="!selectedWeaponId" :class="{ disabledStyles: ownedWeaponsWithInformation.length === 0 }" class="weaponButtonWrapper">
                 <a tabindex="0" class="selectWeaponButton" id="weapon-popover">
-                  <img class="placeholderImage" src="../../assets/swordPlaceholder.svg" alt="sword" />
+                  <div class="placeholderImageWrapper">
+                    <img src="../../assets/swordPlaceholder.svg" alt="sword" />
+                  </div>
                   <b-popover ref="popover" target="weapon-popover" triggers="click blur" placement="right" custom-class="popoverWrapper">
                     <p class="popoverTitle">Weapons</p>
                     <select v-model="weaponStarFilter" v-if="ownedWeaponsWithInformation.length !== 0" class="selectFilter">
@@ -57,7 +59,9 @@
               </div>
               <div v-if="!selectedShieldId" :class="{ disabledStyles: ownedShieldsWithInformation.length === 0 }" class="shieldButtonWrapper">
                 <a tabindex="0" class="selectWeaponButton" id="shield-popover">
-                  <img class="placeholderImage" src="../../assets/shieldPlaceholder.svg" alt="shield" />
+                  <div class="placeholderImageWrapper">
+                    <img src="../../assets/shieldPlaceholder.svg" alt="shield" />
+                  </div>
                   <b-popover ref="popover" target="shield-popover" triggers="click blur" placement="right" custom-class="popoverWrapper">
                     <p class="popoverTitle">Shields</p>
                     <select v-model="shieldStarFilter" v-if="ownedShieldsWithInformation.length !== 0" class="selectFilter">
@@ -590,9 +594,14 @@ p, li, span {
         :hover {
           cursor: pointer;
         }
-        .placeholderImage {
-          width: 2.25rem;
-          height: 2.25rem;
+        .placeholderImageWrapper{
+          width: 4.5rem;
+          height: 4.5rem;
+          padding: 1rem;
+          img {
+            width: 100%;
+            height: 100%;
+          }
         }
       }
     }
