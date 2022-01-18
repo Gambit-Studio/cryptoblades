@@ -58,7 +58,7 @@
           <span v-else-if="this.decisionTimeLeft === 0 && !this.loading && isCharacterInDuelQueue">Duel has expired.</span>
         </div>
         <div class="middleMatchProgressButtons">
-          <pvp-button v-if="isCharacterInDuelQueue" buttonText="IN-PROGRESS" :disabled="true"/>
+          <pvp-button v-if="isCharacterInDuelQueue" buttonText="IN-PROGRESS" :disabled="true" class="inProgressButton"/>
           <div v-else class="matchButtonsWrapper">
             <div v-if="!isInMatch">
               <pvp-button @click="findMatch" :disabled="loading || formattedMatchablePlayersCount < 1"  buttonText="FIND MATCH" />
@@ -754,7 +754,6 @@ span, p, li, button {
     width: 100%;
     button {
       height: 5.5rem;
-      height: 100%;
     }
   }
   .matchButtonsWrapper {

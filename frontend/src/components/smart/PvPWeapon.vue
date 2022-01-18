@@ -183,8 +183,8 @@ export default {
   margin: 0 auto;
   padding: 0;
   .statsWrapper {
-  margin-top: 1rem;
-}
+    margin-top: 1rem;
+  }
   span {
     color: #cec198;
     font-family: 'Roboto';
