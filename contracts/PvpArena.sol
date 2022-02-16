@@ -1014,9 +1014,9 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             blockhash(block.number - 1)
         );
 
-        int128 bonusShieldStats;
+        uint256 bonusShieldStats;
         if (fighter.useShield) {
-            bonusShieldStats = _getShieldStats(character.ID).mul(int128(_shieldFactor)).div(100);
+            bonusShieldStats = _getShieldStats(character.ID).mulu(uint256(_shieldFactor)).div(100);
         }
 
         (
@@ -1032,8 +1032,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             opponentTrait
         );
 
-        uint24 playerFightPower = Common.getPlayerPower(character.basePower, (weaponMultFight.add(bonusShieldStats)), weaponBonusPower);
-
+        uint24 playerFightPower = Common.getPlayerPower(character.basePower, (weaponMultFight.add(int128(bonusShieldStats))), weaponBonusPower);
         uint256 playerPower = RandomUtil.plusMinus10PercentSeeded(
             playerFightPower,
             seed
