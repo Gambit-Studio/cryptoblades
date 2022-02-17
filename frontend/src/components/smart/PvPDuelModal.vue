@@ -10,6 +10,8 @@
       </div>
       <ul>
         <li>
+          <h1>BOOSTED? {{boosted}}</h1>
+          <h1>STAR DIFFERENCE? {{starDifference}}</h1>
           <span>
             {{$t('pvp.youRolled')}}
           </span>
@@ -104,6 +106,12 @@ export default {
       default: null
     },
     defenderPower: {
+      default: null
+    },
+    starDifference: {
+      default: null
+    },
+    boosted: {
       default: null
     }
   },

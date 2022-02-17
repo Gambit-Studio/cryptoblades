@@ -251,7 +251,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         prizePercentages.push(30);
         prizePercentages.push(10);
         duelOffsetCost = 0.005 ether;
-        boostChancePercentage = ABDKMath64x64.divu(100, 4); // 1;
+        boostChancePercentage = ABDKMath64x64.divu(100, 100); // 1;
     }
 
     /// @dev enter the arena with a character, a weapon and optionally a shield

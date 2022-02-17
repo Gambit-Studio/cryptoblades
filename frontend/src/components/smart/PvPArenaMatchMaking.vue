@@ -163,6 +163,8 @@
       :skillEarned="duelResult.skillDifference"
       :rankVariation="duelResult.result === 'win' ? '+5' : '-3'"
       :userCurrentRank="duelResult.rankDifference"
+      :starDifference="duelResult.starDifference"
+      :boosted="duelResult.boosted"
       @close-modal="handleCloseModal"
     />
     <pvp-under-attack-modal
@@ -273,7 +275,9 @@ export default {
         rankDifference: null,
         result: '',
         attackerPower: null,
-        defenderPower: null
+        defenderPower: null,
+        starDifference: null,
+        boosted: null,
       },
       matchablePlayersCount: null,
       duelOffsetCost: null,
@@ -444,11 +448,14 @@ export default {
 
         if (duelFinishedResult.length) {
           const formattedResult = formatDuelResult(duelFinishedResult[duelFinishedResult.length - 1].returnValues);
+          console.log('formatted result', formattedResult);
           this.duelResult.defenderPower = this.opponentInformation.power;
           this.duelResult.attackerPower = this.characterInformation.power;
           this.duelResult.result = formattedResult.attackerWon ? 'win' : 'lose';
           this.duelResult.attackerRoll = formattedResult.attackerRoll;
           this.duelResult.defenderRoll = formattedResult.defenderRoll;
+          this.duelResult.starDifference = formattedResult.starDifference;
+          this.duelResult.boosted = formattedResult.boosted;
           this.duelResult.skillDifference = formattedResult.attackerWon ?
             +this.formattedDuelCost * 0.7 :
             this.formattedDuelCost;
@@ -503,7 +510,9 @@ export default {
         rankDifference: null,
         result: '',
         attackerPower: null,
-        defenderPower: null
+        defenderPower: null,
+        starDifference: null,
+        boosted: null
       };
     },
 
