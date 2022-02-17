@@ -119,7 +119,6 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
     uint256 public duelOffsetCost;
     address payable public pvpBotAddress;
     int128 public boostChancePercentage;
-    uint256 public boostRankingPointsMultiplier;
     
     event DuelFinished(
         uint256 indexed attacker,
@@ -127,7 +126,9 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         uint256 timestamp,
         uint256 attackerRoll,
         uint256 defenderRoll,
-        bool attackerWon
+        bool attackerWon,
+        bool boosted,
+        uint8 starDifference // delete after
     );
 
     event CharacterKicked(
@@ -250,8 +251,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         prizePercentages.push(30);
         prizePercentages.push(10);
         duelOffsetCost = 0.005 ether;
-        boostChancePercentage = ABDKMath64x64.divu(100, 100); // 1;
-        boostRankingPointsMultiplier = 2;
+        boostChancePercentage = ABDKMath64x64.divu(100, 4); // 1;
     }
 
     /// @dev enter the arena with a character, a weapon and optionally a shield
@@ -519,6 +519,8 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
         uint8 tier;
         uint256 cost;
         bool attackerWon;
+        bool boosted;
+        uint8 starDifference;
     }
 
     function createDuelist(uint256 id) internal returns (Duelist memory duelist) {
@@ -558,9 +560,13 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
             duel.defender.roll = _getCharacterPowerRoll(duel.defender, duel.attacker.trait);
 
             bool boosted;
+            uint8 boostedFactor;
+            uint8 starDifference;
 
             if (defenderWeaponStars > attackerWeaponStars) {
-                uint256 seed = randoms.getRandomSeedUsingHash(
+                starDifference = defenderWeaponStars - attackerWeaponStars;
+                duel.starDifference = starDifference;
+               uint256 seed = randoms.getRandomSeedUsingHash(
                     characters.ownerOf(duel.attacker.ID),
                     blockhash(block.number - 1)
                 );
@@ -570,13 +576,28 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
                     10000,
                     seed
                 );
-
-                boosted = randomNumber < uint256(boostChancePercentage.mul(100));
+                if(starDifference < 3) {
+                    boosted = randomNumber < uint256(boostChancePercentage.div(100).mulu(100)); // 1% chance
+                    boostedFactor = 100;
+                }
+                else if (starDifference < 2) {
+                    boosted = randomNumber < uint256(boostChancePercentage.div(20).mulu(100)); // 5% chance 
+                    boostedFactor = 10;      
+                }
+                else if (starDifference < 1) {
+                    boosted = randomNumber < uint256(boostChancePercentage.div(10).mulu(100));  // 10% chance
+                    boostedFactor = 4;      
+                }
+                else if (starDifference == 1) {
+                    boosted = randomNumber < uint256(boostChancePercentage.div(7).mulu(100));  // 14% chance
+                    boostedFactor = 2;      
+                }
             }
 
             if (boosted) {
+                duel.boosted = boosted;
                 // We change the roll so boosted attacker always wins
-                duel.attacker.roll = uint24(duel.defender.roll.add(1));
+                duel.attacker.roll = uint24(duel.defender.roll.add(10000));
             } else {
                 duel.attacker.roll = _getCharacterPowerRoll(duel.attacker, duel.defender.trait);
 
@@ -636,7 +657,9 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
                 block.timestamp,
                 duel.attacker.roll,
                 duel.defender.roll,
-                duel.attackerWon
+                duel.attackerWon,
+                duel.boosted,
+                duel.starDifference
             );
 
             BountyDistribution
@@ -689,7 +712,7 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
                 uint8 difference = defenderWeaponStars - attackerWeaponStars;
                 rankingPointsByCharacter[winnerID] = rankingPointsByCharacter[
                     winnerID
-                ].add(winningPoints.mul(boostRankingPointsMultiplier).mul(difference));
+                ].add(winningPoints.mul(boostedFactor).mul(difference));
             } else {
                 rankingPointsByCharacter[winnerID] = rankingPointsByCharacter[
                     winnerID
@@ -1192,10 +1215,6 @@ contract PvpArena is Initializable, AccessControlUpgradeable {
 
     function setBoostChancePercentage(uint256 chance) external restricted {
         boostChancePercentage = ABDKMath64x64.divu(chance, 100);
-    }
-
-    function setBoostRankingPointsMultiplier(uint256 multiplier) external restricted {
-        boostRankingPointsMultiplier = multiplier;
     }
 
     // Note: The following are debugging functions. Remove later.
