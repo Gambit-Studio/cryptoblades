@@ -16,6 +16,7 @@ import "./util.sol";
 import "./common.sol";
 import "./Blacksmith.sol";
 import "./SpecialWeaponsManager.sol";
+import "./TokensPrices.sol";
 
 contract CryptoBlades is Initializable, AccessControlUpgradeable {
     using ABDKMath64x64 for int128;
@@ -100,6 +101,8 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
 
         // migrateTo_5e833b0
         durabilityCostFight = 1;
+    
+        combatTokenChargePercent = 25;
     }
 
     function migrateTo_ef994e2(Promos _promos) public {
@@ -220,6 +223,9 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
 
     SpecialWeaponsManager public specialWeaponsManager;
 
+    uint256 public combatTokenChargePercent;
+    TokensPrices public tokensPrices;
+
     event FightOutcome(address indexed owner, uint256 indexed character, uint256 weapon, uint32 target, uint24 playerRoll, uint24 enemyRoll, uint16 xpGain, uint256 skillGain);
     event InGameOnlyFundsGiven(address indexed to, uint256 skillAmount);
 
@@ -296,17 +302,17 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
     }
 
     function fight(uint256 char, uint256 wep, uint32 target, uint8 fightMultiplier) external
-        onlyNonContract() {
+        onlyNonContract() returns (uint256) {
         require(fightMultiplier >= 1 && fightMultiplier <= 5);
 
         (uint8 charTrait, uint24 basePowerLevel, uint64 timestamp) =
-            unpackFightData(characters.getFightDataAndDrainStamina(msg.sender,
+            unpackFightData(characters.getFightDataAndDrainStamina(tx.origin,
                 char, staminaCostFight * fightMultiplier, false, 0));
 
         (int128 weaponMultTarget,
             int128 weaponMultFight,
             uint24 weaponBonusPower,
-            uint8 weaponTrait) = weapons.getFightDataAndDrainDurability(msg.sender, wep, charTrait,
+            uint8 weaponTrait) = weapons.getFightDataAndDrainDurability(tx.origin, wep, charTrait,
                 durabilityCostFight * fightMultiplier, false, 0);
 
         // dirty variable reuse to avoid stack limits
@@ -316,7 +322,7 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
             target,
             now / 1 hours
         );
-        performFight(
+        uint256 offset = performFight(
             char,
             wep,
             Common.getPlayerPower(basePowerLevel, weaponMultFight, weaponBonusPower),
@@ -324,6 +330,8 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
             uint24(target & 0xFFFFFF),
             fightMultiplier
         );
+
+        return offset;
     }
 
     function performFight(
@@ -333,8 +341,8 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
         uint24 traitsCWE, // could fit into uint8 since each trait is only stored on 2 bits (TODO)
         uint24 targetPower,
         uint8 fightMultiplier
-    ) private {
-        uint256 seed = uint256(keccak256(abi.encodePacked(now, msg.sender)));
+    ) private returns (uint256) {
+        uint256 seed = uint256(keccak256(abi.encodePacked(now, tx.origin)));
         uint24 playerRoll = getPlayerPowerRoll(playerFightPower,traitsCWE,seed);
         uint24 monsterRoll = getMonsterPowerRoll(targetPower, RandomUtil.combineSeeds(seed,1));
 
@@ -343,17 +351,18 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
         uint16 xp = getXpGainForFight(playerFightPower, targetPower) * fightMultiplier;
         uint256 tokens = getTokenGainForFight(targetPower, true) * fightMultiplier;
 
-        if(playerRoll < monsterRoll) {
+
+        if (playerRoll < monsterRoll) {
             tokens = 0;
             xp = 0;
         }
 
-        if(tokenRewards[msg.sender] == 0 && tokens > 0) {
-            _rewardsClaimTaxTimerStart[msg.sender] = block.timestamp;
+        if(tokenRewards[tx.origin] == 0 && tokens > 0) {
+            _rewardsClaimTaxTimerStart[tx.origin] = block.timestamp;
         }
 
         // this may seem dumb but we want to avoid guessing the outcome based on gas estimates!
-        tokenRewards[msg.sender] += tokens;
+        tokenRewards[tx.origin] += tokens;
         vars[VAR_UNCLAIMED_SKILL] += tokens;
         vars[VAR_HOURLY_DISTRIBUTION] -= tokens;
         xpRewards[char] += xp;
@@ -361,7 +370,10 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
         vars[VAR_HOURLY_FIGHTS] += fightMultiplier;
         vars[VAR_HOURLY_POWER_SUM] += playerFightPower * fightMultiplier;
 
-        emit FightOutcome(msg.sender, char, wep, (targetPower | ((uint32(traitsCWE) << 8) & 0xFF000000)), playerRoll, monsterRoll, xp, tokens);
+        emit FightOutcome(tx.origin, char, wep, (targetPower | ((uint32(traitsCWE) << 8) & 0xFF000000)), playerRoll, monsterRoll, xp, tokens);
+
+        return (tokens.mul(priceOracleSkillPerUsd.currentPrice()).mul(combatTokenChargePercent))
+            .div(tokensPrices.tokenPrice().mul(10**18));
     }
 
     function getMonsterPower(uint32 target) public pure returns (uint24) {
@@ -577,7 +589,7 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
     }
 
     function _onlyNonContract() internal view {
-        require(tx.origin == msg.sender, "ONC");
+        require(tx.origin == msg.sender || hasRole(GAME_ADMIN, msg.sender), "ONC");
     }
 
     modifier restricted() {
@@ -854,6 +866,10 @@ contract CryptoBlades is Initializable, AccessControlUpgradeable {
         for(uint i = 0; i < varFields.length; i++) {
             vars[varFields[i]] = values[i];
         }
+    }
+
+    function setTokensPricesAddress(address tokensPricesContract) external restricted {
+        tokensPrices = TokensPrices(tokensPricesContract);
     }
 
     function giveInGameOnlyFunds(address to, uint256 skillAmount) external restricted {

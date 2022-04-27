@@ -187,6 +187,7 @@ import Hint from '../components/Hint.vue';
 import Events from '../events';
 import CombatResults from '../components/CombatResults.vue';
 import {fromWeiEther, toBN} from '../utils/common';
+import BigNumber from 'bignumber.js';
 import WeaponInventory from '../components/WeaponInvetory.vue';
 import {mapActions, mapGetters, mapMutations, mapState} from 'vuex';
 import gasp from 'gsap';
@@ -294,8 +295,10 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchTargets', 'doEncounter', 'fetchFightRewardSkill', 'fetchFightRewardXp', 'getXPRewardsIfWin', 'fetchExpectedPayoutForMonsterPower',
-      'fetchHourlyAllowance', 'fetchHourlyPowerAverage', 'fetchHourlyPayPerFight']),
+    ...mapActions(['fetchTargets', 'doEncounterPayNative',
+      'fetchFightRewardSkill', 'fetchFightRewardXp', 'getXPRewardsIfWin', 'fetchExpectedPayoutForMonsterPower',
+      'fetchHourlyAllowance', 'fetchHourlyPowerAverage', 'fetchHourlyPayPerFight',
+      'getCurrentSkillPrice', 'getNativeTokenPriceInUsd', 'getCombatTokenChargePercent']),
     ...mapMutations(['setIsInCombat']),
     getEnemyArt,
     weaponHasDurability(id) {
@@ -402,7 +405,6 @@ export default {
       if (this.selectedWeaponId === null || this.currentCharacterId === null) {
         return;
       }
-
       this.waitingResults = true;
 
       // Force a quick refresh of targets
@@ -416,13 +418,25 @@ export default {
       this.fightResults = null;
       this.error = null;
       this.setIsInCombat(this.waitingResults);
-
       try {
-        const results = await this.doEncounter({
+        const targetPower = targetToFight.power;
+        const expectedPayoutWei = new BigNumber(await this.fetchExpectedPayoutForMonsterPower({ power: targetPower, isCalculator: true }));
+
+        const nativeTokenPriceUsd = new BigNumber (await this.getNativeTokenPriceInUsd());
+        const skillPriceUsdWei = new BigNumber(await this.getCurrentSkillPrice());
+        const tokenChargePercentage = (await this.getCombatTokenChargePercent());
+
+        const offsetToPayInNativeToken = ((
+          expectedPayoutWei.multipliedBy(skillPriceUsdWei).multipliedBy(tokenChargePercentage)
+        ).div(nativeTokenPriceUsd.multipliedBy('1000000000000000000'))).integerValue(BigNumber.ROUND_DOWN);
+
+
+        const results = await this.doEncounterPayNative({
           characterId: this.currentCharacterId,
           weaponId: this.selectedWeaponId,
           targetString: targetIndex,
           fightMultiplier: this.fightMultiplier,
+          offsetCost: offsetToPayInNativeToken
         });
 
         this.fightResults = results;
